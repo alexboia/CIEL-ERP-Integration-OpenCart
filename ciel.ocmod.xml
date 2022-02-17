@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<name>Ciel OpenCart Integration</name>
+	<code>myccieloc002</code>
+	<version>0.0.2</version>
+	<author>MyClar Software Solutions SRL</author>
+	<link>http://myclar.ro</link>
+
+	<file path="system/config/admin.php">
+		<operation>
+			<search><![CDATA['startup/startup',]]></search>
+			<add position="after">
+				<![CDATA['startup/ciel',]]>
+			</add>
+		</operation>
+	</file>
+</modification>
