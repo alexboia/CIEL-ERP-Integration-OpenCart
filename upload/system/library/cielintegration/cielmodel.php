@@ -1,6 +1,8 @@
 <?php
 namespace CielIntegration {
-	use \Loader;
+
+    use CielIntegration\Wrappers\DbOperations;
+    use \Loader;
 	use \Registry;
 	
 	/**
@@ -13,6 +15,20 @@ namespace CielIntegration {
 		public function __construct($registry) {
 			parent::__construct($registry);
 			$this->_bootstrap();
+		}
+
+		/**
+		 * @return DbOperations 
+		 */
+		protected function _getDbOperations() {
+			return new DbOperations($this->_getDb());
+		}
+
+		/**
+		 * @return \DB
+		 */
+		protected function _getDb() {
+			return $this->db;
 		}
 	}
 }

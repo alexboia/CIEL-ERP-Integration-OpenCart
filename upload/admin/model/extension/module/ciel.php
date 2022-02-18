@@ -46,6 +46,12 @@ class ModelExtensionModuleCiel extends CielModel {
 			'extension/ciel_status_product_form_tab');
 	}
 
+	private function _getEvents() {
+		return array(
+
+		);
+	}
+
 	/**
 	 * @return ModelExtensionEvent
 	 */
@@ -55,17 +61,82 @@ class ModelExtensionModuleCiel extends CielModel {
 	}
 
 	private function _installDb() {
+		$db = $this->_getDb();
+		$tablesSql = $this->_getTablesSql();
+		
+		foreach ($tablesSql as $tblSql) {
+			$db->query($tblSql);
+		}
+	}
 
+	private function _getTablesSql() {
+		$tablesSql = array();
+
+		$tablesSql[] = "CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "lvdcielmg_remote_customer` (
+				`lvdcielmg_customer_id` INT(11) NOT NULL,
+				`lvdcielmg_remote_partner_code` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_remote_partner_addr_worksite_id` INT(11) NULL DEFAULT NULL,
+				`lvdcielmg_billing_type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_tax_attribute` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_tax_code` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_bank` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_iban` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_trade_register_number` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				PRIMARY KEY (`lvdcielmg_customer_id`) USING BTREE
+			)
+			COLLATE='utf8_general_ci'
+			ENGINE=InnoDB;";
+
+		$tablesSql[] = "CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "lvdcielmg_remote_order` (
+				`lvdcielmg_order_id` INT(11) NOT NULL,
+				`lvdcielmg_remote_document_id` INT(11) NULL DEFAULT NULL,
+				`lvdcielmg_remote_document_type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_customer_id` INT(11) NULL DEFAULT NULL,
+				`lvdcielmg_remote_partner_code` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_remote_partner_addr_worksite_id` INT(11) NULL DEFAULT NULL,
+				`lvdcielmg_billing_type` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_tax_attribute` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_tax_code` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_bank` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_iban` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_billing_company_trade_register_number` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				PRIMARY KEY (`lvdcielmg_order_id`) USING BTREE
+			)
+			COLLATE='utf8_general_ci'
+			ENGINE=InnoDB;";
+
+		$tablesSql[] = "CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "lvdcielmg_remote_product` (
+				`lvdcielmg_product_id` INT(11) NOT NULL,
+				`lvdcielmg_remote_id` BIGINT(20) NOT NULL,
+				`lvdcielmg_remote_measurement_unit` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`lvdcielmg_remote_price_vat_quota_value` FLOAT(10,0) NULL DEFAULT NULL,
+				`lvdcielmg_remote_price_vat_option_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				PRIMARY KEY (`lvdcielmg_product_id`) USING BTREE
+			)
+			COLLATE='utf8_general_ci'
+			ENGINE=InnoDB;";
+
+		return $tablesSql;
 	}
 
 	public function uninstall() {
+		$this->_uninstallPermissions();
 		$this->_uninstallEvents();
+		$this->_uninstallDb();
+	}
+
+	private function _uninstallPermissions() {
+
 	}
 
 	private function _uninstallEvents() {
 		$eventModel = $this->_getEventModel();
 		$eventModel->deleteEvent('ciel_add_status_product_column');
 		$eventModel->deleteEvent('ciel_add_status_product_editor_tab');
+	}
+
+	private function _uninstallDb() {
+
 	}
 
 	/**

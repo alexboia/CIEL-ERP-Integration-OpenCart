@@ -10,6 +10,8 @@ namespace CielIntegration {
 
 		private static $_vendorBootstrapped = false;
 
+		private static $_polyfillBootstrapped = false;
+
 		public static function bootstrap() {
 			$me = self::_getCurrent();
 			$me->_polyfill();
@@ -41,11 +43,33 @@ namespace CielIntegration {
 		}
 
 		private function _bootstrapVendor() {
-			VendorAutoloader::enable();
+			if (!$this->_isVendorBootstrapped()) {
+				VendorAutoloader::enable();
+				$this->_setVendorBootstrapped();
+			}
+		}
+
+		private function _isVendorBootstrapped() {
+			return self::$_vendorBootstrapped;
+		}
+
+		private function _setVendorBootstrapped() {
+			self::$_vendorBootstrapped = true;
 		}
 
 		private function _polyfill() {
-			require_once __DIR__ . '/polyfill.php';
+			if (!$this->_isPolyfillBootstrapped()) {
+				require_once __DIR__ . '/polyfill.php';
+				$this->_setPolyfillBootstapped();
+			}
+		}
+
+		private function _isPolyfillBootstrapped() {
+			return self::$_polyfillBootstrapped;
+		}
+
+		private function _setPolyfillBootstapped() {
+			self::$_polyfillBootstrapped = true;
 		}
 	}
 }

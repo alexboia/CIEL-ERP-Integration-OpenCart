@@ -58,7 +58,7 @@ namespace CielIntegration {
 					);
 				}
 
-				$headerRow = $columnPlacement
+				$columnPlacement
 					->render($headerRow);
 			}
 
@@ -83,7 +83,7 @@ namespace CielIntegration {
 					);
 				}
 
-				$row = $columnPlacement
+				$columnPlacement
 					->render($row);
 			}
 
