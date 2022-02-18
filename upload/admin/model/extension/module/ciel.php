@@ -40,6 +40,10 @@ class ModelExtensionModuleCiel extends CielModel {
 		$eventModel->addEvent('ciel_add_status_product_column', 
 			'admin/view/catalog/product_list/after', 
 			'extension/ciel_status_product_column');
+
+		$eventModel->addEvent('ciel_add_status_product_editor_tab', 
+			'admin/view/catalog/product_form/after', 
+			'extension/ciel_status_product_form_tab');
 	}
 
 	/**
@@ -61,6 +65,7 @@ class ModelExtensionModuleCiel extends CielModel {
 	private function _uninstallEvents() {
 		$eventModel = $this->_getEventModel();
 		$eventModel->deleteEvent('ciel_add_status_product_column');
+		$eventModel->deleteEvent('ciel_add_status_product_editor_tab');
 	}
 
 	/**

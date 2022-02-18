@@ -11,9 +11,14 @@ class ControllerExtensionCielStatusProductColumn extends CielController {
 			42 => array('ciel_connected' => 'no')
 		));
 
-		$listingRewriter = new ListingContentsRewriter('#form-product', $dataSource);
-		$listingRewriter->addColumn('ciel_connected', 'Connected to CIEL ERP');
+		$listingRewriter = new ListingContentsRewriter('#form-product', 
+			'td input[name="selected[]"]', 
+			$dataSource);
 
-		return $listingRewriter->rewrite($output);
+		$listingRewriter->addColumn('ciel_connected', 
+			'Connected to CIEL ERP');
+
+		return $listingRewriter
+			->rewrite($output);
 	}
 }
