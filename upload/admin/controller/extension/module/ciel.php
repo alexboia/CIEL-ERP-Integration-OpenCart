@@ -27,6 +27,9 @@ class ControllerExtensionModuleCiel extends CielController {
 		$data = $this->_loadAdminLayout();
 		$data['ciel_title'] = $this->_t('ciel_title');
 
+		$data['connection_settings_form'] = $this->load->controller('extension/ciel_connection_settings');
+		$data['runtime_settings_form'] = $this->load->controller('extension/ciel_runtime_settings');
+
 		$this->_renderViewToResponseOutput('extension/module/ciel', 
 			$data);
 	}
