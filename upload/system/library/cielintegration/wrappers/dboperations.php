@@ -1,8 +1,5 @@
 <?php
 namespace CielIntegration\Wrappers {
-
-    use Codeception\Lib\Driver\Db;
-
 	class DbOperations {
 		/**
 		 * @var \DB
@@ -190,6 +187,13 @@ namespace CielIntegration\Wrappers {
 		}
 
 		public function getOne($table, $where) {
+			$rows = $this->select($table, $where, 0, 1);
+			return is_array($rows) && !empty($rows) 
+				? $rows[0] 
+				: array();
+		}
+
+		public function select($table, $where, $offset = -1, $limit = 0) {
 			$selectTable = $this->_getPrefixedTableName($table);
 			$condition = $this->_composeQueryCondition($where);
 
@@ -198,10 +202,16 @@ namespace CielIntegration\Wrappers {
 				$selectQuery .= ' WHERE ' . $condition;
 			}
 
-			$selectQuery .= ' LIMIT 1';
+			if ($limit > 0) {
+				$selectQuery .= ' LIMIT ' . intval($limit);
+			}
+
+			if ($offset >= 0)  {
+				$selectQuery .= 'OFFSET ' . intval($offset);
+			}
 
 			$result = $this->_db->query($selectQuery);
-			return $result->row;
+			return $result->rows;
 		}
 	}
 }
