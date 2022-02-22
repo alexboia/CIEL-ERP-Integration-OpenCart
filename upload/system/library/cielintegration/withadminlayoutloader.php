@@ -6,9 +6,9 @@ namespace CielIntegration {
 	trait WithAdminLayoutLoader {
 		protected function _loadAdminLayout() {
 			$data = array();
-			$data['header'] = $this->load->controller('common/header');
-			$data['column_left'] = $this->load->controller('common/column_left');
-			$data['footer'] = $this->load->controller('common/footer');
+			$data['html_header'] = $this->load->controller('common/header');
+			$data['html_column_left'] = $this->load->controller('common/column_left');
+			$data['html_footer'] = $this->load->controller('common/footer');
 			return $data;
 		}
 

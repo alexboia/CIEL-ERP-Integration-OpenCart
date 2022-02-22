@@ -82,7 +82,7 @@ namespace CielIntegration\Integration\Binding\Model {
 		}
 
 		private function _getTableName() {
-			return DB_PREFIX . self::BASE_TABLE_NAME;
+			return self::BASE_TABLE_NAME;
 		}
 
 		public function getSettings() {

@@ -72,7 +72,7 @@ class ModelExtensionModuleCiel extends CielModel {
 	private function _getTablesSql() {
 		$tablesSql = array();
 
-		$tablesSql[] = "CREATE TABLE `" . DB_PREFIX . "mycciel_oc_binding_settings` (
+		$tablesSql[] = "CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "mycciel_oc_binding_settings` (
 				`settings_key` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
 				`settings_values` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
 				PRIMARY KEY (`settings_key`) USING BTREE

@@ -207,7 +207,7 @@ namespace CielIntegration\Wrappers {
 			}
 
 			if ($offset >= 0)  {
-				$selectQuery .= 'OFFSET ' . intval($offset);
+				$selectQuery .= ' OFFSET ' . intval($offset);
 			}
 
 			$result = $this->_db->query($selectQuery);
