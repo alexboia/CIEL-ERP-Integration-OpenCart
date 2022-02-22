@@ -72,6 +72,14 @@ class ModelExtensionModuleCiel extends CielModel {
 	private function _getTablesSql() {
 		$tablesSql = array();
 
+		$tablesSql[] = "CREATE TABLE `" . DB_PREFIX . "mycciel_oc_binding_settings` (
+				`settings_key` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+				`settings_values` TEXT NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+				PRIMARY KEY (`settings_key`) USING BTREE
+			)
+			COLLATE='utf8mb4_general_ci'
+			ENGINE=InnoDB;";
+
 		$tablesSql[] = "CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "mycciel_oc_remote_customer` (
 				`mycciel_oc_customer_id` INT(11) NOT NULL,
 				`mycciel_oc_remote_partner_code` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
