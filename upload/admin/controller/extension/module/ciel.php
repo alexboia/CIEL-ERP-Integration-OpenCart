@@ -45,12 +45,10 @@ class ControllerExtensionModuleCiel extends CielController {
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
 		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getIndexBreadcrumbsData());
 
-		$data['html_connection_settings_form'] = $this->load->controller('extension/ciel_connection_settings', 
-			$this->_getConnectionSettingsFormData());
+		$data['html_connection_settings_form'] = $this->_renderConnectionSettinsForm();
 
 		if ($hasConnectionInfo) {
-			$data['html_runtime_settings_form'] = $this->load->controller('extension/ciel_runtime_settings',
-				 $this->_getRuntimeSettingsFormData());
+			$data['html_runtime_settings_form'] = $this->_renderRuntimeSettingsForm();
 		} else {
 			$data['html_runtime_settings_form'] = '';
 		}
@@ -71,11 +69,21 @@ class ControllerExtensionModuleCiel extends CielController {
 		);
 	}
 
+	private function _renderConnectionSettinsForm() {
+		return $this->load->controller('extension/ciel_connection_settings', 
+			$this->_getConnectionSettingsFormData());
+	}
+
 	private function _getConnectionSettingsFormData() {
 		$storeBinding = $this->_getStoreBinding();
 		return array(
 
 		);
+	}
+
+	private function _renderRuntimeSettingsForm() {
+		return $this->load->controller('extension/ciel_runtime_settings',
+			$this->_getRuntimeSettingsFormData());
 	}
 
 	private function _getRuntimeSettingsFormData() {
