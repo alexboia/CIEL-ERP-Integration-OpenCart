@@ -1,3 +1,6 @@
+<script type="text/javascript">
+	window['myc_hasConnectionInfo'] = <?php echo $has_connection ? 'true' : 'false'; ?>;
+</script>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title"><i class="fa fa-pencil"></i> <?php echo $text_connection_settings_form_heading; ?></h3>

@@ -2,6 +2,7 @@
 namespace CielIntegration {
 
     use CielIntegration\Integration\CielIntegrationFactory;
+    use Exception;
     use \Loader;
 	use \Request;
 
@@ -22,6 +23,11 @@ namespace CielIntegration {
 		 * @var CielIntegrationFactory
 		 */
 		private $_integrationFactory;
+
+		/**
+		 * @var LookupDataProvider
+		 */
+		private $_lookupDataProvider;
 
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
@@ -112,11 +118,74 @@ namespace CielIntegration {
 			return $this->load->controller('extension/ciel_modal_loading_indicator');
 		}
 
-		protected function _createAjaxResponse() {
+		protected function _getWarehousesForDropdown() {
+			$dataSource = null;
+
+			try {
+				$dataSource = $this->_getStoreBinding()
+					->getAvailableWarehouses();
+			} catch (Exception $exc) {
+				//TODO: log errors
+			}
+
+			return $dataSource;
+		}
+
+		protected function _getVatQuotasForDropdown() {
+			$dataSource = null;
+
+			try {
+				$dataSource = $this->_getStoreBinding()
+					->getAvailableVatQuotas();
+			} catch (Exception $exc) {
+				//TODO: log errors
+			}
+
+			return $dataSource;
+		}
+
+		protected function _createAjaxResponse(array $additionalProps = array()) {
 			$response = new \stdClass();
 			$response->success = false;
 			$response->message = null;
+
+			foreach ($additionalProps as $key => $value) {
+				$response->$key = $value;
+			}
+
 			return $response;
+		}
+
+		protected function _getDocumentTypeName($typeId) {
+			return $this->_getLookupDataProvider()
+				->getDocumentTypeName($typeId);
+		}
+
+		protected function _getSupportedDocumentTypes() {
+			return $this->_getLookupDataProvider()
+				->getSupportedDocumentTypes();
+		}
+
+		protected function _getSupportedStockUpdateModes() {
+			return $this->_getLookupDataProvider()
+				->getSupportedStockUpdateModes();
+		}
+
+		protected function _getSupportedDocumentStatusTypes() {
+			return $this->_getLookupDataProvider()
+				->getSupportedDocumentStatusTypes();
+		}
+
+		protected function _getOpenCartOrderStatuses() {
+			return $this->_getLookupDataProvider()
+				->getOpenCartOrderStatuses();
+		}
+
+		private function _getLookupDataProvider() {
+			if ($this->_lookupDataProvider === null) {
+				$this->_lookupDataProvider = new LookupDataProvider($this->registry);
+			}
+			return $this->_lookupDataProvider;
 		}
 	}
 }

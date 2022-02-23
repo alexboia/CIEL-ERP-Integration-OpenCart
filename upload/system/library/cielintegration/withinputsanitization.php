@@ -14,6 +14,16 @@ namespace CielIntegration {
 				: '';
 		}
 
+		protected function _sanitizeTextInputArray(array $values) {
+			$safeValues = array();
+
+			foreach ($values as $key => $value) {
+				$safeValues[$key] = $this->_sanitizeTextInput($value);
+			}
+
+			return $safeValues;
+		}
+
 		protected function _sanitizeUrl($value) {
 			if (is_object($value) || is_array($value)) {
 				return '';

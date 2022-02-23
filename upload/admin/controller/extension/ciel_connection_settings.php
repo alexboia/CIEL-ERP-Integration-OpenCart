@@ -5,7 +5,7 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 	public function index($data = array()) {
 		$data = array_merge($data, 
 			$this->_getConnectionSettingsFormData());
-			
+
 		$data = array_merge($data, array(
 			'text_connection_settings_form_heading' 
 				=> $this->_t('text_connection_settings_form_heading'),
@@ -27,12 +27,14 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 			$credentials = $storeBinding->getCredentials();
 
 			$data = array(
+				'has_connection' => true,
 				'connection_endpoint_url' => $endpoint,
 				'connection_username' => $credentials['username'],
 				'connection_society_code' => $credentials['society']
 			);
 		} else {
 			$data = array(
+				'has_connection' => false,
 				'connection_endpoint_url' => '',
 				'connection_username' => '',
 				'connection_society_code' => ''

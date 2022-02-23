@@ -7,8 +7,9 @@
 			<div class="pull-right">
 				<button type="submit" 
 					id="myc_ciel_settings_save"
-					form="myc_ciel_settings_form 
+					form="myc_ciel_settings_form"
 					data-toggle="tooltip" 
+					data-save-settings-url="<?php echo $url_save_action; ?>"
 					title="<?php echo $txt_save_action; ?>" 
 					class="btn btn-primary"><i class="fa fa-save"></i></button>
 				<a href="<?php echo $url_cancel_action; ?>" 

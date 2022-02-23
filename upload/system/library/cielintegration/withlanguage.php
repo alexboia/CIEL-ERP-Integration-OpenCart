@@ -7,7 +7,7 @@ namespace CielIntegration {
 	trait WithLanguage {
 		private $_loaded = false;
 
-		private $_textDomain = 'extension/module/ciel';
+		private $_textDomain = null;
 
 		protected function _t($key) {
 			$this->_ensureLanguageLoaded();
@@ -16,7 +16,10 @@ namespace CielIntegration {
 
 		private function _ensureLanguageLoaded() {
 			if (!$this->_loaded) {
-				$this->language->load($this->_textDomain);
+				$this->language->load('extension/module/ciel');
+				if (!empty($this->_textDomain)) {
+					$this->language->load($this->_textDomain);
+				}
 				$this->_loaded = true;
 			}
 		}
