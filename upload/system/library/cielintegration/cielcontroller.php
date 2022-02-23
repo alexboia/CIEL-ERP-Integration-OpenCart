@@ -16,6 +16,7 @@ namespace CielIntegration {
 	class CielController extends \Controller {
 		use WithBootstrapper;
 		use WithLanguage;
+		use WithInputSanitization;
 
 		/**
 		 * @var CielIntegrationFactory
@@ -103,8 +104,19 @@ namespace CielIntegration {
 				$data);
 		}
 
+		protected function _includeLoadingIndicatorScript() {
+			$this->_addHeaderScript('extension/ciel_loading_indicator.js');
+		}
+
 		protected function _renderLoadingIndicator() {
 			return $this->load->controller('extension/ciel_modal_loading_indicator');
+		}
+
+		protected function _createAjaxResponse() {
+			$response = new \stdClass();
+			$response->success = false;
+			$response->message = null;
+			return $response;
 		}
 	}
 }

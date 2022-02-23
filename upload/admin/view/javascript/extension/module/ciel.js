@@ -8,13 +8,13 @@
 
 	function _getConnectionTestInputData() {
 		return {
-			connection_endpoint_url: $('#myc_connection_endpoint_url')
+			myc_connection_endpoint_url: $('#myc_connection_endpoint_url')
 				.val(),
-			connection_username: $('#myc_connection_username')
+			myc_connection_username: $('#myc_connection_username')
 				.val(),
-			connection_password: $('#myc_connection_password')
+			myc_connection_password: $('#myc_connection_password')
 				.val(),
-			connection_society_code: $('#myc_connection_society_code')
+			myc_connection_society_code: $('#myc_connection_society_code')
 				.val()
 		};
 	}

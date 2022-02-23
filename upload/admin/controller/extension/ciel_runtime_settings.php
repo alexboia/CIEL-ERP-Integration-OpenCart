@@ -7,4 +7,11 @@ class ControllerExtensionCielRuntimeSettings extends CielController {
 		$data['text_runtime_settings_form_heading'] = $this->_t('text_runtime_settings_form_heading');
 		return $this->_renderView('extension/ciel_runtime_settings_form', $data);
 	}
+
+	private function _getRuntimeSettingsFormData() {
+		$storeBinding = $this->_getStoreBinding();
+		return array(
+
+		);
+	}
 }

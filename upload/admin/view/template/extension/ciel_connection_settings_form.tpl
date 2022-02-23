@@ -10,7 +10,7 @@
 					type="text" 
 					name="myc_connection_endpoint_url" 
 					id="myc_connection_endpoint_url" 
-					value="" 
+					value="<?php echo $connection_endpoint_url; ?>" 
 					placeholder="URL serviciu web CIEL Server" 
 				/>
 		</div>
@@ -22,7 +22,7 @@
 					type="text" 
 					name="myc_connection_username" 
 					id="myc_connection_username" 
-					value="" 
+					value="<?php echo $connection_username; ?>" 
 					placeholder="Nume utilizator serviciu web CIEL Server" 
 				/>
 			</div>
@@ -34,7 +34,6 @@
 					type="password" 
 					name="myc_connection_password" 
 					id="myc_connection_password" 
-					value="" 
 					placeholder="Parola serviciu web CIEL Server" 
 				/>
 			</div>
@@ -46,7 +45,7 @@
 					type="text" 
 					name="myc_connection_society_code" 
 					id="myc_connection_society_code" 
-					value="" 
+					value="<?php echo $connection_society_code; ?>" 
 					placeholder="Cod societate" 
 				/>
 			</div>
