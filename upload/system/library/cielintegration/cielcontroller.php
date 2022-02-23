@@ -124,6 +124,13 @@ namespace CielIntegration {
 			try {
 				$dataSource = $this->_getStoreBinding()
 					->getAvailableWarehouses();
+
+				foreach ($dataSource as $id => $w) {
+					if (!is_object($w['properties'])) {
+						$w['properties'] = (object)$w['properties'];
+						$dataSource[$id] = $w;
+					}
+				}
 			} catch (Exception $exc) {
 				//TODO: log errors
 			}

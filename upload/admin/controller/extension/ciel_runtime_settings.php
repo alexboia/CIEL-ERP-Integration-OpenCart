@@ -41,7 +41,7 @@ class ControllerExtensionCielRuntimeSettings extends CielController {
 			'data_available_order_statuses' => $this->_getOpenCartOrderStatuses(),
 			'data_available_document_types' => $this->_getSupportedDocumentTypes(),
 			'data_available_stock_update_modes' => $this->_getSupportedStockUpdateModes(),
-			'data_available_document_status_types' => $this->_getSupportedDocumentTypes()
+			'data_available_document_status_types' => $this->_getSupportedDocumentStatusTypes()
 		);
 
 		if ($storeBinding->hasConnectionInfo()) {
