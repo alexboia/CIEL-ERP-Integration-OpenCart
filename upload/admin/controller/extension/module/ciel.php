@@ -33,6 +33,7 @@ class ControllerExtensionModuleCiel extends CielController {
 
 		//Prepare document assets
 		$this->_includeLoadingIndicatorScript();
+		$this->_includeOperationStatusScript();
 		$this->_addHeaderScript('extension/module/ciel.js');
 		$this->_setDocumentTitleLangKey('ciel_settings_page_title');
 

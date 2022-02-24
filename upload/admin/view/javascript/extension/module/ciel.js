@@ -15,6 +15,25 @@
 		_context = $.extend({}, _context, newVals);
 	}
 
+	function _showError(message) {
+		$('#myc_operation_status_message')
+			.cielOperationStatus('show', 
+				false, 
+				message);
+	}
+
+	function _showSuccess(message) {
+		$('#myc_operation_status_message')
+			.cielOperationStatus('show', 
+				true, 
+				message);
+	}
+
+	function _clearStatusMessage() {
+		$('#myc_operation_status_message')
+			.cielOperationStatus('hide');
+	}
+
 	function _getConnectionTestUrl() {
 		return $('#myc_test_ciel_erp_connection')
 			.attr('data-test-connection-url');
@@ -35,6 +54,7 @@
 
 	function _testConnection(data) {
 		$.showCielLoading();
+		_clearStatusMessage();
 		$.ajax(_getConnectionTestUrl(), {
 			type: 'POST',
 			dataType: 'json',
@@ -42,8 +62,14 @@
 			data: data
 		}).done(function(data, status, xhr) {
 			$.hideCielLoading();
+			if (data && data.success) {
+				_showSuccess(data.message);
+			} else {
+				_showError(data.message || 'The connection test failed');
+			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
+			_showError('The connection test failed');
 		});
 	}
 
@@ -122,6 +148,7 @@
 
 	function _saveSettings() {
 		$.showCielLoading();
+		_clearStatusMessage();
 		$.ajax(_getSettingsFormSaveUrl(), {
 			type: 'POST',
 			dataType: 'json',
@@ -135,14 +162,14 @@
 					_initialSync();
 				}
 
-				//TODO: show result
+				_showSuccess('The settings have been successfully saved.');
 				_storeInitialControlValues();
 			} else {
-				//TODO: show result
+				_showError(data.message || 'The settings could not be saved.');
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			//TODO: show result
+			_showError('The settings could not be saved.');
 		});
 	}
 

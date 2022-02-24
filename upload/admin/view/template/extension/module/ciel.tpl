@@ -23,6 +23,9 @@
 	</div>
 
 	<form name="myc_ciel_settings_form" id="myc_ciel_settings_form" method="POST" class="form-horizontal">
+		<div id="myc_operation_status_message" 
+			class="container-fluid" 
+			style="display: none;"></div>
 		<div class="container-fluid">
 			<?php echo $html_connection_settings_form; ?>		
 		</div>

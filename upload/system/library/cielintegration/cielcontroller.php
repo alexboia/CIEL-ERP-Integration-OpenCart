@@ -118,6 +118,10 @@ namespace CielIntegration {
 			return $this->load->controller('extension/ciel_modal_loading_indicator');
 		}
 
+		protected function _includeOperationStatusScript() {
+			$this->_addHeaderScript('extension/ciel_operation_status.js');
+		}
+
 		protected function _getWarehousesForDropdown() {
 			$dataSource = null;
 
