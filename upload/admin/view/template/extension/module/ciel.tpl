@@ -34,6 +34,11 @@
 				<?php echo $html_runtime_settings_form; ?>
 			</div>
 		<?php endif; ?>
+		<?php if (!empty($html_workflow_settings_form)): ?>
+			<div class="container-fluid">
+				<?php echo $html_workflow_settings_form; ?>
+			</div>
+		<?php endif; ?>
 	</form>
 
 	<?php echo $html_loading_indicator; ?>

@@ -3,7 +3,7 @@ namespace CielIntegration\Integration\Binding {
 
     use Ciel\Api\Integration\Binding\Providers\CielErpToStoreBindingAdapter;
     use Ciel\Api\Session\DbTableSessionCielClientSessionProvider;
-    use CielIntegration\Integration\Binding\Model\BindingSettings;
+    use CielIntegration\Integration\Binding\Model\IntegrationSettings;
     use CielIntegration\Integration\OpenCartCielConfig;
     use CielIntegration\Integration\OpenCartFileBasedCielCache;
 
@@ -24,14 +24,14 @@ namespace CielIntegration\Integration\Binding {
 		private $_clientSessionProvider;
 
 		/**
-		 * @var BindingSettings
+		 * @var IntegrationSettings
 		 */
 		private $_bindingSettingsModel;
 
 		public function __construct(\Registry $registry) {
 			$this->_config = new OpenCartCielConfig();
 			$this->_cache = new OpenCartFileBasedCielCache($this->_config->getGenericCacheDuration());
-			$this->_bindingSettingsModel = new BindingSettings($registry);
+			$this->_bindingSettingsModel = new IntegrationSettings($registry);
 
 			$this->_clientSessionProvider = new DbTableSessionCielClientSessionProvider(
 				$this->_getDbTableSessionProviderConnectionOptions(),
@@ -63,12 +63,12 @@ namespace CielIntegration\Integration\Binding {
 
 		public function saveBindingData(array $data) { 
 			$this->_bindingSettingsModel
-				->saveSettings($data);
+				->saveBindingSettings($data);
 		}
 
 		public function getBindingData() { 
 			return $this->_bindingSettingsModel
-				->getSettings();
+				->getBindingSettings();
 		}
 
 		public function clearBindingData() { 

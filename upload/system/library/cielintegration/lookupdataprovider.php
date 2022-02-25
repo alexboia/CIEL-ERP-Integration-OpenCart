@@ -5,6 +5,7 @@ namespace CielIntegration {
     use Ciel\Api\Data\DocumentType;
     use CielIntegration\Integration\StockUpdateMode;
     use ModelLocalisationOrderStatus;
+    use ModelLocalisationStockStatus;
 
 	/**
 	 * @property \Loader $load
@@ -65,6 +66,26 @@ namespace CielIntegration {
             return isset($types[$typeId]) 
                 ? $types[$typeId] 
                 : null;
+		}
+
+		public function getOpenCartStockStatuses() {
+			$statuses = array();
+			$stockStatusModel = $this->_getStockStatusModel();
+			$stockStatusRows = $stockStatusModel->getStockStatuses();
+			
+			foreach ($stockStatusRows as $sRow) {
+				$statuses[$sRow['stock_status_id']] = $sRow['name'];
+			}
+
+			return $statuses;
+		}
+
+		/**
+		 * @return ModelLocalisationStockStatus
+		 */
+		private function _getStockStatusModel() {
+			$this->load->model('localisation/stock_status');
+			return $this->model_localisation_stock_status;
 		}
 	}
 }

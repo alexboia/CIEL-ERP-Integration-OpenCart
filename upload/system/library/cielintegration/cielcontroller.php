@@ -44,6 +44,11 @@ namespace CielIntegration {
 				->getStoreBinding();
 		}
 
+		protected function _getWorkflow() {
+			return $this->_integrationFactory
+				->getWorkflow();
+		}
+
 		protected function _getRequestMethod() {
 			return strtoupper($this->request->server['REQUEST_METHOD']);
 		}
@@ -190,6 +195,11 @@ namespace CielIntegration {
 		protected function _getOpenCartOrderStatuses() {
 			return $this->_getLookupDataProvider()
 				->getOpenCartOrderStatuses();
+		}
+
+		protected function _getOpenCartStockStatuses() {
+			return $this->_getLookupDataProvider()
+				->getOpenCartStockStatuses();
 		}
 
 		private function _getLookupDataProvider() {

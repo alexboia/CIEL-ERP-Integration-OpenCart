@@ -3,6 +3,7 @@ namespace CielIntegration\Integration {
 
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
     use CielIntegration\Integration\Binding\OpenCartCielErpToStoreBindingAdapter;
+    use CielIntegration\Integration\Binding\OpenCartCielWorkflow;
     use Registry;
 
 	class CielIntegrationFactory {
@@ -22,6 +23,11 @@ namespace CielIntegration\Integration {
 		 */
 		private $_registry;
 
+		/**
+		 * @var OpenCartCielWorkflow
+		 */
+		private $_workflow;
+
 		public function __construct(\Registry $registry) {
 			$this->_registry = $registry;
 		}
@@ -35,6 +41,13 @@ namespace CielIntegration\Integration {
 				);
 			}
 			return $this->_storeBinding;
+		}
+
+		public function getWorkflow() {
+			if ($this->_workflow === null) {
+				$this->_workflow = new OpenCartCielWorkflow($this->_registry);
+			}
+			return $this->_workflow;
 		}
 	}
 }

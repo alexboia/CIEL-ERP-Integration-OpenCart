@@ -54,6 +54,7 @@ class ControllerExtensionModuleCiel extends CielController {
 
 		$data['html_connection_settings_form'] = $this->_renderConnectionSettinsForm();
 		$data['html_runtime_settings_form'] = $this->_renderRuntimeSettingsForm();
+		$data['html_workflow_settings_form'] = $this->_renderWorkflowSettingsForm();
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/module/ciel', 
@@ -82,8 +83,14 @@ class ControllerExtensionModuleCiel extends CielController {
 			array());
 	}
 
+	private function _renderWorkflowSettingsForm() {
+		return $this->load->controller('extension/ciel_workflow_settings', 
+			array());
+	}
+
 	public function saveSettings() {
 		if ($this->_isHttpPost()) {
+			$workflow = $this->_getWorkflow();
 			$storeBinding = $this->_getStoreBinding();
 			$response = $this->_createAjaxResponse(array(
 				'warehouses' => null,
@@ -167,6 +174,15 @@ class ControllerExtensionModuleCiel extends CielController {
 				? $this->_sanitizeTextInput($this->request->post['myc_runtime_stock_update_mode'])
 				: '';
 
+			//Workflow settings
+			$wfInStockStatusId = isset($this->request->post['myc_wf_in_stock_status_id'])
+				? intval($this->request->post['myc_wf_in_stock_status_id'])
+				: 0;
+
+			$wfOutOfStockStatusId = isset($this->request->post['myc_wf_out_of_stock_status_id'])
+				? intval($this->request->post['myc_wf_out_of_stock_status_id'])
+				: 0;
+
 			if (empty($bindingPassword) && $storeBinding->hasConnectionInfo()) {
 				$bindingPassword = $storeBinding->getPassword();
 			}
@@ -231,6 +247,18 @@ class ControllerExtensionModuleCiel extends CielController {
 						return;
 					}
 
+					if ($wfInStockStatusId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_in_stock_status_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
+					if ($wfOutOfStockStatusId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_out_of_stock_status_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
 					$articlesReset = $this->_resetProductsIfBindingPropertiesChanged($bindingWarehouseCode, 
 						$bindingMatchVariations);
 
@@ -256,6 +284,10 @@ class ControllerExtensionModuleCiel extends CielController {
 					//Save store binding
 					$storeBinding->save();
 					$this->_reconfigureStoreForBindingConfiguration();
+
+					//Save workflow
+					$workflow->setProductStockStatuses($wfInStockStatusId, 
+						$wfOutOfStockStatusId);
 
 					$response->articlesReset = $articlesReset;
 					$response->customersReset = $customersReset;
