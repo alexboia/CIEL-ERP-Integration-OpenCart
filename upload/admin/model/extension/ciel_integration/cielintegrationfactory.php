@@ -1,9 +1,9 @@
 <?php
-namespace CielIntegration\Integration {
+namespace CielIntegration\Integration\Admin {
 
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
-    use CielIntegration\Integration\Binding\OpenCartCielErpToStoreBindingAdapter;
-    use CielIntegration\Integration\Binding\OpenCartCielWorkflow;
+    use CielIntegration\Integration\Admin\Binding\OpenCartCielErpToStoreBindingAdapter;
+    use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
     use Registry;
 
 	class CielIntegrationFactory {

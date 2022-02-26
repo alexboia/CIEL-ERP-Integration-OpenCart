@@ -1,5 +1,5 @@
 <?php
-namespace CielIntegration\Integration\Binding\Model {
+namespace CielIntegration\Integration\Admin\Binding\Model {
     use CielIntegration\CielModel;
 
 	class IntegrationSettings extends CielModel {

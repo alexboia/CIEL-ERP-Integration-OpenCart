@@ -1,11 +1,11 @@
 <?php
-namespace CielIntegration\Integration\Binding {
+namespace CielIntegration\Integration\Admin\Binding {
 
     use Ciel\Api\Integration\Binding\Providers\CielErpToStoreBindingAdapter;
     use Ciel\Api\Session\DbTableSessionCielClientSessionProvider;
-    use CielIntegration\Integration\Binding\Model\IntegrationSettings;
-    use CielIntegration\Integration\OpenCartCielConfig;
-    use CielIntegration\Integration\OpenCartFileBasedCielCache;
+    use CielIntegration\Integration\Admin\Binding\Model\IntegrationSettings;
+    use CielIntegration\Integration\Admin\OpenCartCielConfig;
+    use CielIntegration\Integration\Admin\OpenCartFileBasedCielCache;
 
 	class OpenCartCielErpToStoreBindingAdapter implements CielErpToStoreBindingAdapter {
 		/**

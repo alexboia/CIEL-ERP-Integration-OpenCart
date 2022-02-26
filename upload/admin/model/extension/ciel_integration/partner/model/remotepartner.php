@@ -1,6 +1,6 @@
 <?php
-namespace CielIntegration\Integration\Partner\Model {
-    use CielIntegration\Integration\IntegrationModel;
+namespace CielIntegration\Integration\Admin\Partner\Model {
+    use CielIntegration\Integration\Admin\IntegrationModel;
 
 	class RemotePartner extends IntegrationModel {
 		const BASE_TABLE_NAME = 'mycciel_oc_remote_customer';

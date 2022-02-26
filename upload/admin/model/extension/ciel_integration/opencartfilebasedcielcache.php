@@ -1,5 +1,5 @@
 <?php
-namespace CielIntegration\Integration {
+namespace CielIntegration\Integration\Admin {
 
     use Cache;
     use Ciel\Api\CielCache;

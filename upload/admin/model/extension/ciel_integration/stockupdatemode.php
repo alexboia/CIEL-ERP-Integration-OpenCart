@@ -1,5 +1,5 @@
 <?php
-namespace CielIntegration\Integration {
+namespace CielIntegration\Integration\Admin {
 	class StockUpdateMode {
 		const Manual = 'stock-update-manual';
 

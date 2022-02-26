@@ -1,6 +1,6 @@
 <?php
-namespace CielIntegration\Integration\Order\Model {
-    use CielIntegration\Integration\IntegrationModel;
+namespace CielIntegration\Integration\Admin\Order\Model {
+    use CielIntegration\Integration\Admin\IntegrationModel;
 
 	class RemoteOrder extends IntegrationModel {
 		const BASE_TABLE_NAME = 'mycciel_oc_remote_order';

@@ -1,6 +1,6 @@
 <?php
-namespace CielIntegration\Integration\Article\Model {
-    use CielIntegration\Integration\IntegrationModel;
+namespace CielIntegration\Integration\Admin\Article\Model {
+    use CielIntegration\Integration\Admin\IntegrationModel;
 
 	class RemoteArticle extends IntegrationModel {
 		const BASE_TABLE_NAME = 'mycciel_oc_remote_product';

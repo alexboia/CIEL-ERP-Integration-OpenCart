@@ -1,7 +1,12 @@
 <?php
 use CielIntegration\CielController;
+use CielIntegration\Integration\Admin\WithCielIntegration;
+use CielIntegration\Integration\Admin\WithLookupDataProvider;
 
 class ControllerExtensionCielRuntimeSettings extends CielController {
+	use WithLookupDataProvider;
+	use WithCielIntegration;
+
 	public function index($data = array()) {
 		$data = array_merge($data, 
 			$this->_getRuntimeSettingsFormData());

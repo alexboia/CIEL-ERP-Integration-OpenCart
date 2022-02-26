@@ -1,7 +1,7 @@
 <?php
 namespace CielIntegration {
 
-    use CielIntegration\Integration\CielIntegrationFactory;
+    use CielIntegration\Integration\Admin\CielIntegrationFactory;
     use Exception;
     use \Loader;
 	use \Request;
@@ -24,11 +24,6 @@ namespace CielIntegration {
 		 */
 		private $_integrationFactory;
 
-		/**
-		 * @var LookupDataProvider
-		 */
-		private $_lookupDataProvider;
-
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
 			$this->_bootstrap();
@@ -37,16 +32,6 @@ namespace CielIntegration {
 
 		private function _initIntegration() {
 			$this->_integrationFactory = new CielIntegrationFactory($this->registry);
-		}
-
-		protected function _getStoreBinding() {
-			return $this->_integrationFactory
-				->getStoreBinding();
-		}
-
-		protected function _getWorkflow() {
-			return $this->_integrationFactory
-				->getWorkflow();
 		}
 
 		protected function _getRequestMethod() {
@@ -127,39 +112,6 @@ namespace CielIntegration {
 			$this->_addHeaderScript('extension/ciel_operation_status.js');
 		}
 
-		protected function _getWarehousesForDropdown() {
-			$dataSource = null;
-
-			try {
-				$dataSource = $this->_getStoreBinding()
-					->getAvailableWarehouses();
-
-				foreach ($dataSource as $id => $w) {
-					if (!is_object($w['properties'])) {
-						$w['properties'] = (object)$w['properties'];
-						$dataSource[$id] = $w;
-					}
-				}
-			} catch (Exception $exc) {
-				//TODO: log errors
-			}
-
-			return $dataSource;
-		}
-
-		protected function _getVatQuotasForDropdown() {
-			$dataSource = null;
-
-			try {
-				$dataSource = $this->_getStoreBinding()
-					->getAvailableVatQuotas();
-			} catch (Exception $exc) {
-				//TODO: log errors
-			}
-
-			return $dataSource;
-		}
-
 		protected function _createAjaxResponse(array $additionalProps = array()) {
 			$response = new \stdClass();
 			$response->success = false;
@@ -170,43 +122,6 @@ namespace CielIntegration {
 			}
 
 			return $response;
-		}
-
-		protected function _getDocumentTypeName($typeId) {
-			return $this->_getLookupDataProvider()
-				->getDocumentTypeName($typeId);
-		}
-
-		protected function _getSupportedDocumentTypes() {
-			return $this->_getLookupDataProvider()
-				->getSupportedDocumentTypes();
-		}
-
-		protected function _getSupportedStockUpdateModes() {
-			return $this->_getLookupDataProvider()
-				->getSupportedStockUpdateModes();
-		}
-
-		protected function _getSupportedDocumentStatusTypes() {
-			return $this->_getLookupDataProvider()
-				->getSupportedDocumentStatusTypes();
-		}
-
-		protected function _getOpenCartOrderStatuses() {
-			return $this->_getLookupDataProvider()
-				->getOpenCartOrderStatuses();
-		}
-
-		protected function _getOpenCartStockStatuses() {
-			return $this->_getLookupDataProvider()
-				->getOpenCartStockStatuses();
-		}
-
-		private function _getLookupDataProvider() {
-			if ($this->_lookupDataProvider === null) {
-				$this->_lookupDataProvider = new LookupDataProvider($this->registry);
-			}
-			return $this->_lookupDataProvider;
 		}
 	}
 }

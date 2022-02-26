@@ -1,7 +1,10 @@
 <?php
 use CielIntegration\CielController;
+use CielIntegration\Integration\Admin\WithCielIntegration;
 
 class ControllerExtensionCielConnectionSettings extends CielController {
+	use WithCielIntegration;
+	
 	public function index($data = array()) {
 		$data = array_merge($data, 
 			$this->_getConnectionSettingsFormData());

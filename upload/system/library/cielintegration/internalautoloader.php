@@ -2,14 +2,21 @@
 namespace CielIntegration {
 	use InvalidArgumentException;
 
-	class VendorAutoloader {
+	class InternalAutoloader {
 		private static $_initialized = false;
 
 		private static $_prefixConfig = null;
 
 		public static function enable() {
-			$libDir = __DIR__ . '/vendor';
+			$libDir = self::_getVendorLibDir();
+			$adminIntegrationLibDir = self::_getAdminIntegrationLibDir();
+
 			self::init(array(
+				'CielIntegration\\Integration\\Admin' => array(
+					'separator' => '\\',
+					'libDir' => $adminIntegrationLibDir,
+					'transform' => 'strtolower'
+				),
 				'Symfony\\Component\\CssSelector' => array(
 					'separator' => '\\',
 					'libDir' => $libDir . '/symphony/css-selector'
@@ -19,6 +26,14 @@ namespace CielIntegration {
 					'libDir' => $libDir . '/voku/helper'
 				 )
 			));
+		}
+
+		private static function _getVendorLibDir() {
+			return  __DIR__ . '/vendor';
+		}
+
+		private static function _getAdminIntegrationLibDir() {
+			return realpath(DIR_APPLICATION . '/../admin/model/extension/ciel_integration');
 		}
 
 		private static function init($prefixConfig) {
@@ -42,6 +57,10 @@ namespace CielIntegration {
 					$classPath = str_replace($fullPrefix, '', $className);
 					$classPath = self::_getRelativePath($classPath, $config['separator']);
 					$classPath = $config['libDir'] . '/' . $classPath . '.php';
+					if (isset($config['transform']) && is_callable($config['transform'])) {
+						$classPath = call_user_func($config['transform'], 
+							$classPath);
+					}
 					break;
 				}
 			}

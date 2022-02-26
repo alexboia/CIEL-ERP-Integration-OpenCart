@@ -1,5 +1,5 @@
 <?php
-namespace CielIntegration\Integration {
+namespace CielIntegration\Integration\Admin {
     use Ciel\Api\CielConfig;
 
 	class OpenCartCielConfig implements CielConfig {

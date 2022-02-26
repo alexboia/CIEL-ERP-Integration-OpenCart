@@ -8,15 +8,15 @@ namespace CielIntegration {
 
 		private static $_cielApiBootstrapped = false;
 
-		private static $_vendorBootstrapped = false;
+		private static $_internalLibrariesBootstrapped = false;
 
 		private static $_polyfillBootstrapped = false;
 
 		public static function bootstrap() {
 			$me = self::_getCurrent();
 			$me->_polyfill();
-			$me->_bootstrapVendor();
 			$me->_bootstrapCielApi();
+			$me->_bootstrapInternalLibraries();
 		}
 
 		private static function _getCurrent() {
@@ -42,19 +42,19 @@ namespace CielIntegration {
 			self::$_cielApiBootstrapped = true;
 		}
 
-		private function _bootstrapVendor() {
-			if (!$this->_isVendorBootstrapped()) {
-				VendorAutoloader::enable();
-				$this->_setVendorBootstrapped();
+		private function _bootstrapInternalLibraries() {
+			if (!$this->_areInternalLibrariesBootstrapped()) {
+				InternalAutoloader::enable();
+				$this->_setInternalLibrariesBootstrapped();
 			}
 		}
 
-		private function _isVendorBootstrapped() {
-			return self::$_vendorBootstrapped;
+		private function _areInternalLibrariesBootstrapped() {
+			return self::$_internalLibrariesBootstrapped;
 		}
 
-		private function _setVendorBootstrapped() {
-			self::$_vendorBootstrapped = true;
+		private function _setInternalLibrariesBootstrapped() {
+			self::$_internalLibrariesBootstrapped = true;
 		}
 
 		private function _polyfill() {

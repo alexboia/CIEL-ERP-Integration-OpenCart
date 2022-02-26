@@ -4,11 +4,15 @@ use Ciel\Api\Data\DocumentStatusType;
 use Ciel\Api\Data\DocumentType;
 use Ciel\Api\Data\WarehouseType;
 use CielIntegration\CielController;
-use CielIntegration\Integration\StockUpdateMode;
+use CielIntegration\Integration\Admin\WithLookupDataProvider;
+use CielIntegration\Integration\Admin\StockUpdateMode;
+use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\WithAdminLayoutLoader;
 
 class ControllerExtensionModuleCiel extends CielController {
 	use WithAdminLayoutLoader;
+	use WithLookupDataProvider;
+	use WithCielIntegration;
 
 	public function install() {
 		$this->_getModel()
@@ -178,9 +182,22 @@ class ControllerExtensionModuleCiel extends CielController {
 			$wfInStockStatusId = isset($this->request->post['myc_wf_in_stock_status_id'])
 				? intval($this->request->post['myc_wf_in_stock_status_id'])
 				: 0;
-
 			$wfOutOfStockStatusId = isset($this->request->post['myc_wf_out_of_stock_status_id'])
 				? intval($this->request->post['myc_wf_out_of_stock_status_id'])
+				: 0;
+
+			$wfNewTaxRateCustomerGroupId = isset($this->request->post['myc_wf_new_tax_rate_customer_group_id'])
+				? intval($this->request->post['myc_wf_new_tax_rate_customer_group_id'])
+				: 0;
+			$wfNewTaxRateGeoZoneId = isset($this->request->post['myc_wf_new_tax_rate_geo_zone_id'])
+				? intval($this->request->post['myc_wf_new_tax_rate_geo_zone_id'])
+				: 0;
+
+			$wfNewProductWeightClassId = isset($this->request->post['myc_wf_new_product_weight_class_id'])
+				? intval($this->request->post['myc_wf_new_product_weight_class_id'])
+				: 0;
+			$wfNewProductLengthClassId = isset($this->request->post['myc_wf_new_product_length_class_id'])
+				? intval($this->request->post['myc_wf_new_product_length_class_id'])
 				: 0;
 
 			if (empty($bindingPassword) && $storeBinding->hasConnectionInfo()) {
@@ -259,6 +276,30 @@ class ControllerExtensionModuleCiel extends CielController {
 						return;
 					}
 
+					if ($wfNewTaxRateCustomerGroupId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_customer_group_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
+					if ($wfNewTaxRateGeoZoneId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_geo_zone_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
+					if ($wfNewProductWeightClassId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_weight_class_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
+					if ($wfNewProductLengthClassId <= 0) {
+						$response->message = $this->_t('msg_err_fill_in_valid_length_class_id');
+						$this->_renderJsonToResponseOutput($response);
+						return;
+					}
+
 					$articlesReset = $this->_resetProductsIfBindingPropertiesChanged($bindingWarehouseCode, 
 						$bindingMatchVariations);
 
@@ -286,8 +327,12 @@ class ControllerExtensionModuleCiel extends CielController {
 					$this->_reconfigureStoreForBindingConfiguration();
 
 					//Save workflow
-					$workflow->setProductStockStatuses($wfInStockStatusId, 
+					$workflow->saveProductStockStatuses($wfInStockStatusId, 
 						$wfOutOfStockStatusId);
+					$workflow->saveNewTaxRateOptions($wfNewTaxRateGeoZoneId, 
+						$wfNewTaxRateCustomerGroupId);
+					$workflow->saveNewProductOptions($wfNewProductWeightClassId, 
+						$wfNewProductLengthClassId);
 
 					$response->articlesReset = $articlesReset;
 					$response->customersReset = $customersReset;

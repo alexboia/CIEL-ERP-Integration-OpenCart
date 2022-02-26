@@ -1,5 +1,5 @@
 <?php
-namespace CielIntegration\Integration {
+namespace CielIntegration\Integration\Admin {
     use CielIntegration\CielModel;
     use InvalidArgumentException;
 
