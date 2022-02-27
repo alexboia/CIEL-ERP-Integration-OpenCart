@@ -15,6 +15,22 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 			return $this->_update($remotePartnerInfo);
 		}
 
+		public function setBindingInformation($customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
+			$data = $this->getByCustomerId($customerId);
+			if (empty($data)) {
+				$data = array(
+					'customer_id' => $customerId
+				);
+			}
+
+			$data = array_merge($data, array(
+				'remote_partner_code' => $remoteCode,
+				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
+			));
+
+			$this->update($data);
+		}
+
 		public function addAll(array $remotePartnersInfos) {
 			if (empty($remotePartnersInfos)) {
 				return;

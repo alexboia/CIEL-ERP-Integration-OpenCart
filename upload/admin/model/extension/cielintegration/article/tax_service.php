@@ -1,26 +1,18 @@
 <?php
 namespace CielIntegration\Integration\Admin\Article {
 
-    use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
-    use CielIntegration\Integration\Admin\IntegrationService;
-    use Exception;
-    use ModelLocalisationTaxClass;
-    use ModelLocalisationTaxRate;
+	use CielIntegration\Integration\Admin\IntegrationService;
+	use ModelLocalisationTaxClass;
+	use ModelLocalisationTaxRate;
 
-    /**
+	/**
 	 * @property \Loader $load
 	 */
 	class TaxService extends IntegrationService {
 		const BASE_CIEL_ERP_TAX_CLASS_NAME = 'CIEL ERP';
 
-		/**
-		 * @var OpenCartCielWorkflow
-		 */
-		private $_workflow;
-
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
-			$this->_workflow = new OpenCartCielWorkflow($registry);
 		}
 
 		public function getOrCreateTaxClass($vatOptionName, $vatQuotaName, $vatQuotaValue) {
@@ -50,12 +42,14 @@ namespace CielIntegration\Integration\Admin\Article {
 			$taxRate = null;
 			$taxRatesRows = $this->_getTaxRateModel()
 				->getTaxRates();
+			$geoZoneId = $this->_getWorkflow()
+				->getNewTaxRateGeoZoneId();
 
 			foreach ($taxRatesRows as $tRow) {
-				//TODO: also factor in geo zone from workflow
 				if (strcasecmp($tRow['name'], $vatQuotaName) === 0 
 					&& $tRow['rate'] == $vatQuotaValue 
-					&& $tRow['type'] == 'P') {
+					&& $tRow['type'] == 'P'
+					&& $tRow['geo_zone_id'] == $geoZoneId) {
 					$taxRate = $tRow;
 					break;
 				}
@@ -65,12 +59,19 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		private function _createTaxRate($vatQuotaName, $vatQuotaValue) {
+			$geoZoneId = $this->_getWorkflow()
+				->getNewTaxRateGeoZoneId();
+			$customerGroupId = $this->_getWorkflow()
+				->getNewTaxRateCustomerGroupId();
+
 			$data = array(
-				'geo_zone_id' => 0,//TODO - pull from workflow
+				'type' => 'P',
 				'name' => $vatQuotaName,
 				'rate' => $vatQuotaValue,
-				'type' => 'P',
-				'tax_rate_customer_group' => array() //TODO - pull from workflow
+				'geo_zone_id' => $geoZoneId,
+				'tax_rate_customer_group' => array(
+					$customerGroupId
+				)
 			);
 
 			$taxRateModel = $this->_getTaxRateModel();
@@ -174,6 +175,14 @@ namespace CielIntegration\Integration\Admin\Article {
 		private function _getTaxRateModel() {
 			$this->load->model('localisation/tax_rate');
 			return $this->model_localisation_tax_rate;
+		}
+
+		public function productPricesIncludeTaxes() {
+			return false;
+		}
+
+		public function useTaxes() {
+			return true;
 		}
 	}
 }

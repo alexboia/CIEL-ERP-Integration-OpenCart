@@ -2,28 +2,34 @@
 namespace CielIntegration {
 	use InvalidArgumentException;
 
-	class InternalAutoloader {
+	class Autoloader {
 		private static $_initialized = false;
 
 		private static $_prefixConfig = null;
 
 		public static function enable() {
-			$libDir = self::_getVendorLibDir();
+			$mainLibDir = __DIR__;
+			$vendorLibDir = self::_getVendorLibDir();
 			$adminIntegrationLibDir = self::_getAdminIntegrationLibDir();
 
 			self::init(array(
 				'CielIntegration\\Integration\\Admin' => array(
 					'separator' => '\\',
 					'libDir' => $adminIntegrationLibDir,
-					'transform' => 'strtolower'
+					'transform' => 'myc_underscorize'
+				),
+				'CielIntegration' => array(
+					'separator' => '\\',
+					'libDir' => $mainLibDir,
+					'transform' => 'myc_underscorize'
 				),
 				'Symfony\\Component\\CssSelector' => array(
 					'separator' => '\\',
-					'libDir' => $libDir . '/symphony/css-selector'
+					'libDir' => $vendorLibDir . '/symphony/css-selector'
 				),
 				'voku\\helper' => array(
 					'separator' => '\\',
-					'libDir' => $libDir . '/voku/helper'
+					'libDir' => $vendorLibDir . '/voku/helper'
 				 )
 			));
 		}
@@ -33,7 +39,7 @@ namespace CielIntegration {
 		}
 
 		private static function _getAdminIntegrationLibDir() {
-			return realpath(DIR_APPLICATION . '/../admin/model/extension/ciel_integration');
+			return realpath(DIR_APPLICATION . '/../admin/model/extension/cielintegration');
 		}
 
 		private static function init($prefixConfig) {
@@ -55,12 +61,17 @@ namespace CielIntegration {
 				$fullPrefix = $prefix . $config['separator'];
 				if (strpos($className, $fullPrefix) === 0) {
 					$classPath = str_replace($fullPrefix, '', $className);
-					$classPath = self::_getRelativePath($classPath, $config['separator']);
-					$classPath = $config['libDir'] . '/' . $classPath . '.php';
+					
 					if (isset($config['transform']) && is_callable($config['transform'])) {
-						$classPath = call_user_func($config['transform'], 
-							$classPath);
+						$classPath = self::_getRelativePath($classPath, 
+							$config['separator'], 
+							$config['transform']);
+					} else {
+						$classPath = self::_getRelativePath($classPath, 
+							$config['separator']);
 					}
+
+					$classPath = $config['libDir'] . '/' . $classPath . '.php';
 					break;
 				}
 			}
@@ -70,7 +81,7 @@ namespace CielIntegration {
 			}
 		}
 
-		private static function _getRelativePath($className, $separator) {
+		private static function _getRelativePath($className, $separator, $transform = null) {
 			$classPath = array();
 			$pathParts = array_filter(explode($separator, $className), function($el) {
 				return !empty($el);
@@ -79,9 +90,18 @@ namespace CielIntegration {
 			foreach ($pathParts as $namePart) {
 				if (!empty($namePart)) {
 					$namePart[0] = strtolower($namePart[0]);
+					if ($transform !== null) {
+						$namePart = call_user_func($transform, $namePart);
+					}
+					
 					$classPath[] = $namePart;
 				}
 			}
+
+			if ($transform !== null) {
+				$className = call_user_func($transform, $className);
+			}
+
 			$classPath[] = $className;
 			return implode('/', $classPath);
 		}

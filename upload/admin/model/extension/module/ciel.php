@@ -119,6 +119,7 @@ class ModelExtensionModuleCiel extends CielModel {
 				`mycciel_oc_remote_measurement_unit` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
 				`mycciel_oc_remote_price_vat_quota_value` FLOAT(10,0) NULL DEFAULT NULL,
 				`mycciel_oc_remote_price_vat_option_name` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+				`mycciel_oc_remote_batch_tracking_enabled` SMALLINT(6) NOT NULL,
 				PRIMARY KEY (`mycciel_oc_product_id`) USING BTREE
 			)
 			COLLATE='utf8_general_ci'

@@ -1,6 +1,12 @@
 <?php
 namespace CielIntegration\Integration\Admin {
+	/**
+	 * @property \Loader $load
+	 * @property \Registry $registry
+	 */
 	abstract class IntegrationService {
+		use WithCielIntegration;
+
 		/**
 		 * @var \Registry
 		 */

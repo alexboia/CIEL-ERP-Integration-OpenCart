@@ -15,6 +15,23 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 			return $this->_update($remoteOrderInfo);
 		}
 
+		public function setCustomerBindingInformation($orderId, $customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
+			$data = $this->getByOrderId($orderId);
+			if (empty($data)) {
+				$data = array(
+					'order_id' => $orderId
+				);
+			}
+
+			$data = array_merge($data, array(
+				'customer_id' => $customerId,
+				'remote_partner_code' => $remoteCode,
+				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
+			));
+
+			$this->update($data);
+		}
+
 		public function addAll(array $remoteOrdersInfos) {
 			if (empty($remoteOrdersInfos)) {
 				return;

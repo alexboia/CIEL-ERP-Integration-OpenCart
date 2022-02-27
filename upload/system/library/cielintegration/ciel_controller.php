@@ -1,8 +1,5 @@
 <?php
 namespace CielIntegration {
-
-    use CielIntegration\Integration\Admin\CielIntegrationFactory;
-    use Exception;
     use \Loader;
 	use \Request;
 
@@ -18,20 +15,11 @@ namespace CielIntegration {
 		use WithBootstrapper;
 		use WithLanguage;
 		use WithInputSanitization;
-
-		/**
-		 * @var CielIntegrationFactory
-		 */
-		private $_integrationFactory;
+		use WithRouteUrl;
 
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
 			$this->_bootstrap();
-			$this->_initIntegration();
-		}
-
-		private function _initIntegration() {
-			$this->_integrationFactory = new CielIntegrationFactory($this->registry);
 		}
 
 		protected function _getRequestMethod() {
@@ -79,15 +67,6 @@ namespace CielIntegration {
 			);
 
 			return $data;
-		}
-
-		protected function _createRouteUrl($route) {
-			return $this->url->link($route, 'token=' . $this->_getCurrentSessionToken(), true);
-		}
-
-		protected function _getCurrentSessionToken() {
-			return $this->session
-				->data['token'];
 		}
 
 		protected function _renderJsonToResponseOutput($result) {

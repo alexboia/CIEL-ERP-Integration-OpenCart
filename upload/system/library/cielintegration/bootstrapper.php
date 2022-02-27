@@ -28,10 +28,14 @@ namespace CielIntegration {
 
 		private function _bootstrapCielApi() {
 			if (!$this->_isCielApiBootstrapped()) {
-				require_once __DIR__ . '/ciel/CielAutoloader.php';
-				\Ciel\Api\CielAutoloader::enable();
+				$this->_setupCielApiAutoloader();
 				$this->_setCielApiBootstrapped();
 			}
+		}
+
+		private function _setupCielApiAutoloader() {
+			require_once __DIR__ . '/ciel/CielAutoloader.php';
+			\Ciel\Api\CielAutoloader::enable();
 		}
 
 		private function _isCielApiBootstrapped() {
@@ -44,9 +48,18 @@ namespace CielIntegration {
 
 		private function _bootstrapInternalLibraries() {
 			if (!$this->_areInternalLibrariesBootstrapped()) {
-				InternalAutoloader::enable();
+				$this->_includeHelpers();
+				$this->_setupInternalLibrariesAutoloader();
 				$this->_setInternalLibrariesBootstrapped();
 			}
+		}
+
+		private function _includeHelpers() {
+			require_once __DIR__ . '/helper/string.php';
+		}
+
+		private function _setupInternalLibrariesAutoloader() {
+			Autoloader::enable();
 		}
 
 		private function _areInternalLibrariesBootstrapped() {

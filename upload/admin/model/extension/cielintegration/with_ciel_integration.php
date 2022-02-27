@@ -1,8 +1,12 @@
 <?php
 namespace CielIntegration\Integration\Admin {
 
+    use Ciel\Api\CielConfig;
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
+    use CielIntegration\Integration\Admin\Article\Model\RemoteArticle;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
+    use CielIntegration\Integration\Admin\Order\Model\RemoteOrder;
+    use CielIntegration\Integration\Admin\Partner\Model\RemotePartner;
     use Exception;
 
 	/**
@@ -40,6 +44,17 @@ namespace CielIntegration\Integration\Admin {
 				->getWorkflow();
 		}
 
+		/**
+		 * @return CielConfig 
+		 */
+		protected function _getConfig() {
+			return $this->_getStoreBinding()
+				->getConfig();
+		}
+
+		/**
+		 * @return array|null
+		 */
 		protected function _getWarehousesForDropdown() {
 			$dataSource = null;
 
@@ -60,6 +75,9 @@ namespace CielIntegration\Integration\Admin {
 			return $dataSource;
 		}
 
+		/**
+		 * @return array|null
+		 */
 		protected function _getVatQuotasForDropdown() {
 			$dataSource = null;
 
@@ -71,6 +89,27 @@ namespace CielIntegration\Integration\Admin {
 			}
 
 			return $dataSource;
+		}
+
+		/**
+		 * @return RemoteArticle 
+		 */
+		protected function _getRemoteArticleModel() {
+			return new RemoteArticle($this->registry);
+		}
+
+		/**
+		 * @return RemotePartner
+		 */
+		protected function _getRemotePartnerModel() {
+			return new RemotePartner($this->registry);
+		}
+
+		/**
+		 * @return RemoteOrder
+		 */
+		protected function _getRemoteOrderModel() {
+			return new RemoteOrder($this->registry);
 		}
 	}
 }

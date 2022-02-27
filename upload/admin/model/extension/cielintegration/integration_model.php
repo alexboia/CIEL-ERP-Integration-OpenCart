@@ -106,6 +106,19 @@ namespace CielIntegration\Integration\Admin {
 			}
 		}
 
+		protected function _getAll() {
+			$dbOperations = $this->_getDbOperations();
+
+			$dbModelInfos = $dbOperations->select($this->_getTableName(), 
+				array());
+
+			if (!empty($dbModelInfos)) {
+				return $this->_buildInfosToReturn($dbModelInfos);
+			} else {
+				return array();
+			}
+		}
+
 		protected function _getAllByModelIds(array $modelIds) {
 			$dbOperations = $this->_getDbOperations();
 			$where = $this->_createModelIdsCondition($modelIds);
