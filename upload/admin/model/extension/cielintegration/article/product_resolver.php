@@ -16,6 +16,28 @@ namespace CielIntegration\Integration\Admin\Article {
 			));
 		}
 
+		public function getVatOutOptionName($productId) {
+			if (empty($productId)) {
+				return null;
+			}
+
+			$remoteArticleModel = $this
+				->_getRemoteArticleModel();
+			return $remoteArticleModel
+				->getVatOutOptionName($productId);
+		}
+
+		public function getVatOutQuotaValue($productId) {
+			if (empty($productId)) {
+				return 0;
+			}
+
+			$remoteArticleModel = $this
+				->_getRemoteArticleModel();
+			return $remoteArticleModel
+				->getVatOutQuotaValue($productId);
+		}
+
 		public function getBatchTrackingStatus($productId) {
 			if (empty($productId)) {
 				return false;
@@ -38,7 +60,7 @@ namespace CielIntegration\Integration\Admin\Article {
 				->existsForProductId($productId);
 		}
 
-		public function getCielErpRemoteArticleId($productId) {
+		public function lookupRemoteArticleId($productId) {
 			if (empty($productId)) {
 				return false;
 			}
@@ -111,6 +133,16 @@ namespace CielIntegration\Integration\Admin\Article {
 			return $productModel->getProducts(array(
 				'filter_status' => 1
 			));
+		}
+
+		public function getProduct($productId) {
+			if (empty($productId)) {
+				return null;
+			}
+
+			$productModel = $this->_getCatalogProductModel();
+			return $productModel
+				->getProduct($productId);
 		}
 
 		/**

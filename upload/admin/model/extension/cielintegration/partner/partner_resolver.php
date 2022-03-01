@@ -2,9 +2,7 @@
 namespace CielIntegration\Integration\Admin\Partner {
 
     use CielIntegration\Integration\Admin\IntegrationService;
-    use Exception;
     use ModelCustomerCustomer;
-    use ModelLocalisationZone;
 
 	class PartnerResolver extends IntegrationService {
 		public function getCustomer($customerId) {
@@ -106,6 +104,12 @@ namespace CielIntegration\Integration\Admin\Partner {
 						=> $remotePartnerData['remote_partner_addr_worksite_id']
 				)
 				: null;
+		}
+
+		public function isConnectedToCielErp($customerId) {
+			$bindingInformation = $this->getCustomerBillingAddressInformation($customerId);
+			return !empty($bindingInformation) 
+				&& !empty($bindingInformation['remote_partner_code']);
 		}
 
 		/**

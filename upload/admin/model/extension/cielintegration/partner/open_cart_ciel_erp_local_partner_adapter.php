@@ -5,6 +5,7 @@ namespace CielIntegration\Integration\Admin\Partner {
     use Ciel\Api\Exception\LocalPartnerNotFoundException;
     use Ciel\Api\Integration\Partners\Providers\CielErpLocalPartnerAdapter;
     use CielIntegration\Integration\Admin\IntegrationService;
+    use CielIntegration\Integration\Admin\Order\OrderPartnerResolver;
     use CielIntegration\Integration\Admin\Order\OrderResolver;
     use InvalidArgumentException;
 
@@ -27,6 +28,11 @@ namespace CielIntegration\Integration\Admin\Partner {
 		 */
 		private $_orderResolver;
 
+		/**
+		 * @var OrderPartnerResolver
+		 */
+		private $_orderPartnerResolver;
+
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
 			$this->_remotePartnerMarshallerFactory = 
@@ -35,6 +41,8 @@ namespace CielIntegration\Integration\Admin\Partner {
 				new PartnerResolver($registry);
 			$this->_orderResolver = 
 				new OrderResolver($registry);
+			$this->_orderPartnerResolver = 
+				new OrderPartnerResolver($registry);
 		}
 
 		public function getAllLocalPartnersForExport() { 
@@ -156,7 +164,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 				throw new LocalOrderNotFoundException('id', $localOrderId);
 			}
 
-			$bindingInformation = $this->_getRemoteOrderPartnerBindingInformation($localOrderId, 
+			$bindingInformation = $this->_getOrderCustomerRemotePartnerBindingInformation($localOrderId, 
 				$customerId);
 
 			if ($bindingInformation == null) {
@@ -211,35 +219,15 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		private function _getOrderCustomerBillingAddressInformation($orderId, $customerId) {
-			$orderBillingAddressInformation = $this->_orderResolver
-				->getOrderCustomerBillingAddressInformation($orderId);
-
-			$customerBillingAddressInformation = $this->_partnerResolver
-				->getCustomerBillingAddressInformation($customerId);
-
-			if (empty($orderBillingAddressInformation)) {
-				$orderBillingAddressInformation = $this->_orderResolver
-					->getEmptyRemoteOrderPartnerBindingInformation();
-			}
-
-			return myc_merge_if_value_empty($orderBillingAddressInformation, 
-				$customerBillingAddressInformation);
+			return $this->_orderPartnerResolver
+				->getOrderCustomerBillingAddressInformation($orderId, 
+					$customerId);
 		}
 
-		private function _getRemoteOrderPartnerBindingInformation($orderId, $customerId) {
-			$orderPartnerBindingInformation = $this->_orderResolver
-				->getRemoteOrderPartnerBindingInformation($orderId);
-
-			$customerPartnerBindingInformation = $this->_partnerResolver
-				->getRemotePartnerBindingInformation($customerId);
-
-			if (empty($orderPartnerBindingInformation)) {
-				$orderPartnerBindingInformation = $this->_orderResolver
-					->getEmptyRemoteOrderPartnerBindingInformation();
-			}
-
-			return myc_merge_if_value_empty($orderPartnerBindingInformation, 
-				$customerPartnerBindingInformation);
+		private function _getOrderCustomerRemotePartnerBindingInformation($orderId, $customerId) {
+			return $this->_orderPartnerResolver
+				->getOrderCustomerRemotePartnerBindingInformation($orderId, 
+					$customerId);
 		}
 
 		public function getPartnerData($localPartnerId) { 

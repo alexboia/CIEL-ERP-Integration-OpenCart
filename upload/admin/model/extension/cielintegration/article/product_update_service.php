@@ -4,6 +4,7 @@ namespace CielIntegration\Integration\Admin\Article {
     use Ciel\Api\Exception\ArticleCodeAlreadyExistsException;
     use CielIntegration\Integration\Admin\IntegrationService;
     use CielIntegration\Integration\Admin\PriceFormatter;
+    use InvalidArgumentException;
     use ModelCatalogProduct;
     use Registry;
 
@@ -43,6 +44,11 @@ namespace CielIntegration\Integration\Admin\Article {
 		 */
 		public function __construct($productId, \Registry $registry) {
 			parent::__construct($registry);
+
+			if (empty($productId) && $productId !== 0) {
+				throw new InvalidArgumentException('Product id may not be empty.');
+			}
+
 			$this->_productId = $productId;
 			$this->_taxService = new TaxService($registry);
 			$this->_manufacturerService = new ManufacturerService($registry);
@@ -369,11 +375,15 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		private function _calculatePriceOutWithoutVat($priceOutWithVat, $vatQuotaValue) {
-			return (double)$priceOutWithVat / (1 + ($vatQuotaValue / 100));
+			return $this->_priceFormatter
+				->calculatePriceWithoutVat($priceOutWithVat, 
+					$vatQuotaValue);
 		}
 
-		private function _calculatePriceOutWithVat($priceOut, $vatQuotaValue) {
-			return (double)$priceOut * (1 + ($vatQuotaValue / 100));
+		private function _calculatePriceOutWithVat($priceOutWithoutVat, $vatQuotaValue) {
+			return $this->_priceFormatter
+				->calculatePriceWithVat($priceOutWithoutVat, 
+					$vatQuotaValue);
 		}
 
 		private function _productPricesIncludeTaxes() {

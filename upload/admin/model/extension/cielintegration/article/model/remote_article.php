@@ -86,5 +86,21 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 					? intval($record['remote_id']) 
 					: 0;
 		}
+
+		public function getVatOutOptionName($productId) {
+			$record = $this->getByProductId($productId);
+			return !empty($record) 
+				&& !empty($record['remote_price_vat_option_name']) 
+					? $record['remote_price_vat_option_name'] 
+					: null;
+		}
+
+		public function getVatOutQuotaValue($productId) {
+			$record = $this->getByProductId($productId);
+			return !empty($record) 
+				&& !empty($record['remote_price_vat_quota_value']) 
+					? floatval($record['remote_price_vat_quota_value']) 
+					: 0;
+		}
 	}
 }

@@ -5,13 +5,28 @@ namespace CielIntegration\Integration\Admin\Order {
     use ModelSaleOrder;
 
 	class OrderResolver extends IntegrationService {
+		public function orderExists($orderId) {
+			if (empty($orderId)) {
+				return false;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT COUNT(order_id) as order_count FROM `' . DB_PREFIX . 'order` WHERE order_id = "' . intval($orderId) . '"');
+			
+			$row = $result->row;
+			return !empty($row) && !empty($row['order_count'])
+				? intval($row['order_count']) > 0
+				: false;
+		}
+
 		public function getOrder($orderId) {
 			if (empty($orderId)) {
 				return null;
 			}
 
 			$orderModel = $this->_getOrderModel();
-			return $orderModel->getOrder($orderId);
+			return $orderModel
+				->getOrder($orderId);
 		}
 		
 		/**
@@ -20,6 +35,54 @@ namespace CielIntegration\Integration\Admin\Order {
 		private function _getOrderModel() {
 			$this->load->model('sale/order');
 			return $this->model_sale_order;
+		}
+
+		public function getOrderProducts($orderId) {
+			if (empty($orderId)) {
+				return array();
+			}
+
+			$orderModel = $this->_getOrderModel();
+			return $orderModel
+				->getOrderProducts($orderId);
+		}
+
+		public function getOrderTotals($orderId) {
+			if (empty($orderId)) {
+				return array();
+			}
+
+			$orderModel = $this->_getOrderModel();
+			return $orderModel
+				->getOrderTotals($orderId);
+		}
+
+		public function isRemoteDocumentIssuedForOrder($orderId) {
+			if (empty($orderId)) {
+				return false;
+			}
+
+			$remoteDocumentData = $this->lookupRemoteDocumentData($orderId);
+			return $remoteDocumentData != null
+				&& !empty($remoteDocumentData['id']);
+		}
+
+		public function lookupRemoteDocumentData($orderId) {
+			if (empty($orderId)) {
+				return false;
+			}
+
+			$remoteOrderModel = $this->_getRemoteOrderModel();
+			$remoteOrderData = $remoteOrderModel->getByOrderId($orderId);
+
+			if (!empty($remoteOrderData)) {
+				return array(
+					'id' => $remoteOrderData['remote_document_id'],
+					'type' => $remoteOrderData['remote_document_type']
+				);
+			} else {
+				return null;
+			}
 		}
 
 		public function getOrderCustomerBillingAddressInformation($orderId) {
@@ -60,7 +123,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			);
 		}
 
-		public function getRemoteOrderPartnerBindingInformation($orderId) {
+		public function getOrderCustomerRemotePartnerBindingInformation($orderId) {
 			if (empty($orderId)) {
 				return null;
 			}
@@ -78,11 +141,24 @@ namespace CielIntegration\Integration\Admin\Order {
 				: null;
 		}
 
-		public function getEmptyRemoteOrderPartnerBindingInformation() {
+		public function isOrderCustomerConnectedToCielErp($orderId) {
+			$bindingInformation = $this->getOrderCustomerRemotePartnerBindingInformation($orderId);
+			return !empty($bindingInformation) 
+				&& !empty($bindingInformation['remote_partner_code']);
+		}
+
+		public function getEmptyOrderCustomerRemotePartnerBindingInformation() {
 			return array(
 				'remote_partner_code' => null,
 				'remote_partner_addr_worksite_id' => null
 			);
+		}
+
+		/**
+		 * @return \DB
+		 */
+		protected function _getDb() {
+			return $this->db;
 		}
 	}
 }

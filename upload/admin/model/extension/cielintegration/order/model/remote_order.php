@@ -15,21 +15,57 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 			return $this->_update($remoteOrderInfo);
 		}
 
+		public function setRemoteDocumentData($orderId, $documentId, $documentType) {
+			if (empty($orderId)) {
+				return;
+			}
+
+			$orderData = $this->getByOrderId($orderId);
+			if (empty($orderId)) {
+				return;
+			}
+
+			$orderData = array_merge($orderData, array(
+				'remote_document_id' => $documentId,
+				'remote_document_type' => $documentType
+			));
+
+			$this->update($orderData);
+		}
+
+		public function clearRemoteDocumentData($orderId) {
+			if (empty($orderId)) {
+				return;
+			}
+
+			$orderData = $this->getByOrderId($orderId);
+			if (empty($orderId)) {
+				return;
+			}
+
+			$orderData = array_merge($orderData, array(
+				'remote_document_id' => null,
+				'remote_document_type' => null
+			));
+
+			$this->update($orderData);
+		}
+
 		public function setCustomerBindingInformation($orderId, $customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
-			$data = $this->getByOrderId($orderId);
-			if (empty($data)) {
-				$data = array(
+			$orderData = $this->getByOrderId($orderId);
+			if (empty($orderData)) {
+				$orderData = array(
 					'order_id' => $orderId
 				);
 			}
 
-			$data = array_merge($data, array(
+			$orderData = array_merge($orderData, array(
 				'customer_id' => $customerId,
 				'remote_partner_code' => $remoteCode,
 				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
 			));
 
-			$this->update($data);
+			$this->update($orderData);
 		}
 
 		public function addAll(array $remoteOrdersInfos) {

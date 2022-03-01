@@ -1,22 +1,37 @@
 <?php
 namespace CielIntegration\Integration\Admin {
 
+    use Ciel\Api\Integration\Articles\CielErpArticleIntegration;
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
+    use Ciel\Api\Integration\Orders\CielErpOrderIntegration;
+    use Ciel\Api\Integration\Partners\CielErpPartnerIntegration;
+    use CielIntegration\Integration\Admin\Article\OpenCartCielErpLocalArticleAdapter;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielErpToStoreBindingAdapter;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
+    use CielIntegration\Integration\Admin\Order\OpenCartCielErpLocalOrderAdapter;
+    use CielIntegration\Integration\Admin\Partner\OpenCartCielErpLocalPartnerAdapter;
     use Registry;
 
 	class CielIntegrationFactory {
 		/**
 		 * @var CielErpToStoreBinding
 		 */
-		private $_storeBinding;
+		private $_storeBinding = null;
 
-		private $_articleIntegration;
+		/**
+		 * @var CielErpArticleIntegration
+		 */
+		private $_articleIntegration = null;
 
-		private $_orderIntegration;
+		/**
+		 * @var CielErpOrderIntegration
+		 */
+		private $_orderIntegration = null;
 
-		private $_partnerIntegration;
+		/**
+		 * @var CielErpPartnerIntegration
+		 */
+		private $_partnerIntegration = null;
 
 		/**
 		 * @var Registry
@@ -41,6 +56,42 @@ namespace CielIntegration\Integration\Admin {
 				);
 			}
 			return $this->_storeBinding;
+		}
+
+		public function getArticleIntegration() {
+			if ($this->_articleIntegration === null) {
+				$this->_articleIntegration = new CielErpArticleIntegration(
+					$this->getStoreBinding(),
+					new OpenCartCielErpLocalArticleAdapter(
+						$this->_registry
+					)
+				);
+			}
+			return $this->_articleIntegration;
+		}
+
+		public function getPartnerIntegration() {
+			if ($this->_partnerIntegration === null) {
+				$this->_partnerIntegration = new CielErpPartnerIntegration(
+					$this->getStoreBinding(),
+					new OpenCartCielErpLocalPartnerAdapter(
+						$this->_registry
+					)
+					);
+			}
+			return $this->_partnerIntegration;
+		}
+
+		public function getOrderIntegration() {
+			if ($this->_orderIntegration === null) {
+				$this->_orderIntegration = new CielErpOrderIntegration(
+					$this->getStoreBinding(), 
+					new OpenCartCielErpLocalOrderAdapter(
+						$this->_registry
+					)
+				);
+			}
+			return $this->_orderIntegration;
 		}
 
 		public function getWorkflow() {

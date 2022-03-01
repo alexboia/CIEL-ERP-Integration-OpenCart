@@ -2,6 +2,7 @@
 namespace CielIntegration\Integration\Admin\Partner {
 
     use CielIntegration\Integration\Admin\IntegrationService;
+    use InvalidArgumentException;
 
 	class PartnerUpdateService extends IntegrationService {
 		/**
@@ -11,6 +12,11 @@ namespace CielIntegration\Integration\Admin\Partner {
 
 		public function __construct($customerId, \Registry $registry) {
 			parent::__construct($registry);
+
+			if (empty($customerId)) {
+				throw new InvalidArgumentException('Customer id may not be empty.');
+			}
+
 			$this->_customerId = $customerId;
 		}
 

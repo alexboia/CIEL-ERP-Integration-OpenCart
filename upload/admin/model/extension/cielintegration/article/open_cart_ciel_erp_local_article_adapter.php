@@ -260,7 +260,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			}
 
 			if ($this->_productExits($localId)) {
-				$sku = $this->_lookupProductSku($localId);
+				$sku = $this->_getProductSku($localId);
 				$result = array(
 					$localId => $sku
 				);
@@ -271,9 +271,9 @@ namespace CielIntegration\Integration\Admin\Article {
 			return $result;
 		}
 
-		private function _lookupProductSku($localId) {
+		private function _getProductSku($productId) {
 			return $this->_productResolver
-				->lookupProductSku($localId);
+				->lookupProductSku($productId);
 		}
 
 		public function getBatchTrackingStatusForSingleArticle($localId) { 
@@ -321,15 +321,15 @@ namespace CielIntegration\Integration\Admin\Article {
 				'description' => trim($product['description']),
 				'manageStock' => true,
 				'permalink' => $this->_getProductEditUrl($productId),
-				'remoteId' => $this->_getCielErpRemoteArticleId($productId)
+				'remoteId' => $this->_getRemoteArticleId($productId)
 			);
 			
 			return $data;
 		}
 
-		private function _getCielErpRemoteArticleId($productId) {
+		private function _getRemoteArticleId($productId) {
 			return $this->_productResolver
-				->getCielErpRemoteArticleId($productId);
+				->lookupRemoteArticleId($productId);
 		}
 
 		private function _getProductEditUrl($producId) {
