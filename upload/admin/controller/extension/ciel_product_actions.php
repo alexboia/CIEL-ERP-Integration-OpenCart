@@ -14,8 +14,7 @@ class ControllerExtensionCielProductActions extends CielController {
 			$productId = $this->_getProductIdFromUrl();
 			if (!empty($productId)) {
 				try {
-					$this->_doConnectToCielErp($productId);
-					$response->success = true;
+					$response->success = $this->_doConnectToCielErp($productId);
 				} catch (RemoteArticleNotFoundException $exc) {
 					//TODO: logging
 				} catch (Exception $exc) {
@@ -35,7 +34,12 @@ class ControllerExtensionCielProductActions extends CielController {
 
 	private function _doConnectToCielErp($productId) {
 		$articleIntegration = $this->_getArticleIntegration();
-		$articleIntegration->tryAutoConnectArticleByLocalCode($productId);
+		if ($articleIntegration->canBeMatchedByLocalCode($productId)) {
+			$articleIntegration->tryAutoConnectArticleByLocalCode($productId);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private function _getArticleIntegration() {
@@ -44,10 +48,44 @@ class ControllerExtensionCielProductActions extends CielController {
 	}
 
 	public function update_all() {
+		$response = $this->_createAjaxResponse();
 
+		if ($this->_isHttpPost()) {
+			$productId = $this->_getProductIdFromUrl();
+			if (!empty($productId)) {
+				try {
+					$response->success = $this->_doUpdateAllProductInformation($productId);
+				} catch (RemoteArticleNotFoundException $exc) {
+					//TODO: logging
+				} catch (Exception $exc) {
+					//TODO: logging
+				}
+			}
+		}
+
+		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _doUpdateAllProductInformation($productId) {
+		$articleIntegration = $this->_getArticleIntegration();
+		if ($articleIntegration->isArticleConnected($productId)) {
+			$articleIntegration->updateArticleFromRemoteSource($productId);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public function update_stocks() {
+		$response = $this->_createAjaxResponse();
 
+		if ($this->_isHttpPost()) {
+			$productId = $this->_getProductIdFromUrl();
+			if (!empty($productId)) {
+				
+			}
+		}
+
+		$this->_renderJsonToResponseOutput($response);
 	}
 }

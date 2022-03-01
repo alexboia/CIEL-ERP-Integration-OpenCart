@@ -49,6 +49,12 @@
 					<th scope="row" class="text-right">Actiuni disponibile</th>
 					<td class="text-left">
 						<?php if ($is_connected_to_ciel_erp): ?>
+							<button id="myc_sync_all_product_information" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_update_all_action_url; ?>">
+								Actualizare completa din CIEL ERP
+							</button>
+							<button id="myc_only_stock_product_information" type="button" class="btn" data-action-url="<?php echo $ciel_erp_update_stocks_action_url; ?>">
+								Actualizare doar stocuri din CIEL ERP
+							</button>
 						<?php else: ?>
 							<button id="myc_connect_product_to_ciel_erp" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_connect_action_url; ?>">
 								Conectare la CIEL ERP folosind SKU
