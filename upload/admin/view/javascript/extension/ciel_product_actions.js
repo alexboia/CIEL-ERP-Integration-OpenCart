@@ -19,6 +19,13 @@
 				message);
 	}
 
+	function _delayedReloadPage(timeoutSeconds) {
+		window.setTimeout(function() {
+			$.showCielLoading();
+			window.location.reload();
+		}, timeoutSeconds * 1000);
+	}
+
 	function _connectProductToCielErp() {
 		var $me = $(this);
 		var actionUrl = _getActionUrl($me);
@@ -32,14 +39,17 @@
 			data: {}
 		}).done(function(data, status, xhr) {
 			$.hideCielLoading();
+			console.log(data);
 			if (data && !!data.success) {
-				_showSuccess('Produsul as fost conectat cu succes la CIEL ERP.');
+				_showSuccess('Produsul a fost conectat cu succes la CIEL ERP. Pagina se va reincarca in 5 secunde.');
+				_delayedReloadPage(5);
 			} else {
 				_showError(data.message || 'Produsul nu a putut fi conectat la CIEL ERP.');	
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			_showError('Produsul nu a putut fi conectat la CIEL ERP.');
+			console.log(error);
+			_showError('Produsul nu a putut fi conectat la CIEL ERP din cauza unei posibile probleme de comunicatie.');
 		});
 	}
 

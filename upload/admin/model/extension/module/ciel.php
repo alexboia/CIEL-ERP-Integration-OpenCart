@@ -26,11 +26,21 @@ class ModelExtensionModuleCiel extends CielModel {
 				"access",
 				"extension/ciel_connect_products"
 			);
-
 			$userGroupModel->addPermission(
 				$adminUserGroupId,
 				"modify",
 				"extension/ciel_connect_products"
+			);
+
+			$userGroupModel->addPermission(
+				$adminUserGroupId,
+				"access",
+				"extension/ciel_product_actions"
+			);
+			$userGroupModel->addPermission(
+				$adminUserGroupId,
+				"modify",
+				"extension/ciel_product_actions"
 			);
 		}
 	}

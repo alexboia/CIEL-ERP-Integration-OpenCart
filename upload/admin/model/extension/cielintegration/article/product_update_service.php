@@ -228,16 +228,34 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		private function _updateProduct($modifiedProductData) {
-			$productModel = $this->_getCatalogProductModel();
-			if ($this->_productData === null) {
-				$this->_productData = $productModel->getProduct($this->_productId);
+			$db = $this->_getDb();
+			$cache = $this->_getCache();
+
+			$query = $this->_buildProductUpdateQuery($modifiedProductData);
+			$cache->delete('product');
+
+			$db->query($query);
+		}
+
+		private function _buildProductUpdateQuery($modifiedProductData) {
+			$db = $this->_getDb();
+			$updateColums = array();
+
+			foreach ($modifiedProductData as $key => $value) {
+				$updateColums[] = sprintf('`%s` = "%s"', 
+					$key, 
+					$db->escape($value));
 			}
 
-			$this->_productData = array_merge($this->_productData, 
-				$modifiedProductData);
-			
-			$productModel->editProduct($this->_productId, 
-				$this->_productData);
+			$updateColums = join(', ', 
+				$updateColums);
+
+			$query = 'UPDATE `' . DB_PREFIX .'product` 
+				SET ' . $updateColums . ' 
+				WHERE product_id =' 
+					. intval($this->_productId);
+
+			return $query;
 		}
 
 		public function setProductTaxInformation(array $remoteArticleData) {
@@ -465,6 +483,20 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		private function _shopStockManagementEnabled() {
 			return true;
+		}
+
+		/**
+		 * @return \DB
+		 */
+		private function _getDb() {
+			return $this->db;
+		}
+
+		/**
+		 * @return \Cache
+		 */
+		private function _getCache() {
+			return $this->cache;
 		}
 	}
 } 

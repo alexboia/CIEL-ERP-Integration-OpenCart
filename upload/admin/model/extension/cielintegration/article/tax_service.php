@@ -40,8 +40,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		private function _getTaxRatesByVatQuotaProperties($vatQuotaName, $vatQuotaValue) {
 			$taxRate = null;
-			$taxRatesRows = $this->_getTaxRateModel()
-				->getTaxRates();
+			$taxRatesRows = $this->_getAllTaxRates();
 			$geoZoneId = $this->_getWorkflow()
 				->getNewTaxRateGeoZoneId();
 
@@ -56,6 +55,16 @@ namespace CielIntegration\Integration\Admin\Article {
 			}
 
 			return $taxRate;
+		}
+
+		private function _getAllTaxRates() {
+			$db = $this->_getDb();
+			$result = $db->query('SELECT * FROM `' . DB_PREFIX . 'tax_rate` ORDER BY name ASC');
+			if (!empty($result) && !empty($result->rows)) {
+				return $result->rows;
+			} else {
+				return array();
+			}
 		}
 
 		private function _createTaxRate($vatQuotaName, $vatQuotaValue) {
@@ -145,10 +154,12 @@ namespace CielIntegration\Integration\Admin\Article {
 			if (!$found) {
 				$taxClassWithRule = array_merge($taxClass, array(
 					'tax_rule' => array(
-						'tax_class_id' => $taxClassId,
-						'tax_rate_id' => $taxRateId,
-						'based' => 'payment',
-						'priority' => 0
+						array(
+							'tax_class_id' => $taxClassId,
+							'tax_rate_id' => $taxRateId,
+							'based' => 'payment',
+							'priority' => 0
+						)
 					)
 				));
 
@@ -183,6 +194,13 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		public function useTaxes() {
 			return true;
+		}
+
+		/**
+		 * @return \DB
+		 */
+		private function _getDb() {
+			return $this->db;
 		}
 	}
 }

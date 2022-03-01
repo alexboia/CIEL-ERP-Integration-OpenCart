@@ -142,7 +142,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 			$row = $result->row;
 			return !empty($row) && !empty($row['sku'])
-				? intval($row['sku'])
+				? $row['sku']
 				: null;
 		}
 
