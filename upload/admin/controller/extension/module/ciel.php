@@ -1,5 +1,4 @@
 <?php
-
 use Ciel\Api\Data\DocumentStatusType;
 use Ciel\Api\Data\DocumentType;
 use Ciel\Api\Data\WarehouseType;
@@ -33,8 +32,6 @@ class ControllerExtensionModuleCiel extends CielController {
 	}
 
 	public function index() {
-		$storeBinding = $this->_getStoreBinding();
-
 		//Prepare document assets
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();

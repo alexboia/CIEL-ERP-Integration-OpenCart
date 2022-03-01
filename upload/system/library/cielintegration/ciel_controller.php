@@ -22,6 +22,11 @@ namespace CielIntegration {
 			$this->_bootstrap();
 		}
 
+		protected function _isRoute($route) {
+			return isset($this->request->get['route'])
+				&& $this->request->get['route'] == $route;
+		}
+
 		protected function _getRequestMethod() {
 			return strtoupper($this->request->server['REQUEST_METHOD']);
 		}

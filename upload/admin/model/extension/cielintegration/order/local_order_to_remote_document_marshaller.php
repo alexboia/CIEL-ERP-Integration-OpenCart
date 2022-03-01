@@ -304,7 +304,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				$discountVatQuotaValue);
 			
 			$discounts[] = array(
-				'item_discount' => -$totalDiscount,
+				'item_discount' => -$totalDiscountNotVat,
 				'item_discount_tax' => -($totalDiscount - $totalDiscountNotVat),
 				'item_vat_out_quota_value' => 0
 			);

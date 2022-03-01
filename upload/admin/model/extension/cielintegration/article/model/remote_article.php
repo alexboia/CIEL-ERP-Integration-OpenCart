@@ -44,7 +44,26 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 		}
 
 		public function existsForProductId($productId) {
-			return !empty($this->_getOneByModelId($productId));
+			$record = $this->_getOneByModelId($productId);
+			return !empty($record);
+		}
+
+		public function isConnectedToCielErp($productId) {
+			$record = $this->_getOneByModelId($productId);
+			return !empty($record)
+				&& !empty($record['remote_id']);
+		}
+
+		public function areConnectedToCielErp(array $productIds) {
+			$status = array_fill_keys($productIds, false);
+			$records = $this->_getAllByModelIds($productIds);
+
+			foreach ($records as $r) {
+				$productId = $r['product_id'];
+				$status[$productId] = !empty($r['remote_id']);
+			}
+
+			return $status;
 		}
 
 		protected function _getTableName() {
