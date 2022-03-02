@@ -47,7 +47,7 @@ class ControllerExtensionCielProductActions extends CielController {
 			->getArticleIntegration();
 	}
 
-	public function update_all() {
+	public function updateAll() {
 		$response = $this->_createAjaxResponse();
 
 		if ($this->_isHttpPost()) {
@@ -76,16 +76,32 @@ class ControllerExtensionCielProductActions extends CielController {
 		}
 	}
 
-	public function update_stocks() {
+	public function updateStocks() {
 		$response = $this->_createAjaxResponse();
 
 		if ($this->_isHttpPost()) {
 			$productId = $this->_getProductIdFromUrl();
 			if (!empty($productId)) {
-				
+				try {
+					$response->success = $this->_doUpdateStocks($productId);
+				} catch (RemoteArticleNotFoundException $exc) {
+					//TODO: logging
+				} catch (Exception $exc) {
+					//TODO: logging
+				}
 			}
 		}
 
 		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _doUpdateStocks($productId) {
+		$articleIntegration = $this->_getArticleIntegration();
+		if ($articleIntegration->isArticleConnected($productId)) {
+			$articleIntegration->updateStockForArticle($productId);
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

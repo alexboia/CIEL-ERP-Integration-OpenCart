@@ -40,9 +40,9 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 
 		$data['ciel_erp_connect_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/connect', 
 			$productActionParams);
-		$data['ciel_erp_update_all_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/update_all', 
+		$data['ciel_erp_update_all_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/updateAll', 
 			$productActionParams);
-		$data['ciel_erp_update_stocks_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/update_stocks', 
+		$data['ciel_erp_update_stocks_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/updateStocks', 
 			$productActionParams);
 
 		$viewContents = $this->_renderView('extension/ciel_status_product_form_tab_contents', 

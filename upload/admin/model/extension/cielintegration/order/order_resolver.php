@@ -63,8 +63,27 @@ namespace CielIntegration\Integration\Admin\Order {
 			}
 
 			$remoteDocumentData = $this->lookupRemoteDocumentData($orderId);
+			return $this->_isRemoteDocumentIssued($remoteDocumentData);
+		}
+
+		private function _isRemoteDocumentIssued($remoteDocumentData) {
 			return $remoteDocumentData != null
 				&& !empty($remoteDocumentData['id']);
+		}
+
+		public function areRemoteDocumentsIssuedForOrders(array $orderIds) {
+			if (empty($orderIds)) {
+				return array();
+			}
+
+			$remoteDocumentsStatus = array();
+			$remoteDocumentsData = $this->lookupRemoteDocumentsData($orderIds);
+
+			foreach ($remoteDocumentsData as $id => $remoteDocumentData) {
+				$remoteDocumentsStatus[$id] = $this->_isRemoteDocumentIssued($remoteDocumentData);
+			}
+			
+			return $remoteDocumentsStatus;
 		}
 
 		public function lookupRemoteDocumentData($orderId) {
@@ -72,17 +91,47 @@ namespace CielIntegration\Integration\Admin\Order {
 				return false;
 			}
 
-			$remoteOrderModel = $this->_getRemoteOrderModel();
-			$remoteOrderData = $remoteOrderModel->getByOrderId($orderId);
+			$remoteOrderData = $this->_getRemoteOrderModel()
+				->getByOrderId($orderId);
 
 			if (!empty($remoteOrderData)) {
-				return array(
-					'id' => $remoteOrderData['remote_document_id'],
-					'type' => $remoteOrderData['remote_document_type']
-				);
+				return $this->_getRemoteDocumentData($remoteOrderData);
 			} else {
 				return null;
 			}
+		}
+
+		private function _getRemoteDocumentData($remoteOrderData) {
+			return array(
+				'id' => $remoteOrderData['remote_document_id'],
+				'type' => $remoteOrderData['remote_document_type']
+			);
+		}
+
+		public function lookupRemoteDocumentsData(array $orderIds) {
+			if (empty($orderIds)) {
+				return array();
+			}
+
+			$documentsData = array_fill_keys($orderIds, 
+				$this->_getEmptyRemoteDocumentData());
+
+			$remoteOrdersData = $this->_getRemoteOrderModel()
+				->getByOrderIds($orderIds);
+
+			foreach ($remoteOrdersData as $remoteOrderData) {
+				$orderId = intval($remoteOrderData['order_id']);
+				$documentsData[$orderId] = $this->_getRemoteDocumentData($remoteOrderData);
+			}
+
+			return $documentsData;
+		}
+
+		private function _getEmptyRemoteDocumentData() {
+			return array(
+				'id' => null,
+				'type' => null
+			);
 		}
 
 		public function getOrderCustomerBillingAddressInformation($orderId) {

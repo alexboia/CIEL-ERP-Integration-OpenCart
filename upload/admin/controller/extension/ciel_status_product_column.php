@@ -27,9 +27,9 @@ class ControllerExtensionCielStatusProductColumn extends CielController {
 		$data = array();
 		foreach ($cielErpConnectionStatuses as $id => $isConnected) {
 			$data[$id] = array(
-				'ciel_connected' => $isConnected 
-					? '<label class="label label-success">yes</label>' 
-					: '<label class="label label-danger">no</label>'
+				'ciel_connected' => myc_status_label($isConnected, 
+					'yes', 
+					'no')
 			);
 		}
 

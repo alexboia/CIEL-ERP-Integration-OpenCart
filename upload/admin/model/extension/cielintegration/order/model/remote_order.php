@@ -5,7 +5,7 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 	class RemoteOrder extends IntegrationModel {
 		const BASE_TABLE_NAME = 'mycciel_oc_remote_order';
 
-		const ID_COLUMN_KEY = 'oc_order_id';
+		const ID_COLUMN_KEY = 'order_id';
 
 		public function add(array $remoteOrderInfo) {
 			return $this->_add($remoteOrderInfo);

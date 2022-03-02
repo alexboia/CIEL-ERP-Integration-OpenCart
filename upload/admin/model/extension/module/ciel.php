@@ -42,6 +42,17 @@ class ModelExtensionModuleCiel extends CielModel {
 				"modify",
 				"extension/ciel_product_actions"
 			);
+
+			$userGroupModel->addPermission(
+				$adminUserGroupId,
+				"access",
+				"extension/ciel_order_actions"
+			);
+			$userGroupModel->addPermission(
+				$adminUserGroupId,
+				"modify",
+				"extension/ciel_order_actions"
+			);
 		}
 	}
 
@@ -58,6 +69,10 @@ class ModelExtensionModuleCiel extends CielModel {
 		$eventModel->addEvent('ciel_product_editor_tab', 
 			'admin/view/catalog/product_form/after', 
 			'extension/ciel_status_product_form_tab');
+
+		$eventModel->addEvent('ciel_status_order_column', 
+			'admin/view/sale/order_list/after', 
+			'extension/ciel_status_order_column');
 	}
 
 	private function _getEvents() {

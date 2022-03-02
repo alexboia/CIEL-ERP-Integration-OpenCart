@@ -57,6 +57,7 @@ namespace CielIntegration {
 		private function _includeHelpers() {
 			require_once __DIR__ . '/helper/string.php';
 			require_once __DIR__ . '/helper/array.php';
+			require_once __DIR__ . '/helper/html.php';
 		}
 
 		private function _setupInternalLibrariesAutoloader() {
