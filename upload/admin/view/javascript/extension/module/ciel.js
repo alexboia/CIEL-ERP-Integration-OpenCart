@@ -179,9 +179,12 @@
 	}
 
 	function _syncShippingQuotaProperties() {
-		var $option = $ctlBindingShippingQuotaNameSelect.find('option:selected');
+		var $option = $ctlBindingShippingQuotaNameSelect
+			.find('option:selected');
+
 		if ($option.size()) {
-			$('#myc_runtime_shipping_vat_quota_value').val($option.attr('data-quota-value'));
+			$('#myc_runtime_shipping_vat_quota_value').val($option
+					.attr('data-quota-value'));
 		}
 	}
 
@@ -203,16 +206,22 @@
 	}
 
 	function _syncBindingWarehouseWithBindingProperties() {
-		var $warehouseOption = $ctlBindingWarehousesSelect.find('option:selected');
+		var $warehouseOption = $ctlBindingWarehousesSelect
+			.find('option:selected');
+		
 		if ($warehouseOption.size()) {
-			$('#myc_runtime_warehouse_type').val($warehouseOption.attr('data-type'));
-			$('#myc_runtime_warehouse_code').val($warehouseOption.attr('data-code'));
+			$('#myc_runtime_warehouse_type').val($warehouseOption
+				.attr('data-type'));
+			$('#myc_runtime_warehouse_code').val($warehouseOption
+				.attr('data-code'));
 		}
 
-		var supportsSaleOrder = $warehouseOption.attr('data-supports-sale-order') 
-			== 'true';
-		var supportsSaleInvoice = $warehouseOption.attr('data-supports-sale-invoice') 
-			== 'true';
+		var supportsSaleOrder = $warehouseOption
+			.attr('data-supports-sale-order') 
+				== 'true';
+		var supportsSaleInvoice = $warehouseOption
+			.attr('data-supports-sale-invoice') 
+				== 'true';
 
 		var $saleOrderOption = $ctlBindingDocumentTypeSelect
 			.find('option[value=sale-order]');
@@ -246,11 +255,15 @@
 	}
 
 	function _initListeners() {
-		$ctlBindingWarehousesSelect.on('change', _handleWarehouseChanged);
-		$ctlBindingShippingQuotaNameSelect.on('change', _handleShippingQuotaNameChanged);
+		$ctlBindingWarehousesSelect.on('change', 
+			_handleWarehouseChanged);
+		$ctlBindingShippingQuotaNameSelect.on('change', 
+			_handleShippingQuotaNameChanged);
 
-		$('#myc_test_ciel_erp_connection').on('click', _handleTestConnectionButtonClicked);
-		$('#myc_ciel_settings_save').on('click', _handleMainSaveButtonClicked);		
+		$('#myc_test_ciel_erp_connection').on('click', 
+			_handleTestConnectionButtonClicked);
+		$('#myc_ciel_settings_save').on('click', 
+			_handleMainSaveButtonClicked);
 	}
 
 	function _storeInitialControlValues() {

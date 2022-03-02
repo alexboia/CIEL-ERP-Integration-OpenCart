@@ -60,9 +60,12 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 			}
 
 			$orderData = array_merge($orderData, array(
-				'customer_id' => $customerId,
-				'remote_partner_code' => $remoteCode,
-				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
+				'customer_id' => 
+					$customerId,
+				'remote_partner_code' => 
+					$remoteCode,
+				'remote_partner_addr_worksite_id' => 
+					$billingAddrPartnerWorksiteId
 			));
 
 			$this->update($orderData);
