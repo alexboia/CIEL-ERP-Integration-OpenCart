@@ -128,9 +128,20 @@ namespace CielIntegration\Integration\Admin\Order {
 		}
 
 		private function _getShippingPrice() {
-			return isset($this->_sourceOrderTotals['shipping'])
-				? floatval($this->_sourceOrderTotals['shipping'])
-				: 0;
+			$shipping = 0;
+
+			foreach ($this->_sourceOrderTotals as $totalItem) {
+				if ($this->_isShippingTotalItem($totalItem)) {
+					$shipping += floatval($totalItem['value']);
+				}
+			}
+			
+			return $shipping;
+		}
+
+		private function _isShippingTotalItem(array $totalItem) {
+			return $totalItem['code'] 
+				== 'shipping';
 		}
 
 		private function _calculateShippingPriceWithVat($shippingPriceWithoutVat) {
@@ -191,7 +202,7 @@ namespace CielIntegration\Integration\Admin\Order {
 
 			$saleUnitPriceTax = floatval($orderProduct['tax']);
 			$totalSalePriceNoVat = floatval($orderProduct['total']);
-			$totalSalePriceTax = $saleUnitPriceTax  * $quantity;
+			$totalSalePriceTax = $saleUnitPriceTax * $quantity;
 
 			if (abs($baseUnitPriceNoVat - $saleUnitPriceNoVat) <= 0.1) {
 				$totalBasePriceNoVat = $baseUnitPriceNoVat * $quantity;
@@ -271,7 +282,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			}
 
 			$taxCalc = $this->_getTaxCalculator();
-			return $taxCalc->calculate($amount, 
+			return $taxCalc->getTax($amount, 
 				$taxClassId);
 		}
 
@@ -304,9 +315,9 @@ namespace CielIntegration\Integration\Admin\Order {
 				$discountVatQuotaValue);
 			
 			$discounts[] = array(
-				'item_discount' => -$totalDiscountNotVat,
-				'item_discount_tax' => -($totalDiscount - $totalDiscountNotVat),
-				'item_vat_out_quota_value' => 0
+				'item_discount' => $totalDiscountNotVat,
+				'item_discount_tax' => $totalDiscount - $totalDiscountNotVat,
+				'item_vat_out_quota_value' => $discountVatQuotaValue
 			);
 
 			$this->_computedOrderDiscountLines = $discounts;
@@ -316,7 +327,7 @@ namespace CielIntegration\Integration\Admin\Order {
 		private function _calculateTotalDiscount() {
 			$totalDiscountNotVat = $this->_calculateTotalDiscountNoVat();
 			$totalDiscountTax = $this->_calculateTotalDiscountTax();
-			return $totalDiscountNotVat + $totalDiscountTax;
+			return $this->_roundPrice($totalDiscountNotVat + $totalDiscountTax);
 		}
 
 		private function _calculateTotalDiscountNoVat() {
@@ -368,9 +379,10 @@ namespace CielIntegration\Integration\Admin\Order {
 		}
 
 		private function _calculatePriceNoVat($priceWithVat, $vatQuotaValue) {
-			return $this->_priceFormatter
+			$priceNoVat = $this->_priceFormatter
 				->calculatePriceWithoutVat($priceWithVat, 
 					$vatQuotaValue);
+			return $this->_roundPrice($priceNoVat);
 		}
 
 		/**

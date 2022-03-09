@@ -96,6 +96,10 @@ namespace CielIntegration {
 			$this->_addHeaderScript('extension/ciel_operation_status.js');
 		}
 
+		protected function _includeCommonScript() {
+			$this->_addHeaderScript('extension/ciel_common.js');
+		}
+
 		protected function _createAjaxResponse(array $additionalProps = array()) {
 			$response = new \stdClass();
 			$response->success = false;

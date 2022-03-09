@@ -52,8 +52,10 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 		}
 
 		public function setCustomerBindingInformation($orderId, $customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
+			$addRecord = false;
 			$orderData = $this->getByOrderId($orderId);
 			if (empty($orderData)) {
+				$addRecord = true;
 				$orderData = array(
 					'order_id' => $orderId
 				);
@@ -68,7 +70,11 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 					$billingAddrPartnerWorksiteId
 			));
 
-			$this->update($orderData);
+			if ($addRecord) {
+				$this->add($orderData);
+			} else {
+				$this->update($orderData);
+			}
 		}
 
 		public function addAll(array $remoteOrdersInfos) {

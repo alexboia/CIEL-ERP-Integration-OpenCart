@@ -65,7 +65,6 @@ class ModelExtensionModuleCiel extends CielModel {
 		$eventModel->addEvent('ciel_product_editor_tab_assets', 
 			'admin/controller/common/header/before', 
 			'extension/ciel_status_product_form_tab/assets');
-
 		$eventModel->addEvent('ciel_product_editor_tab', 
 			'admin/view/catalog/product_form/after', 
 			'extension/ciel_status_product_form_tab');
@@ -74,6 +73,9 @@ class ModelExtensionModuleCiel extends CielModel {
 			'admin/view/sale/order_list/after', 
 			'extension/ciel_status_order_column');
 
+		$eventModel->addEvent('ciel_order_info_tab_assets', 
+			'admin/controller/common/header/before', 
+			'extension/ciel_status_order_info_tab/assets');
 		$eventModel->addEvent('ciel_order_info_tab', 
 			'admin/view/sale/order_info/after', 
 			'extension/ciel_status_order_info_tab');
@@ -176,6 +178,10 @@ class ModelExtensionModuleCiel extends CielModel {
 		$eventModel->deleteEvent('ciel_status_product_column');
 		$eventModel->deleteEvent('ciel_product_editor_tab_assets');
 		$eventModel->deleteEvent('ciel_product_editor_tab');
+
+		$eventModel->deleteEvent('ciel_status_order_column');
+		$eventModel->deleteEvent('ciel_order_info_tab_assets');
+		$eventModel->deleteEvent('ciel_order_info_tab');
 	}
 
 	private function _uninstallDb() {

@@ -42,10 +42,14 @@ namespace CielIntegration\Integration\Admin\Order {
 		 */
 		private $_localToRemoteDocumentMarshallerFactory;
 
+		private $_documentPreRequisitesStatusProvider;
+
 		public function __construct(\Registry $registry) {
 			parent::__construct($registry);
 			$this->_localToRemoteDocumentMarshallerFactory =
 				new LocalOrderToRemoteDocumentMarshallerFactory($registry);
+			$this->_documentPreRequisitesStatusProvider =
+				new OrderDocumentPreRequisitesStatusProvider($registry);
 			$this->_orderUpdateServiceFactory = 
 				new OrderUpdateServiceFactory($registry);
 			$this->_productResolver = 

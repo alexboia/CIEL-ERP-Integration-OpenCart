@@ -5,7 +5,7 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 	class RemotePartner extends IntegrationModel {
 		const BASE_TABLE_NAME = 'mycciel_oc_remote_customer';
 
-		const ID_COLUMN_KEY = 'oc_customer_id';
+		const ID_COLUMN_KEY = 'customer_id';
 
 		public function add(array $remotePartnerInfo) {
 			return $this->_add($remotePartnerInfo);
@@ -16,19 +16,25 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 		}
 
 		public function setBindingInformation($customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
-			$data = $this->getByCustomerId($customerId);
-			if (empty($data)) {
-				$data = array(
+			$addRecord = false;
+			$productData = $this->getByCustomerId($customerId);
+			if (empty($productData)) {
+				$addRecord = true;
+				$productData = array(
 					'customer_id' => $customerId
 				);
 			}
 
-			$data = array_merge($data, array(
+			$productData = array_merge($productData, array(
 				'remote_partner_code' => $remoteCode,
 				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
 			));
 
-			$this->update($data);
+			if ($addRecord) {
+				$this->add($productData);
+			} else {
+				$this->update($productData);
+			}
 		}
 
 		public function addAll(array $remotePartnersInfos) {

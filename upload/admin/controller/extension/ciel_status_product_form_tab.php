@@ -9,6 +9,7 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 		if ($this->_isProductEditingPage()) {
 			$this->_includeLoadingIndicatorScript();
 			$this->_includeOperationStatusScript();
+			$this->_includeCommonScript();
 			$this->_addHeaderScript('extension/ciel_product_actions.js');
 		}
 	}
@@ -38,13 +39,17 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 			'product_id' => $productId
 		);
 
-		$viewData['ciel_erp_connect_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/connect', 
-			$productActionParams);
-		$viewData['ciel_erp_update_all_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/updateAll', 
-			$productActionParams);
-		$viewData['ciel_erp_update_stocks_action_url'] = $this->_createRouteUrl('extension/ciel_product_actions/updateStocks', 
-			$productActionParams);
+		$viewData['ciel_erp_connect_action_url'] = $this
+			->_createRouteUrl('extension/ciel_product_actions/connect', 
+				$productActionParams);
+		$viewData['ciel_erp_update_all_action_url'] = $this
+			->_createRouteUrl('extension/ciel_product_actions/updateAll', 
+				$productActionParams);
+		$viewData['ciel_erp_update_stocks_action_url'] = $this
+			->_createRouteUrl('extension/ciel_product_actions/updateStocks', 
+				$productActionParams);
 
+		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_product_form_tab_contents', 
 			$viewData);
 

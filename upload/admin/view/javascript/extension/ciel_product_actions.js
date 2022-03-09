@@ -2,7 +2,7 @@
 	"use strict";
 
 	function _getActionUrl($target) {
-		return $target.attr('data-action-url');
+		return $.getCielActionUrl($target);
 	}
 
 	function _showError(message) {
@@ -20,10 +20,7 @@
 	}
 
 	function _delayedReloadPage(timeoutSeconds) {
-		window.setTimeout(function() {
-			$.showCielLoading();
-			window.location.reload();
-		}, timeoutSeconds * 1000);
+		$.delayedReloadCielPage(timeoutSeconds);
 	}
 
 	function _doAction(actionUrl, successMessage, errorMessage) {

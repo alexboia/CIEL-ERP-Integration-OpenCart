@@ -53,7 +53,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 
 			$db = $this->_getDb();
-			$result = $db->query('SELECT COUNT(customer_id) as customer_count FROM `' . DB_PREFIX . 'product` WHERE customer_id = "' . intval($customerId) . '"');
+			$result = $db->query('SELECT COUNT(customer_id) as customer_count FROM `' . DB_PREFIX . 'customer` WHERE customer_id = "' . intval($customerId) . '"');
 			
 			$row = $result->row;
 			return !empty($row) && !empty($row['customer_count'])
@@ -96,7 +96,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 			$remotePartnerModel = $this->_getRemotePartnerModel();
 			$remotePartnerData = $remotePartnerModel->getByCustomerId($customerId);
 
-			return !empty($remotePartnerData) && !($remotePartnerData['remote_partner_code'])
+			return !empty($remotePartnerData) && !empty($remotePartnerData['remote_partner_code'])
 				? array(
 					'remote_partner_code' 
 						=> $remotePartnerData['remote_partner_code'],

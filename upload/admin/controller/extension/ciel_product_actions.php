@@ -42,11 +42,6 @@ class ControllerExtensionCielProductActions extends CielController {
 		}
 	}
 
-	private function _getArticleIntegration() {
-		return $this->_getIntegrationFactory()
-			->getArticleIntegration();
-	}
-
 	public function updateAll() {
 		$response = $this->_createAjaxResponse();
 

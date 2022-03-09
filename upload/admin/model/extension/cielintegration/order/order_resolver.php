@@ -114,7 +114,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			}
 
 			$documentsData = array_fill_keys($orderIds, 
-				$this->_getEmptyRemoteDocumentData());
+				$this->getEmptyRemoteDocumentData());
 
 			$remoteOrdersData = $this->_getRemoteOrderModel()
 				->getByOrderIds($orderIds);
@@ -127,7 +127,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			return $documentsData;
 		}
 
-		private function _getEmptyRemoteDocumentData() {
+		public function getEmptyRemoteDocumentData() {
 			return array(
 				'id' => null,
 				'type' => null
@@ -180,7 +180,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			$remoteOrderModel = $this->_getRemoteOrderModel();
 			$remoteOrderData = $remoteOrderModel->getByOrderId($orderId);
 
-			return !empty($remoteOrderData) && !($remoteOrderData['remote_partner_code'])
+			return !empty($remoteOrderData) && !empty($remoteOrderData['remote_partner_code'])
 				? array(
 					'remote_partner_code' 
 						=> $remoteOrderData['remote_partner_code'],

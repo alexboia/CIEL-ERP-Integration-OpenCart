@@ -2,6 +2,8 @@
 namespace CielIntegration\Integration\Admin {
 
     use Ciel\Api\CielConfig;
+    use Ciel\Api\Data\DocumentStatusType;
+    use Ciel\Api\Data\DocumentType;
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
     use CielIntegration\Integration\Admin\Article\Model\RemoteArticle;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
@@ -21,11 +23,35 @@ namespace CielIntegration\Integration\Admin {
 		/**
 		 * @return CielIntegrationFactory 
 		 */
-		private function _getIntegrationFactory() {
+		protected function _getIntegrationFactory() {
 			if ($this->_integrationFactory == null) {
 				$this->_integrationFactory = new CielIntegrationFactory($this->registry);
 			}
 			return $this->_integrationFactory;
+		}
+
+		protected function _getPartnerIntegration() {
+			return $this->_getIntegrationFactory()
+				->getPartnerIntegration();
+		}
+	
+		protected function _getOrderIntegration() {
+			return $this->_getIntegrationFactory()
+				->getOrderIntegration();
+		}
+	
+		protected function _getArticleIntegration() {
+			return $this->_getIntegrationFactory()
+				->getArticleIntegration();
+		}
+
+		protected function _issueDocumentEnabled() {
+			//TODO: lift up to core CIEL integration API
+			$issueDocumentType = $this->_getStoreBinding()
+				->getIssueDocumentType();
+	
+			return $issueDocumentType == DocumentType::SaleInvoice 
+				|| $issueDocumentType == DocumentType::SaleOrder;
 		}
 
 		/**
@@ -89,6 +115,24 @@ namespace CielIntegration\Integration\Admin {
 			}
 
 			return $dataSource;
+		}
+
+		protected function _issueDocumentAsValid() {
+			return $this->_getStoreBinding()->getIssueDocumentWithStatus() 
+				== DocumentStatusType::Valid;
+		}
+
+		protected function _issueSaleInvoice() {
+			return $this->_getStoreBinding()->getIssueDocumentType() 
+				== DocumentType::SaleInvoice;
+		}
+
+		protected function _shouldAddDocumentIssuedOrderNoteOnOrderAction() {
+			return false;
+		}
+
+		protected function _shouldAddDocumentRemovedOrderNoteOnOrderAction() {
+			return false;
 		}
 
 		/**
