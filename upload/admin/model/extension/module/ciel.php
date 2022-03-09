@@ -79,6 +79,10 @@ class ModelExtensionModuleCiel extends CielModel {
 		$eventModel->addEvent('ciel_order_info_tab', 
 			'admin/view/sale/order_info/after', 
 			'extension/ciel_status_order_info_tab');
+
+		$eventModel->addEvent('ciel_status_customer_column', 
+			'admin/view/customer/customer_list/after', 
+			'extension/ciel_status_customer_column');
 	}
 
 	private function _getEvents() {

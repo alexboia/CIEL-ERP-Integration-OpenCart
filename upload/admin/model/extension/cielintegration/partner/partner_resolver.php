@@ -10,8 +10,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$customerModel = $this->_getCustomerModel();
-			return $customerModel
+			return $this->_getCustomerModel()
 				->getCustomer($customerId);
 		}
 
@@ -28,8 +27,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$customerModel = $this->_getCustomerModel();
-			return $customerModel
+			return $this->_getCustomerModel()
 				->getAddress($addressId);
 		}
 
@@ -66,8 +64,9 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$remotePartnerModel = $this->_getRemotePartnerModel();
-			$remotePartnerData = $remotePartnerModel->getByCustomerId($customerId);
+			$remotePartnerData = $this->_getRemotePartnerModel()
+				->getByCustomerId($customerId);
+
 			if (empty($remotePartnerData)) {
 				return null;
 			}
@@ -93,8 +92,8 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$remotePartnerModel = $this->_getRemotePartnerModel();
-			$remotePartnerData = $remotePartnerModel->getByCustomerId($customerId);
+			$remotePartnerData = $this->_getRemotePartnerModel()
+				->getByCustomerId($customerId);
 
 			return !empty($remotePartnerData) && !empty($remotePartnerData['remote_partner_code'])
 				? array(
@@ -107,9 +106,21 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		public function isConnectedToCielErp($customerId) {
-			$bindingInformation = $this->getCustomerBillingAddressInformation($customerId);
-			return !empty($bindingInformation) 
-				&& !empty($bindingInformation['remote_partner_code']);
+			if (empty($customerId)) {
+				return false;
+			}
+
+			return $this->_getRemotePartnerModel()
+				->isConnectedToCielErp($customerId);
+		}
+
+		public function areConnectedToCielErp(array $customerIds) {
+			if (empty($customerIds)) {
+				return array();
+			}
+
+			return $this->_getRemotePartnerModel()	
+				->areConnectedToCielErp($customerIds);
 		}
 
 		/**

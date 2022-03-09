@@ -35,6 +35,10 @@ namespace CielIntegration {
 			return $this->_getRequestMethod() == 'POST';
 		}
 
+		protected function _isHttpGet() {
+			return $this->_getRequestMethod() == 'GET';
+		}
+
 		protected function _setDocumentTitle($title) {
 			$this->document->setTitle($title);
 		}

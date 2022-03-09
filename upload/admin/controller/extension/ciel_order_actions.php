@@ -38,7 +38,7 @@ class ControllerExtensionCielOrderActions extends CielController {
 	private function _issueDocumentForOrderWithOrderNote($orderId) {
 		$result = $this->_issueDocumentForOrderWithoutOrderNote($orderId);
 		if ($result->wasIssued) {
-			//TODO: add order note
+			$this->_logDebug('OpenCart does not support private order notes.');
 		}
 
 		return $result;
@@ -176,7 +176,12 @@ class ControllerExtensionCielOrderActions extends CielController {
 	}
 
 	private function _removeDocumentForOrderWithOrderNote($orderId) {
-		return $this->_removeDocumentForOrderWithoutOrderNote($orderId);
+		$result = $this->_removeDocumentForOrderWithoutOrderNote($orderId);
+		if ($result->wasRemoved) {
+			$this->_logDebug('OpenCart does not support private order notes.');
+		}
+
+		return $result;
 	}
 
 	private function _removeDocumentForOrderWithoutOrderNote($orderId) {
@@ -223,6 +228,57 @@ class ControllerExtensionCielOrderActions extends CielController {
 	}
 
 	public function getRemoteDocumentLines() {
+		$response = $this->_createAjaxResponse(array(
+			'documentLines' => array()
+		));
 
+		if ($this->_isHttpGet()) {
+			$orderId = $this->_getOrderIdFromUrl();
+			if (!empty($orderId)) {
+				try {	
+					$response->documentLines = $this->_getRemoteDocumentLines($orderId);
+					$response->success = true;
+				} catch (Exception $exc) {
+					$this->_logError($exc);
+				}
+			}
+		}
+
+		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _getRemoteDocumentLines($orderId) {
+		$documentLines = array();
+
+		if ($this->_isDocumentIssuedForOrder($orderId)) {
+			$rawDocumentLines = $this->_getRemoteDocumentLinesForLocalOrderId($orderId);
+			$documentLines = $this->_prepareDocumentLinesForDisplay($rawDocumentLines);
+		}
+
+		return $documentLines;
+	}
+
+	private function _getRemoteDocumentLinesForLocalOrderId($orderId) {
+		return $this->_getOrderIntegration()
+			->getRemoteDocumentLinesForLocalOrderId($orderId);
+	}
+
+	private function _prepareDocumentLinesForDisplay($rawRemoteLines) {
+		$documentLines = array();
+		if (!empty($rawRemoteLines)) {
+			foreach ($rawRemoteLines as $rl) {
+				$documentLines[] = $this->_prepareDocumentLineForDisplay($rl);
+			}
+		}
+		return $documentLines;
+	}
+
+	private function _prepareDocumentLineForDisplay($rawRemoteLine) {
+		return array(
+			'name' => $rawRemoteLine['Name'],
+			'code' => $rawRemoteLine['Code'],
+			'quantity' => $rawRemoteLine['Quantity'],
+			'priceOutNoVat' => $rawRemoteLine['PriceOut']
+		);
 	}
 }

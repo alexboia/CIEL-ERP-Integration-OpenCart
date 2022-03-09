@@ -37,6 +37,24 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 			}
 		}
 
+		public function isConnectedToCielErp($customerId) {
+			$record = $this->_getOneByModelId($customerId);
+			return !empty($record) 
+				&& !empty($record['remote_partner_code']);
+		}
+
+		public function areConnectedToCielErp(array $customerIds) {
+			$status = array_fill_keys($customerIds, false);
+			$records = $this->_getAllByModelIds($customerIds);
+
+			foreach ($records as $r) {
+				$customerId = $r['customer_id'];
+				$status[$customerId] = !empty($r['remote_partner_code']);
+			}
+
+			return $status;
+		}
+
 		public function addAll(array $remotePartnersInfos) {
 			if (empty($remotePartnersInfos)) {
 				return;
