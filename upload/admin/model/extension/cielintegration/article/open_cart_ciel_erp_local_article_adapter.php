@@ -198,7 +198,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			if ($this->_shopStockManagementEnabled()) {
 				if (!empty($remoteArticlesStockData)) {
 					$productIds = $this->_getAllConnectedLocalProductIdsBySkus();
-					foreach ($productIds as $pId => $code) {
+					foreach ($productIds as $code => $pId) {
 						$articleStockData = isset($remoteArticlesStockData[$code]) 
 							? $remoteArticlesStockData[$code] 
 							: null;
@@ -234,7 +234,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 			if (!empty($remoteArticlesData)) {
 				$productIds = $this->_getAllConnectedLocalProductIdsBySkus();
-				foreach ($productIds as $pId => $code) {
+				foreach ($productIds as $code => $pId) {
 					$articleData = isset($remoteArticlesData[$code]) 
 						? $remoteArticlesData[$code] 
 						: null;

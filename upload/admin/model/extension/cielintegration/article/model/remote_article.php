@@ -88,7 +88,7 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 				}
 			}
 
-			return $result;
+			return $productIds;
 		}
 
 		public function getBatchStrackingStatusByProductId($productId) {

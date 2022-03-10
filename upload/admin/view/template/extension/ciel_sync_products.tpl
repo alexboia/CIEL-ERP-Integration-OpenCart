@@ -48,7 +48,7 @@
 			</div>
 
 			<div id="myc-sync-info-actions" class="sync-info-actions">
-				<button id="myc-sync-start" type="button" class="btn btn-primary" data-action="<?php echo $ciel_update_btn_action; ?>"><?php echo $ciel_update_btn_text; ?></button>
+				<button id="myc-sync-start" type="button" class="btn btn-primary" data-action-url="<?php echo $ciel_update_btn_action; ?>"><?php echo $ciel_update_btn_text; ?></button>
 			</div>
 		<?php else: ?>
 			<div class="alert alert-danger" role="alert">
@@ -56,6 +56,8 @@
 			</div>
 		<?php endif; ?>
 	</div>
+
+	<?php echo $html_loading_indicator; ?>
 </div>
 
 <?php echo $html_footer; ?>

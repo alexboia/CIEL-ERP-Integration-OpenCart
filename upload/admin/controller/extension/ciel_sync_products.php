@@ -20,6 +20,8 @@ class ControllerExtensionCielSyncProducts extends CielController {
 		//Prepare document assets
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();
+		$this->_includeCommonScript();
+		
 		$this->_addStylesheet('extension/ciel_common.css');
 		$this->_addHeaderScript('extension/ciel_sync_products.js');
 		$this->_setDocumentTitleLangKey('ciel_sync_products_title');

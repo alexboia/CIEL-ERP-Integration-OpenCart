@@ -33,7 +33,6 @@
 			data: {}
 		}).done(function(data, status, xhr) {
 			$.hideCielLoading();
-			console.log(data);
 			if (data && !!data.success) {
 				_showSuccess(successMessage);
 				_delayedReloadPage(5);
