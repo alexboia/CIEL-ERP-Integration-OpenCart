@@ -10,6 +10,26 @@ class ModelExtensionModuleCiel extends CielModel {
 
 	private function _installPermissions() {
 		$userGroupModel = $this->_getUserGroupModel();
+		$adminUserGroupId = $this->_resolveAdminGroupUserId();
+
+		if (!is_null($adminUserGroupId)) {
+			foreach ($this->_getPermissionRoutes() as $route) {
+				$userGroupModel->addPermission(
+					$adminUserGroupId,
+					'access',
+					$route
+				);
+				$userGroupModel->addPermission(
+					$adminUserGroupId,
+					'modify',
+					$route
+				);
+			}
+		}
+	}
+
+	private function _resolveAdminGroupUserId() {
+		$userGroupModel = $this->_getUserGroupModel();
 		$userGroups = $userGroupModel->getUserGroups();
 
 		$adminUserGroupId = null;
@@ -20,40 +40,18 @@ class ModelExtensionModuleCiel extends CielModel {
 			}
 		}
 
-		if (!is_null($adminUserGroupId)) {
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"access",
-				"extension/ciel_connect_products"
-			);
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"modify",
-				"extension/ciel_connect_products"
-			);
+		return $adminUserGroupId;
+	}
 
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"access",
-				"extension/ciel_product_actions"
-			);
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"modify",
-				"extension/ciel_product_actions"
-			);
-
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"access",
-				"extension/ciel_order_actions"
-			);
-			$userGroupModel->addPermission(
-				$adminUserGroupId,
-				"modify",
-				"extension/ciel_order_actions"
-			);
-		}
+	private function _getPermissionRoutes() {
+		return array(
+			'extension/ciel_connect_products',
+			'extension/ciel_product_actions',
+			'extension/ciel_order_actions',
+			'extension/ciel_sync_products',
+			'extension/ciel_import_oc_romania',
+			'extension/ciel_status'
+		);
 	}
 
 	private function _installEvents() {
@@ -174,7 +172,21 @@ class ModelExtensionModuleCiel extends CielModel {
 	}
 
 	private function _uninstallPermissions() {
+		$userGroupModel = $this->_getUserGroupModel();
+		$adminUserGroupId = $this->_resolveAdminGroupUserId();
 
+		if (!is_null($adminUserGroupId)) {
+			foreach ($this->_getPermissionRoutes() as $route) {
+				$userGroupModel->removePermission($adminUserGroupId, 
+					'access', 
+					$route
+				);
+				$userGroupModel->removePermission($adminUserGroupId, 
+					'modify', 
+					$route
+				);
+			}
+		}
 	}
 
 	private function _uninstallEvents() {
@@ -189,7 +201,7 @@ class ModelExtensionModuleCiel extends CielModel {
 	}
 
 	private function _uninstallDb() {
-
+		
 	}
 
 	/**

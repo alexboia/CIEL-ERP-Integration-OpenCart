@@ -54,6 +54,11 @@ namespace CielIntegration {
 			$this->document->addScript($fullScriptHref);
 		}
 
+		protected function _addStylesheet($stylesheetHref) {
+			$fullStylesheetHref = 'view/stylesheet/' . $stylesheetHref;
+			$this->document->addStyle($fullStylesheetHref);
+		}
+
 		protected function _renderView($viewRoute, $viewData) {
 			return $this->load->view($viewRoute, $viewData);
 		}
@@ -72,7 +77,7 @@ namespace CielIntegration {
 	
 			$data[] = array(
 				'text' => $this->_t('text_module'),
-				'href' => $this->_createRouteUrl('extension/module')
+				'href' => $this->_createRouteUrl('extension/extension')
 			);
 
 			return $data;

@@ -1,0 +1,6 @@
+.myc-tooltip::after {
+	font-family: FontAwesome;
+	color: #1E91CF;
+	content: "\f059";
+	margin-left: 4px;
+}
