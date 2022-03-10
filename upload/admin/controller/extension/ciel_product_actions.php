@@ -3,9 +3,11 @@
 use Ciel\Api\Exception\RemoteArticleNotFoundException;
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\WithCielIntegration;
+use CielIntegration\WithLogging;
 
 class ControllerExtensionCielProductActions extends CielController {
 	use WithCielIntegration;
+	use WithLogging;
 
 	public function connect() {
 		$response = $this->_createAjaxResponse();

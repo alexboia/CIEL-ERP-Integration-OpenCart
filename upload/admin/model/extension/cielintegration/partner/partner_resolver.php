@@ -95,6 +95,10 @@ namespace CielIntegration\Integration\Admin\Partner {
 			$remotePartnerData = $this->_getRemotePartnerModel()
 				->getByCustomerId($customerId);
 
+			return $this->_extractRemotePartnerBindingInformation($remotePartnerData);
+		}
+
+		private function _extractRemotePartnerBindingInformation($remotePartnerData) {
 			return !empty($remotePartnerData) && !empty($remotePartnerData['remote_partner_code'])
 				? array(
 					'remote_partner_code' 
@@ -103,6 +107,13 @@ namespace CielIntegration\Integration\Admin\Partner {
 						=> $remotePartnerData['remote_partner_addr_worksite_id']
 				)
 				: null;
+		}
+
+		public function getEmptyRemotePartnerBindingInformation($customerId) {
+			return array(
+				'remote_partner_code' => null,
+				'remote_partner_addr_worksite_id' => null
+			);
 		}
 
 		public function isConnectedToCielErp($customerId) {
