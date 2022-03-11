@@ -18,17 +18,16 @@ class ControllerExtensionCielSyncProducts extends CielController {
 
 	public function index() {
 		//Prepare document assets
+		$this->_setDocumentTitleLangKey('ciel_sync_products_title');
+		$this->_addStylesheet('extension/ciel_common.css');
+		
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();
 		$this->_includeCommonScript();
-		
-		$this->_addStylesheet('extension/ciel_common.css');
 		$this->_addHeaderScript('extension/ciel_sync_products.js');
-		$this->_setDocumentTitleLangKey('ciel_sync_products_title');
 
 		//Prepare data
 		$data = $this->_loadAdminLayout();
-
 		$data['is_bound'] = $this->_isStoreBound();
 
 		$data['ciel_sync_products_title'] = $this->_t('ciel_sync_products_title');
@@ -47,14 +46,14 @@ class ControllerExtensionCielSyncProducts extends CielController {
 		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
 
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
-		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getIndexBreadcrumbsData());
+		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/ciel_sync_products', 
 			$data);
 	}
 
-	private function _getIndexBreadcrumbsData() {
+	private function _getBreadcrumbsData() {
 		$breadcrumbs = $this->_getBaseBreadcrumbs();
 		$breadcrumbs[] = array(
 			'text' => $this->_t('ciel_sync_products_title'),
@@ -67,7 +66,7 @@ class ControllerExtensionCielSyncProducts extends CielController {
 	}
 
 	public function execute() {
-		if ($this->_isHttpPost()) {
+		if ($this->_isHttpPost() && $this->_isStoreBound()) {
 			$response = $this->_updateAllProductsInfo();
 		} else {
 			$response = $this->_createEmptySyncProductsAjaxResponse();

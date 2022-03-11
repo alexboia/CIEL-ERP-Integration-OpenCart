@@ -5,7 +5,7 @@ namespace CielIntegration\Integration\Admin\Article {
     use ModelCatalogProduct;
 
 	/**
-	 * @property \DB $db;
+	 * @property \DB $db
 	 */
 	class ProductResolver extends IntegrationService {
 		use WithRouteUrl;

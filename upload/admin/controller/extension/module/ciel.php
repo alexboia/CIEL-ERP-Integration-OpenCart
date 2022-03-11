@@ -7,11 +7,13 @@ use CielIntegration\Integration\Admin\WithLookupDataProvider;
 use CielIntegration\Integration\Admin\StockUpdateMode;
 use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\WithAdminLayoutLoader;
+use CielIntegration\WithLogging;
 
 class ControllerExtensionModuleCiel extends CielController {
 	use WithAdminLayoutLoader;
 	use WithLookupDataProvider;
 	use WithCielIntegration;
+	use WithLogging;
 
 	public function install() {
 		$this->_getModel()
@@ -33,10 +35,10 @@ class ControllerExtensionModuleCiel extends CielController {
 
 	public function index() {
 		//Prepare document assets
+		$this->_setDocumentTitleLangKey('ciel_settings_page_title');
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();
 		$this->_addHeaderScript('extension/module/ciel.js');
-		$this->_setDocumentTitleLangKey('ciel_settings_page_title');
 
 		//Prepare data
 		$data = $this->_loadAdminLayout();
@@ -48,10 +50,10 @@ class ControllerExtensionModuleCiel extends CielController {
 		$data['url_save_action'] = $this->_createRouteUrl('extension/module/ciel/saveSettings');
 
 		$data['txt_cancel_action'] = $this->_t('button_cancel');
-		$data['url_cancel_action'] = $this->_createRouteUrl('extension/module');
+		$data['url_cancel_action'] = $this->_createRouteUrl('extension/extension');
 
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
-		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getIndexBreadcrumbsData());
+		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
 
 		$data['html_connection_settings_form'] = $this->_renderConnectionSettinsForm();
 		$data['html_runtime_settings_form'] = $this->_renderRuntimeSettingsForm();
@@ -62,7 +64,7 @@ class ControllerExtensionModuleCiel extends CielController {
 			$data);
 	}
 
-	private function _getIndexBreadcrumbsData() {
+	private function _getBreadcrumbsData() {
 		$breadcrumbs = $this->_getBaseBreadcrumbs();
 		$breadcrumbs[] = array(
 			'text' => $this->_t('ciel_settings_page_title'),
@@ -341,7 +343,7 @@ class ControllerExtensionModuleCiel extends CielController {
 					$response->success = true;
 				}
 			} catch (Exception $exc) {
-				//TODO: log exception
+				$this->_logError($exc);
 			}
 
 			$this->_renderJsonToResponseOutput($response);
@@ -360,14 +362,18 @@ class ControllerExtensionModuleCiel extends CielController {
 		$articlesReset = false;
 
 		if ($this->_shouldResetProducts($warehouseCode, $matchVariations)) {
-			// $this->_articleIntegration
-			// 	->disconnectAllArticles();
+			$this->_disconnectAllArticles();
 			$articlesReset = true;
 		} else {
-			//TODO: logging
+			$this->_logDebug('Products reset not required.');
 		}
 
 		return $articlesReset;
+	}
+
+	private function _disconnectAllArticles() {
+		$this->_getArticleIntegration()
+			->disconnectAllArticles();
 	}
 
 	private function _shouldResetCustomers($useExtendedCompanyBillingFields) {
@@ -378,14 +384,18 @@ class ControllerExtensionModuleCiel extends CielController {
 		$customersReset = false;
 		
 		if ($this->_shouldResetCustomers($useExtendedCompanyBillingFields)) {
-			// $this->_partnerIntegration
-			// 	->removeCustomAddressBillingDataForAllConnectedPartners();
+			$this->_removeCustomAddressBillingDataForAllConnectedPartners();
 			$customersReset = true;
 		} else {
-			//TODO: logging
+			$this->_logDebug('Customers billing data reset not required.');
 		}
 
 		return $customersReset;
+	}
+
+	private function _removeCustomAddressBillingDataForAllConnectedPartners() {
+		$this->_getPartnerIntegration()
+			->removeCustomAddressBillingDataForAllConnectedPartners();
 	}
 
 	private function _reconfigureStoreForBindingConfiguration() {
@@ -442,7 +452,7 @@ class ControllerExtensionModuleCiel extends CielController {
 					$response->message = $this->_t('msg_connection_test_ok');
 					$response->success = true;
 				} catch (Exception $exc) {
-					//TODO: log exception
+					$this->_logError($exc);
 					$response->message = $this->_t('msg_connection_test_failed');
 				}
 			} else {

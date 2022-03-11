@@ -1,11 +1,11 @@
 (function($) {
 	"use strict";
 
-	var $ctlSyncInfoStats = null;
+	var $ctlMigrateInfoStats = null;
 	var $ctlTotalEligibleCount = null;
 	var $ctlTotalUpdatedCount = null;
 
-	function _getSyncInformationUrl($target) {
+	function _getMigrateInformationUrl($target) {
 		return $.getCielActionUrl($target);
 	}
 
@@ -24,19 +24,19 @@
 	}
 
 	function _hideInfoStats() {
-		$ctlSyncInfoStats.hide();
+		$ctlMigrateInfoStats.hide();
 	}
 
 	function _showInfoStats(results) {
 		$ctlTotalEligibleCount.text(results.eligible);
 		$ctlTotalUpdatedCount.text(results.updated);
-		$ctlSyncInfoStats.show();
+		$ctlMigrateInfoStats.show();
 	}
 
-	function _syncInformation() {
+	function _migrateProductInformation() {
 		_hideInfoStats();
 		$.showCielLoading();
-		$.ajax(_getSyncInformationUrl($(this)), {
+		$.ajax(_getMigrateInformationUrl($(this)), {
 			type: 'POST',
 			dataType: 'json',
 			cache: false,
@@ -45,38 +45,30 @@
 			$.hideCielLoading();
 			if (data && data.success) {
 				_showInfoStats(data.result);
-				_showSuccess(data.message || 'Product information successfully updated.');
+				_showSuccess(data.message || 'Product information successfully migrated.');
 			} else {
-				_showError(data.message || 'Product information could not be updated.');
+				_showError(data.message || 'Product information could not be migrated.');
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			_showError('Product information could not be updated.');
-		});
-	}
-
-	function _initTooltips() {
-		$('[data-toggle=\'tooltip\']').tooltip({
-			container: 'body',
-			html: true
+			_showError('Product information could not be migrated.');
 		});
 	}
 
 	function _initControls() {
-		$ctlSyncInfoStats = $('#myc-sync-info-stats');
+		$ctlMigrateInfoStats = $('#myc-migrate-info-stats');
 		$ctlTotalEligibleCount = $('#myc-total-eligible');
 		$ctlTotalUpdatedCount = $('#myc-total-updated');
 	}
 
 	function _initEvents() {
 		$(document).on('click', 
-			'#myc-sync-start', 
-			_syncInformation);
+			'#myc-migrate-start', 
+			_migrateProductInformation);
 	}
 
 	$(document).ready(function() {
 		_initControls();
-		_initTooltips();
 		_initEvents();
 	});
 })(jQuery);

@@ -5,6 +5,7 @@ namespace CielIntegration\Integration\Admin {
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
     use Ciel\Api\Integration\Orders\CielErpOrderIntegration;
     use Ciel\Api\Integration\Partners\CielErpPartnerIntegration;
+    use CielIntegration\Integration\Admin\Article\OcRomaniaConnectedProductsProvider;
     use CielIntegration\Integration\Admin\Article\OpenCartCielErpLocalArticleAdapter;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielErpToStoreBindingAdapter;
     use CielIntegration\Integration\Admin\Binding\OpenCartCielWorkflow;
@@ -99,6 +100,10 @@ namespace CielIntegration\Integration\Admin {
 				$this->_workflow = new OpenCartCielWorkflow($this->_registry);
 			}
 			return $this->_workflow;
+		}
+
+		public function getOcRomaniaConnectedProductsProvider() {
+			return new OcRomaniaConnectedProductsProvider($this->_registry);
 		}
 	}
 }
