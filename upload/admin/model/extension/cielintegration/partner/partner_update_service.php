@@ -1,6 +1,7 @@
 <?php
 namespace CielIntegration\Integration\Admin\Partner {
 
+    use Ciel\Api\Exception\CielException;
     use CielIntegration\Integration\Admin\IntegrationService;
     use InvalidArgumentException;
 
@@ -13,7 +14,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 		public function __construct($customerId, \Registry $registry) {
 			parent::__construct($registry);
 
-			if (empty($customerId)) {
+			if (empty($customerId) && $customerId != 0) {
 				throw new InvalidArgumentException('Customer id may not be empty.');
 			}
 
@@ -21,13 +22,21 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		public function setCustomerBindingInformation(array $remotePartnerData, array $remoteShopBillingAddressData) {
-			$remotePartnerCode = $this->_getRemotePartnerCode($remotePartnerData);
-			$addrWorksiteId = $this->_getRemoteBillingAddrPartnerWorksiteId($remoteShopBillingAddressData);
+			if ($this->_isRegisteredCustomer()) {
+				$remotePartnerCode = $this->_getRemotePartnerCode($remotePartnerData);
+				$addrWorksiteId = $this->_getRemoteBillingAddrPartnerWorksiteId($remoteShopBillingAddressData);
+	
+				$remotePartnerModel = $this->_getRemotePartnerModel();
+				$remotePartnerModel->setBindingInformation($this->_customerId, 
+					$remotePartnerCode, 
+					$addrWorksiteId);				
+			} else {
+				throw new CielException('Cannot update customer binding information for anonymous customer');
+			}
+		}
 
-			$remotePartnerModel = $this->_getRemotePartnerModel();
-			$remotePartnerModel->setBindingInformation($this->_customerId, 
-				$remotePartnerCode, 
-				$addrWorksiteId);
+		private function _isRegisteredCustomer() {
+			return !empty($this->_customerId);
 		}
 
 		private function _getRemotePartnerCode(array $remotePartnerData) {
@@ -56,15 +65,17 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		public function importOrderCustomerBindingInformation($orderId) {
-			$remotePartnerModel = $this->_getRemotePartnerModel();
-			$customerData = $remotePartnerModel->getByCustomerId($this->_customerId);
+			if ($this->_isRegisteredCustomer()) {
+				$remotePartnerModel = $this->_getRemotePartnerModel();
+				$customerData = $remotePartnerModel->getByCustomerId($this->_customerId);
 
-			if (!empty($customerData)) {
-				$remoteOrderModel = $this->_getRemoteOrderModel();
-				$remoteOrderModel->setCustomerBindingInformation($orderId, 
-					$this->_customerId, 
-					$customerData['remote_partner_code'], 
-					$customerData['remote_partner_addr_worksite_id']);
+				if (!empty($customerData)) {
+					$remoteOrderModel = $this->_getRemoteOrderModel();
+					$remoteOrderModel->setCustomerBindingInformation($orderId, 
+						$this->_customerId, 
+						$customerData['remote_partner_code'], 
+						$customerData['remote_partner_addr_worksite_id']);
+				}
 			}
 		}
 	}

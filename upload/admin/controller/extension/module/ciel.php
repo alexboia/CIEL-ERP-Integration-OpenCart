@@ -3,6 +3,8 @@ use Ciel\Api\Data\DocumentStatusType;
 use Ciel\Api\Data\DocumentType;
 use Ciel\Api\Data\WarehouseType;
 use CielIntegration\CielController;
+use CielIntegration\Integration\Admin\Article\TaxService;
+use CielIntegration\Integration\Admin\ShippingService;
 use CielIntegration\Integration\Admin\WithLookupDataProvider;
 use CielIntegration\Integration\Admin\StockUpdateMode;
 use CielIntegration\Integration\Admin\WithCielIntegration;
@@ -410,11 +412,20 @@ class ControllerExtensionModuleCiel extends CielController {
 	}
 
 	private function _updateStoreShippingTaxClass() {
-		//TODO: implement
+		$storeBinding = $this->_getStoreBinding();
+		$shippingService = $this->_getShippingService();
+		$taxService = $this->_getTaxService();
+
+		$taxClass = $taxService->getOrCreateTaxClass('Transport Taxabil', 
+			$storeBinding->getShippingVatQuotaName(), 
+			$storeBinding->getShippingVatQuotaValue());
+
+		$taxClassId = intval($taxClass['tax_class_id']);
+		$shippingService->setTaxClassIdForActiveShippingMethods($taxClassId);
 	}
 
 	private function _reconfigureStockUpdateScheduling() {
-		//TODO: implement
+		return;
 	}
 
 	public function testConnection() {
@@ -478,5 +489,13 @@ class ControllerExtensionModuleCiel extends CielController {
 			$society);
 			
 		$client->logout();
+	}
+
+	private function _getShippingService() {
+		return new ShippingService($this->registry);
+	}
+
+	private function _getTaxService() {
+		return new TaxService($this->registry);
 	}
 }

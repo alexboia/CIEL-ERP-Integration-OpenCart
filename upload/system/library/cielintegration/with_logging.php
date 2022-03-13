@@ -41,6 +41,7 @@ namespace CielIntegration {
 				$logMessageParts[] = $message;
 			}
 
+			$logMessageParts[] = get_class($exc);
 			$logMessageParts[] = $exc->getMessage();
 			$logMessageParts[] = $exc->getTraceAsString();
 

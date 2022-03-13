@@ -56,36 +56,64 @@ class ModelExtensionModuleCiel extends CielModel {
 
 	private function _installEvents() {
 		$eventModel = $this->_getEventModel();
-		$eventModel->addEvent('ciel_status_product_column', 
-			'admin/view/catalog/product_list/after', 
-			'extension/ciel_status_product_column');
 
-		$eventModel->addEvent('ciel_product_editor_tab_assets', 
-			'admin/controller/common/header/before', 
-			'extension/ciel_status_product_form_tab/assets');
-		$eventModel->addEvent('ciel_product_editor_tab', 
-			'admin/view/catalog/product_form/after', 
-			'extension/ciel_status_product_form_tab');
-
-		$eventModel->addEvent('ciel_status_order_column', 
-			'admin/view/sale/order_list/after', 
-			'extension/ciel_status_order_column');
-
-		$eventModel->addEvent('ciel_order_info_tab_assets', 
-			'admin/controller/common/header/before', 
-			'extension/ciel_status_order_info_tab/assets');
-		$eventModel->addEvent('ciel_order_info_tab', 
-			'admin/view/sale/order_info/after', 
-			'extension/ciel_status_order_info_tab');
-
-		$eventModel->addEvent('ciel_status_customer_column', 
-			'admin/view/customer/customer_list/after', 
-			'extension/ciel_status_customer_column');
+		foreach ($this->_getEvents() as $evt) {
+			$eventModel->addEvent($evt['code'], 
+				$evt['trigger'], 
+				$evt['action'], 
+				1);
+		}
 	}
 
 	private function _getEvents() {
 		return array(
+			array(
+				'code' =>'ciel_status_product_column',
+				'trigger' => 'admin/view/catalog/product_list/after',
+				'action' => 'extension/ciel_status_product_column',
+			),
+			array(
+				'code' => 'ciel_product_editor_tab_assets',
+				'trigger' => 'admin/controller/common/header/before',
+				'action' => 'extension/ciel_status_product_form_tab/assets'
+			),
+			array(
+				'code' => 'ciel_product_editor_tab',
+				'trigger' => 'admin/view/catalog/product_form/after',
+				'action' => 'extension/ciel_status_product_form_tab'
+			),
 
+			array(
+				'code' => 'ciel_status_order_column',
+				'trigger' => 'admin/view/sale/order_list/after',
+				'action' => 'extension/ciel_status_order_column'
+			),
+			array(
+				'code' => 'ciel_order_info_tab_assets',
+				'trigger' => 'admin/controller/common/header/before',
+				'action' => 'extension/ciel_status_order_info_tab/assets'
+			),
+			array(
+				'code' => 'ciel_order_info_tab',
+				'trigger' => 'admin/view/sale/order_info/after',
+				'action' => 'extension/ciel_status_order_info_tab'
+			),
+
+			array(
+				'code' => 'ciel_status_customer_column',
+				'trigger' => 'admin/view/customer/customer_list/after',
+				'action' => 'extension/ciel_status_customer_column'
+			),
+			array(
+				'code' => 'ciel_customer_editor_tab',
+				'trigger' => 'admin/view/customer/customer_form/after',
+				'action' => 'extension/ciel_status_customer_form_tab'
+			),
+			array(
+				'code' => 'ciel_menu_entries',
+				'trigger' => 'admin/view/common/column_left/before',
+				'action' => 'extension/ciel_menu_entries'
+			)
 		);
 	}
 
@@ -191,17 +219,28 @@ class ModelExtensionModuleCiel extends CielModel {
 
 	private function _uninstallEvents() {
 		$eventModel = $this->_getEventModel();
-		$eventModel->deleteEvent('ciel_status_product_column');
-		$eventModel->deleteEvent('ciel_product_editor_tab_assets');
-		$eventModel->deleteEvent('ciel_product_editor_tab');
 
-		$eventModel->deleteEvent('ciel_status_order_column');
-		$eventModel->deleteEvent('ciel_order_info_tab_assets');
-		$eventModel->deleteEvent('ciel_order_info_tab');
+		foreach ($this->_getEvents() as $evt) {
+			$eventModel->deleteEvent($evt['code']);
+		}
 	}
 
 	private function _uninstallDb() {
-		
+		$tableNames = array(
+			'mycciel_oc_binding_settings',
+			'mycciel_oc_remote_customer',
+			'mycciel_oc_remote_order',
+			'mycciel_oc_remote_product'
+		);
+
+		foreach ($tableNames as $tableName) {
+			$this->_dropTable($tableName);
+		}
+	}
+
+	private function _dropTable($tableName) {
+		$db = $this->_getDb();
+		$db->query('DROP TABLE IF EXISTS `' . DB_PREFIX . $tableName . '`;');
 	}
 
 	/**
@@ -210,5 +249,5 @@ class ModelExtensionModuleCiel extends CielModel {
 	private function _getUserGroupModel() {
 		$this->load->model('user/user_group');
 		return $this->model_user_user_group;
-	}
+	}	
 }

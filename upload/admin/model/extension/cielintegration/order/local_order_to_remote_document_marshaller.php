@@ -196,7 +196,7 @@ namespace CielIntegration\Integration\Admin\Order {
 
 			$productTaxClassId = intval($product['tax_class_id']);
 			$baseUnitPriceNoVat = floatval($product['price']);
-			if ($baseUnitPriceNoVat == null) {
+			if (empty($baseUnitPriceNoVat)) {
 				$baseUnitPriceNoVat = $saleUnitPriceNoVat;
 			}
 
@@ -204,7 +204,9 @@ namespace CielIntegration\Integration\Admin\Order {
 			$totalSalePriceNoVat = floatval($orderProduct['total']);
 			$totalSalePriceTax = $saleUnitPriceTax * $quantity;
 
-			if (abs($baseUnitPriceNoVat - $saleUnitPriceNoVat) <= 0.1) {
+			//If the base price is greater than the sale price, we consider this to be a discount
+			//	otherwise, it's a regular price change and we just keep the sale price
+			if ($baseUnitPriceNoVat - $saleUnitPriceNoVat >= 0.1) {
 				$totalBasePriceNoVat = $baseUnitPriceNoVat * $quantity;
 				$baseUnitPriceTax = $this->_calculateTax($baseUnitPriceNoVat, 
 					$productTaxClassId);

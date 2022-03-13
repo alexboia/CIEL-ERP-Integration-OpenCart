@@ -18,9 +18,9 @@ class ControllerExtensionCielProductActions extends CielController {
 				try {
 					$response->success = $this->_doConnectToCielErp($productId);
 				} catch (RemoteArticleNotFoundException $exc) {
-					//TODO: logging
+					$this->_logRemoteArticleNotFoundError($exc);
 				} catch (Exception $exc) {
-					//TODO: logging
+					$this->_logGenericProductActionError($exc);
 				}
 			}
 		}
@@ -44,6 +44,14 @@ class ControllerExtensionCielProductActions extends CielController {
 		}
 	}
 
+	private function _logRemoteArticleNotFoundError(RemoteArticleNotFoundException $exc) {
+		$this->_logError($exc, 'Could not execute product action. Remote article not found (by <' . $exc->getIdentifierType() . '>, value <' . $exc->getIdentifierValue() . '>).', );
+	}
+
+	private function _logGenericProductActionError(Exception $exc) {
+		$this->_logError($exc, 'Could not execute product action.');
+	}
+
 	public function updateAll() {
 		$response = $this->_createAjaxResponse();
 
@@ -53,9 +61,9 @@ class ControllerExtensionCielProductActions extends CielController {
 				try {
 					$response->success = $this->_doUpdateAllProductInformation($productId);
 				} catch (RemoteArticleNotFoundException $exc) {
-					//TODO: logging
+					$this->_logRemoteArticleNotFoundError($exc);
 				} catch (Exception $exc) {
-					//TODO: logging
+					$this->_logGenericProductActionError($exc);
 				}
 			}
 		}
@@ -82,9 +90,9 @@ class ControllerExtensionCielProductActions extends CielController {
 				try {
 					$response->success = $this->_doUpdateStocks($productId);
 				} catch (RemoteArticleNotFoundException $exc) {
-					//TODO: logging
+					$this->_logRemoteArticleNotFoundError($exc);
 				} catch (Exception $exc) {
-					//TODO: logging
+					$this->_logGenericProductActionError($exc);
 				}
 			}
 		}

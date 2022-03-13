@@ -18,7 +18,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 		public function __construct($customerId, \Registry $registry) {
 			parent::__construct($registry);
 
-			if (empty($customerId)) {
+			if (empty($customerId) && $customerId != 0) {
 				throw new InvalidArgumentException('Customer id may not be empty.');
 			}
 

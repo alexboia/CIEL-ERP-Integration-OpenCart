@@ -21,8 +21,14 @@ namespace CielIntegration\Integration\Admin\Binding {
 		}
 
 		private function _getWorkflowSettings() {
-			return $this->_bindingSettingsModel
+			$wfSettings = $this->_bindingSettingsModel
 				->getWorkflowSettings();
+
+			if ($wfSettings == null) {
+				$wfSettings = array();
+			}
+
+			return $wfSettings;
 		}
 
 		public function getInStockStatusId() {

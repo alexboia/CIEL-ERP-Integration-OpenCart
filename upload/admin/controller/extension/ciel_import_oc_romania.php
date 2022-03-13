@@ -107,9 +107,6 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 
 	private function _processMigrateProducts() {
 		$connected = array();
-		$productResolver = $this->_getProductResolver();
-		$articleIntegration = $this->_getArticleIntegration();
-
 		$ocRomaniaConnectedProducts = $this->_getOcRomaniaConnectedProducts();
 		$eligible = count($ocRomaniaConnectedProducts);
 
@@ -119,16 +116,14 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 			$id = $cProduct['id'];
 			$sku = $cProduct['sku'];
 
-			if (!$productResolver->isConnectedToCielErp($id)) {
-				$articleIntegration->tryAutoConnectArticleByLocalCode($id);
+			try {
+				$this->_processMigrateProduct($id, $sku);
 				$connected[] = array(
 					'id' => $id,
 					'sku' => $sku
 				);
-				
-				$this->_logDebug('Product with sku <' . $sku . '> has been migrated.');
-			} else {
-				$this->_logDebug('Product with sku <' . $sku . '> is already connected. Skipping...');
+			} catch (Exception $exc) {
+				$this->_logError($exc, 'Failed to migrate product with sku <' . $sku . '>');
 			}
 		}
 
@@ -137,6 +132,18 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 			'eligible' => $eligible,
 			'connected' => $connected
 		);
+	}
+
+	private function _processMigrateProduct($id, $sku) {
+		$productResolver = $this->_getProductResolver();
+		$articleIntegration = $this->_getArticleIntegration();
+
+		if (!$productResolver->isConnectedToCielErp($id)) {
+			$articleIntegration->tryAutoConnectArticleByLocalCode($id);
+			$this->_logDebug('Product with sku <' . $sku . '> has been migrated.');
+		} else {
+			$this->_logDebug('Product with sku <' . $sku . '> is already connected. Skipping...');
+		}
 	}
 
 	private function _getOcRomaniaConnectedProducts() {

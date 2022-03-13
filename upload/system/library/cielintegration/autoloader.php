@@ -89,7 +89,6 @@ namespace CielIntegration {
 			$className = array_pop($pathParts);
 			foreach ($pathParts as $namePart) {
 				if (!empty($namePart)) {
-					$namePart[0] = strtolower($namePart[0]);
 					if ($transform !== null) {
 						$namePart = call_user_func($transform, $namePart);
 					}

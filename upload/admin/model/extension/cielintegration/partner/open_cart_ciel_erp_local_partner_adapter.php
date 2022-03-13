@@ -103,7 +103,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 
 			$customerId = $this->_getCustomerIdForOrder($localOrderId);
-			if (empty($customerId)) {
+			if (empty($customerId) && $customerId != 0) {
 				throw new LocalOrderNotFoundException('id', $localOrderId);
 			}
 
@@ -160,8 +160,8 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 
 			$customerId = intval($order['customer_id']);
-			if (empty($customerId)) {
-				throw new LocalOrderNotFoundException('id', $localOrderId);
+			if (empty($customerId) && $customerId != 0) {
+				throw new LocalPartnerNotFoundException('id', $localOrderId);
 			}
 
 			$bindingInformation = $this->_getOrderCustomerRemotePartnerBindingInformation($localOrderId, 
