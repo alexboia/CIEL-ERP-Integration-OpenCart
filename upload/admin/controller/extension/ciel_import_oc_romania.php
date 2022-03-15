@@ -6,6 +6,7 @@ use CielIntegration\Integration\Admin\Article\ProductResolver;
 use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\WithAdminLayoutLoader;
 use CielIntegration\WithLogging;
+use openbay\fba;
 
 class ControllerExtensionCielImportOcRomania extends CielController {
 	use WithCielIntegration;
@@ -37,9 +38,13 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 
 		$data['ciel_migrate_products_eligible_count_header'] = $this->_t('ciel_migrate_products_eligible_count_header');
 		$data['ciel_migrate_products_updated_count_header'] = $this->_t('ciel_migrate_products_updated_count_header');
+		$data['ciel_migrate_products_not_found_count_header'] = $this->_t('ciel_migrate_products_not_found_count_header');
 
 		$data['ciel_migrate_btn_text'] = $this->_t('ciel_migrate_btn_text');
 		$data['ciel_migrate_btn_action'] = $this->_createRouteUrl('extension/ciel_import_oc_romania/execute');
+
+		$data['ciel_download_not_found_btn_text'] = $this->_t('ciel_download_not_found_btn_text');
+		$data['ciel_download_not_found_action'] = $this->_createRouteUrl('extension/ciel_import_oc_romania/exportNotFound');
 
 		$data['txt_cancel_action'] = $this->_t('button_cancel');
 		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
@@ -89,8 +94,10 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 		try {
 			$result = $this->_processMigrateProducts();
 			$response->connected = $result['connected'];
+			$response->notFound = $result['notFound'];
 			$response->result['eligible'] = $result['eligible'];
 			$response->result['updated'] = count($result['connected']);
+			$response->result['notFound'] = count($result['notFound']);
 
 			$response->message = $this->_t('ciel_migrate_products_success_msg');
 			$response->success = true;
@@ -106,49 +113,42 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 	}
 
 	private function _processMigrateProducts() {
-		$connected = array();
-		$ocRomaniaConnectedProducts = $this->_getOcRomaniaConnectedProducts();
-		$eligible = count($ocRomaniaConnectedProducts);
+		$eligibleProductsIds = $this->_getOcRomaniaConnectedProductIds();
+		$eligible = count($eligibleProductsIds);
 
-		$this->_logDebug('Found <' . $eligible . '> eligible products for migration.');
-
-		foreach ($ocRomaniaConnectedProducts as $cProduct) {
-			$id = $cProduct['id'];
-			$sku = $cProduct['sku'];
-
-			try {
-				$this->_processMigrateProduct($id, $sku);
-				$connected[] = array(
-					'id' => $id,
-					'sku' => $sku
-				);
-			} catch (Exception $exc) {
-				$this->_logError($exc, 'Failed to migrate product with sku <' . $sku . '>');
-			}
+		if ($eligible > 0) {
+			$this->_logDebug('Found <' . $eligible . '> eligible products for migration.');
+			$result = $this->_connectProductsByIds($eligibleProductsIds);
+		} else {
+			$result = array(
+				'connected' => array(),
+				'notFound' => array()
+			);
 		}
 
 		$this->_logDebug('Done processing product migration.');
 		return array(
 			'eligible' => $eligible,
-			'connected' => $connected
+			'connected' => $result['connected'],
+			'notFound' => $result['notFound']
 		);
 	}
 
-	private function _processMigrateProduct($id, $sku) {
-		$productResolver = $this->_getProductResolver();
-		$articleIntegration = $this->_getArticleIntegration();
-
-		if (!$productResolver->isConnectedToCielErp($id)) {
-			$articleIntegration->tryAutoConnectArticleByLocalCode($id);
-			$this->_logDebug('Product with sku <' . $sku . '> has been migrated.');
-		} else {
-			$this->_logDebug('Product with sku <' . $sku . '> is already connected. Skipping...');
-		}
+	private function _connectProductsByIds($productsIds) {
+		return $this->_getArticleIntegration()
+			->tryAutoConnectArticlesByLocalCodes($productsIds);
 	}
 
-	private function _getOcRomaniaConnectedProducts() {
-		return $this->_getOcRomaniaConnectedProductsProvider()
+	private function _getOcRomaniaConnectedProductIds() {
+		$productIds = array();
+		$products = $this->_getOcRomaniaConnectedProductsProvider()
 			->getSyncedProducts();
+
+		foreach ($products as $p) {
+			$productIds[] = $p['id'];
+		}
+
+		return $productIds;
 	}
 
 	private function _getOcRomaniaConnectedProductsProvider() {
@@ -156,12 +156,94 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 			->getOcRomaniaConnectedProductsProvider();
 	}
 
-	private function _getProductResolver() {
-		return new ProductResolver($this->registry);
-	}
-
 	private function _isStoreBound() {
 		return $this->_getStoreBinding()
 			->isBound();
+	}
+
+	public function exportNotFound() {
+		if ($this->_isHttpPost()) {
+			$ids = $this->_getNotFoundProductIdsFromHttpPost();
+			if (!empty($ids)) {
+				$productsData = $this->_getNotFoundProductsInformation($ids);
+				$csvData = $this->_generateNotFoundProductsCsv($productsData);
+				$this->_sendNotFoundProductsCsv($csvData);
+			}
+		}
+
+		die;
+	}
+
+	private function _getNotFoundProductIdsFromHttpPost() {
+		$idsTxt = isset($this->request->post['not_found_ids'])
+			? $this->request->post['not_found_ids']
+			: array();
+
+		$ids = explode(';', 
+			$idsTxt);
+
+		return array_map('intval', 
+			$ids);
+	}
+
+	private function _getNotFoundProductsInformation($ids) {
+		$productsData = array();
+		$model = $this->_getProductModel();
+
+		foreach ($ids as $id) {
+			$product = $model->getProduct($id);
+			$productsData[] = array(
+				$id,
+				$product['sku'],
+				$product['model'],
+				$product['name'],
+				''
+			);
+		}
+
+		return $productsData;
+	}
+
+	private function _generateNotFoundProductsCsv($productsData) {
+		ob_start();
+		$outputStream = fopen('php://output', 'w'); 
+
+		$headerFields = $this->_getNotFoundProductsCsvHeader();
+		fputcsv($outputStream, 
+			$headerFields);
+
+		foreach ($productsData as $p) {
+			fputcsv($outputStream, 
+				$p);
+		}
+
+		fclose($outputStream);
+		return ob_get_clean();
+	}
+
+	private function _getNotFoundProductsCsvHeader() {
+		return array(
+			'ID',
+			'SKU',
+			'Model',
+			'Name',
+			'New SKU'
+		);
+	}
+
+	private function _sendNotFoundProductsCsv($csvData) {
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename="oc-romania-not-connected-products.csv";');
+
+		echo $csvData;
+		die;
+	}
+
+	/**
+	 * @return \ModelCatalogProduct
+	 */
+	private function _getProductModel() {
+		$this->load->model('catalog/product');
+		return $this->model_catalog_product;
 	}
 }

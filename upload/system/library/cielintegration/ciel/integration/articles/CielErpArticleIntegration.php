@@ -127,6 +127,54 @@ namespace Ciel\Api\Integration\Articles {
 			}
 		}
 
+		public function tryAutoConnectArticlesByLocalCodes($localIds) {
+			if (empty($localIds)) {
+				throw new InvalidArgumentException('Local Ids must not be empty');
+			}
+
+			$connected = array();
+			$notFound = array();
+			$localCodes = $this->_lookupLocalArticlesCodes($localIds);
+			$remoteArticles = $this->_getAllFilteredRemoteArticles(true, true);
+			
+			foreach ($localCodes as $pId => $c) {
+				$remoteData = !empty($remoteArticles[$c]) 
+					? $remoteArticles[$c] 
+					: null;
+
+				if ($remoteData != null) {
+					if (!$this->isArticleConnected($pId)) {
+						$this->_adapter->connectArticleAndUpdateWithRemoteData($pId, $remoteData);
+						$connected[] = array(
+							'id' => $pId,
+							'code' => $c
+						);
+					}
+				} else {
+					$notFound[] = array(
+						'id' => $pId,
+						'code' => $c
+					);
+				}
+			}
+
+			return array(
+				'connected' => $connected,
+				'notFound' => $notFound
+			);
+		}
+
+		private function _lookupLocalArticlesCodes($localIds) {
+			$localCodes = array(); 
+			foreach ($localIds as $localId) {
+				$localCodesForId = $this->_adapter->lookupLocalArticleCode($localId);
+				foreach ($localCodesForId as $pId => $c) {
+					$localCodes[$pId] = $c;
+				}
+			}
+			return $localCodes;
+		}
+
 		public function canBeMatchedByLocalCode($localId) {
 			if (empty($localId)) {
 				throw new InvalidArgumentException('Local Id must not be empty');
@@ -189,7 +237,8 @@ namespace Ciel\Api\Integration\Articles {
 				throw new InvalidArgumentException('Local Id must not be empty');
 			}
 
-			return $this->_adapter->lookupLocalArticleCode($localId);
+			return $this->_adapter
+				->lookupLocalArticleCode($localId);
 		}
 
 		public function getDefaultArticleExportParameters() {
