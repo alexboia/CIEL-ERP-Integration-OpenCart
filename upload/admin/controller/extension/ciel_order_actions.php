@@ -5,6 +5,30 @@ use CielIntegration\Integration\Admin\WithCielOrderIntegration;
 class ControllerExtensionCielOrderActions extends CielController {
 	use WithCielOrderIntegration;
 
+	public function checkDocumentIssued() {
+		$response = $this->_createEmptyCheckDocumentIssuedResponse();
+
+		if ($this->_isHttpGet() && $this->_issueDocumentEnabled()) {
+			$orderId = $this->_getOrderIdFromUrl();
+			if (!empty($orderId)) {
+				try {
+					$response->isCielDocumentIssued = $this->_isDocumentIssuedForOrder($orderId);
+					$response->success = true;
+				} catch (Exception $exc) {
+					$this->_logError($exc);
+				}
+			}
+		}
+
+		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _createEmptyCheckDocumentIssuedResponse() {
+		return $this->_createAjaxResponse(array(
+			'isCielDocumentIssued' => null
+		));
+	}
+
 	public function issueDocument() {
 		$response = $this->_createAjaxResponse();
 

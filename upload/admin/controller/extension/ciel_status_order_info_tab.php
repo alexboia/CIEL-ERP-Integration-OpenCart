@@ -72,6 +72,9 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 		$viewData['ciel_erp_view_order_document_lines_action'] = $this
 			->_createRouteUrl('extension/ciel_order_actions/getRemoteDocumentLines', 
 				$orderActionsData);
+		$viewData['ciel_erp_check_document_issued_action'] = $this
+			->_createRouteUrl('extension/ciel_order_actions/checkDocumentIssued', 
+				$orderActionsData);
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_order_info_tab_contents', 

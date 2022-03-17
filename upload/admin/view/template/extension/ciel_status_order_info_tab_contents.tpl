@@ -16,6 +16,11 @@
 	}
 </style>
 
+<script type="text/javascript">
+	window['myc_is_ciel_document_issued'] = <?php echo $is_ciel_document_issued ? 'true' : 'false'; ?>;
+	window['myc_ciel_erp_check_document_issued_action'] = '<?php echo $ciel_erp_check_document_issued_action; ?>';
+</script>
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title"><i class="fa fa-plug"></i> Integrare CIEL ERP</h3>
