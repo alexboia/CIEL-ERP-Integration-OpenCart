@@ -2,7 +2,7 @@
 namespace CielIntegration\Integration\Admin\Partner {
 
     use CielIntegration\Integration\Admin\IntegrationService;
-    use ModelCustomerCustomer;
+    use CielIntegration\Integration\Admin\Partner\Model\LocalCustomer;
 
 	class PartnerResolver extends IntegrationService {
 		public function getCustomer($customerId) {
@@ -10,16 +10,15 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			return $this->_getCustomerModel()
+			return $this->_getLocalCustomerModel()
 				->getCustomer($customerId);
 		}
 
 		/**
-		 * @return ModelCustomerCustomer
+		 * @return LocalCustomer
 		 */
-		private function _getCustomerModel() {
-			$this->load->model('customer/customer');
-			return $this->model_customer_customer;
+		private function _getLocalCustomerModel() {
+			return new LocalCustomer($this->registry);
 		}
 
 		public function getCustomerAddress($addressId) {
@@ -27,7 +26,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			return $this->_getCustomerModel()
+			return $this->_getLocalCustomerModel()
 				->getAddress($addressId);
 		}
 

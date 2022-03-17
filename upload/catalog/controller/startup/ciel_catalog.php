@@ -1,7 +1,7 @@
 <?php
 use CielIntegration\Bootstrapper;
 
-class ControllerStartupCiel extends Controller {
+class ControllerStartupCielCatalog extends Controller {
 	public function index() {
 		if (function_exists('set_time_limit')) {
 			set_time_limit(0);

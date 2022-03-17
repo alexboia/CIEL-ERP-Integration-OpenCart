@@ -2,7 +2,7 @@
 namespace CielIntegration\Integration\Admin\Order {
 
     use CielIntegration\Integration\Admin\IntegrationService;
-    use ModelSaleOrder;
+    use CielIntegration\Integration\Admin\Order\Model\LocalOrder;
 
 	class OrderResolver extends IntegrationService {
 		public function orderExists($orderId) {
@@ -24,17 +24,16 @@ namespace CielIntegration\Integration\Admin\Order {
 				return null;
 			}
 
-			$orderModel = $this->_getOrderModel();
+			$orderModel = $this->_getLocalOrderModel();
 			return $orderModel
 				->getOrder($orderId);
 		}
 		
 		/**
-		 * @return ModelSaleOrder
+		 * @return LocalOrder
 		 */
-		private function _getOrderModel() {
-			$this->load->model('sale/order');
-			return $this->model_sale_order;
+		private function _getLocalOrderModel() {
+			return new LocalOrder($this->registry);
 		}
 
 		public function getOrderProducts($orderId) {
@@ -42,7 +41,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				return array();
 			}
 
-			$orderModel = $this->_getOrderModel();
+			$orderModel = $this->_getLocalOrderModel();
 			return $orderModel
 				->getOrderProducts($orderId);
 		}
@@ -52,7 +51,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				return array();
 			}
 
-			$orderModel = $this->_getOrderModel();
+			$orderModel = $this->_getLocalOrderModel();
 			return $orderModel
 				->getOrderTotals($orderId);
 		}

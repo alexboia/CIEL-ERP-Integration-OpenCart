@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <modification>
 	<name>Ciel OpenCart Integration</name>
-	<code>myccieloc002</code>
-	<version>0.0.2</version>
+	<code>myccieloc003</code>
+	<version>0.0.3</version>
 	<author>MyClar Software Solutions SRL</author>
 	<link>http://myclar.ro</link>
 
@@ -11,6 +11,15 @@
 			<search><![CDATA['startup/startup',]]></search>
 			<add position="after">
 				<![CDATA['startup/ciel',]]>
+			</add>
+		</operation>
+	</file>
+
+	<file path="system/config/catalog.php">
+		<operation>
+			<search><![CDATA['startup/startup',]]></search>
+			<add position="after">
+				<![CDATA['startup/ciel_catalog',]]>
 			</add>
 		</operation>
 	</file>

@@ -1,8 +1,9 @@
 <?php
 namespace CielIntegration\Integration\Admin\Article {
+
+    use CielIntegration\Integration\Admin\Article\Model\LocalProduct;
     use CielIntegration\Integration\Admin\IntegrationService;
     use CielIntegration\WithRouteUrl;
-    use ModelCatalogProduct;
 
 	/**
 	 * @property \DB $db
@@ -147,7 +148,7 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		public function getAllProducts() {
-			return $this->_getCatalogProductModel()
+			return $this->_getLocalProductModel()
 				->getProducts(array(
 					'filter_status' => 1
 				));
@@ -158,16 +159,15 @@ namespace CielIntegration\Integration\Admin\Article {
 				return null;
 			}
 
-			return $this->_getCatalogProductModel()
+			return $this->_getLocalProductModel()
 				->getProduct($productId);
 		}
 
 		/**
-		 * @return ModelCatalogProduct
+		 * @return LocalProduct
 		 */
-		private function _getCatalogProductModel() {
-			$this->load->model('catalog/product');
-			return $this->model_catalog_product;
+		private function _getLocalProductModel() {
+			return new LocalProduct($this->registry);
 		}
 
 		/**

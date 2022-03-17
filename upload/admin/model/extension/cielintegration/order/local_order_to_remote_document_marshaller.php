@@ -216,6 +216,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				$baseUnitPriceNoVat = $saleUnitPriceNoVat;
 				$totalBasePriceNoVat = $totalSalePriceNoVat;
 				$totalBasePriceTax = $totalSalePriceTax;
+				$baseUnitPriceTax = $saleUnitPriceTax;
 			}
 
 			$discount = $totalBasePriceNoVat 

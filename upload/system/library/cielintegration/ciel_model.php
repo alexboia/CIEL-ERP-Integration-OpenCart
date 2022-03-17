@@ -8,6 +8,7 @@ namespace CielIntegration {
 	/**
 	 * @property \Loader $load
 	 * @property \Registry $registry
+	 * @property \Config $config
 	 * @property \DB $db
 	 */
 	class CielModel extends \Model {
