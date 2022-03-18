@@ -187,6 +187,26 @@ class ControllerExtensionModuleCiel extends CielController {
 				? intval($this->request->post['myc_wf_out_of_stock_status_id'])
 				: 0;
 
+			$wfPfCustomerGroupId = isset($this->request->post['myc_wf_pf_customer_group_id'])
+				? intval($this->request->post['myc_wf_pf_customer_group_id'])
+				: 0;
+			$wfPjCustomerGroupId = isset($this->request->post['myc_wf_pj_customer_group_id'])
+				? intval($this->request->post['myc_wf_pj_customer_group_id'])
+				: 0;
+
+			$wfVatCodeCustomFieldId = isset($this->request->post['myc_wf_vat_code_custom_field_id'])
+				? intval($this->request->post['myc_wf_vat_code_custom_field_id'])
+				: 0;
+			$wfRegComNumberCustomFieldId = isset($this->request->post['myc_wf_reg_com_number_custom_field_id'])
+				? intval($this->request->post['myc_wf_reg_com_number_custom_field_id'])
+				: 0;
+			$wfBankAccountCustomFieldId = isset($this->request->post['myc_wf_bank_account_custom_field_id'])
+				? intval($this->request->post['myc_wf_bank_account_custom_field_id'])
+				: 0;
+			$wfBankNameCustomFieldId = isset($this->request->post['myc_wf_bank_name_custom_field_id'])
+				? intval($this->request->post['myc_wf_bank_name_custom_field_id'])
+				: 0;
+
 			$wfNewTaxRateCustomerGroupId = isset($this->request->post['myc_wf_new_tax_rate_customer_group_id'])
 				? intval($this->request->post['myc_wf_new_tax_rate_customer_group_id'])
 				: 0;
@@ -330,6 +350,12 @@ class ControllerExtensionModuleCiel extends CielController {
 					//Save workflow
 					$workflow->saveProductStockStatuses($wfInStockStatusId, 
 						$wfOutOfStockStatusId);
+					$workflow->savePersonTypeCustomerGroupMapping($wfPfCustomerGroupId, 
+						$wfPjCustomerGroupId);
+					$workflow->saveCustomFieldsMapping($wfVatCodeCustomFieldId, 
+						$wfRegComNumberCustomFieldId, 
+						$wfBankAccountCustomFieldId, 
+						$wfBankNameCustomFieldId);
 					$workflow->saveNewTaxRateOptions($wfNewTaxRateGeoZoneId, 
 						$wfNewTaxRateCustomerGroupId);
 					$workflow->saveNewProductOptions($wfNewProductWeightClassId, 

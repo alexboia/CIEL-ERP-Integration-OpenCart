@@ -97,8 +97,8 @@
 		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_wf_bank_account_custom_field_id">Campul custom folosit pentru contul bancar:</label>
 			<div class="col-sm-10">
-				<select name="myc_wf_reg_bank_account_custom_field_id" 
-					id="myc_wf_reg_bank_account_custom_field_id"
+				<select name="myc_wf_bank_account_custom_field_id" 
+					id="myc_wf_bank_account_custom_field_id"
 					class="form-control">
 					<option value="0">Niciunul</option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>
@@ -111,8 +111,8 @@
 		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_wf_bank_name_custom_field_id">Campul custom folosit pentru denumirea bancii:</label>
 			<div class="col-sm-10">
-				<select name="myc_wf_reg_bank_name_custom_field_id" 
-					id="myc_wf_reg_bank_name_custom_field_id"
+				<select name="myc_wf_bank_name_custom_field_id" 
+					id="myc_wf_bank_name_custom_field_id"
 					class="form-control">
 					<option value="0">Niciunul</option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>

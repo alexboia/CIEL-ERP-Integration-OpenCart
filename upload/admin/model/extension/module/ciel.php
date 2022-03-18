@@ -113,6 +113,11 @@ class ModelExtensionModuleCiel extends CielModel {
 				'code' => 'ciel_menu_entries',
 				'trigger' => 'admin/view/common/column_left/before',
 				'action' => 'extension/ciel_menu_entries'
+			),
+			array(
+				'code' => 'ciel_catalog_process_order_hist',
+				'trigger' => 'catalog/model/checkout/order/addOrderHistory/after',
+				'action' => 'extension/ciel_catalog_process_order_status_change'
 			)
 		);
 	}

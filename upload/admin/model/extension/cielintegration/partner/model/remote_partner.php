@@ -17,23 +17,49 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 
 		public function setBindingInformation($customerId, $remoteCode, $billingAddrPartnerWorksiteId) {
 			$addRecord = false;
-			$productData = $this->getByCustomerId($customerId);
-			if (empty($productData)) {
+			$customerData = $this->getByCustomerId($customerId);
+			if (empty($customerData)) {
 				$addRecord = true;
-				$productData = array(
+				$customerData = array(
 					'customer_id' => $customerId
 				);
 			}
 
-			$productData = array_merge($productData, array(
+			$customerData = array_merge($customerData, array(
 				'remote_partner_code' => $remoteCode,
 				'remote_partner_addr_worksite_id' => $billingAddrPartnerWorksiteId
 			));
 
 			if ($addRecord) {
-				$this->add($productData);
+				$this->add($customerData);
 			} else {
-				$this->update($productData);
+				$this->update($customerData);
+			}
+		}
+
+		public function setBillingInformation($customerId, $billingInformation) {
+			$addRecord = false;
+			$customerData = $this->getByCustomerId($customerId);
+			if (empty($customerData)) {
+				$addRecord = true;
+				$customerData = array(
+					'customer_id' => $customerId
+				);
+			}
+
+			$customerData = array_merge($customerData, array(
+				'billing_type' => $billingInformation['billing_type'],
+				'billing_company_tax_attribute' => $billingInformation['billing_company_tax_attribute'],
+				'billing_company_trade_register_number' => $billingInformation['billing_company_trade_register_number'],
+				'billing_company_tax_code' => $billingInformation['billing_company_tax_code'],
+				'billing_company_iban' => $billingInformation['billing_company_iban'],
+				'billing_company_bank' => $billingInformation['billing_company_bank']
+			));
+
+			if ($addRecord) {
+				$this->add($customerData);
+			} else {
+				$this->update($customerData);
 			}
 		}
 

@@ -14,3 +14,20 @@ function myc_underscorize($value) {
 	$returnValue = join('_', $returnParts);
 	return $returnValue;
 }
+
+function myc_extract_vat_code_parts($fullVatCode) {
+	$parts = array(
+		'attribute' => null,
+		'code' => null
+	);
+
+	$fullVatCode = strtoupper($fullVatCode);
+	if (preg_match('/^([A-Z]{2})([0-9]{9,})$/i', $fullVatCode)) {
+		$parts['attribute'] = substr($fullVatCode, 0, 2);
+		$parts['code'] = substr($fullVatCode, 2);
+	} else {
+		$parts['code'] = $fullVatCode;
+	}
+
+	return $parts;
+}
