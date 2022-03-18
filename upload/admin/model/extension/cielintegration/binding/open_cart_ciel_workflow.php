@@ -45,6 +45,67 @@ namespace CielIntegration\Integration\Admin\Binding {
 			));
 		}
 
+		public function getPFPersonTypeCustomerGroupId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['pf_customer_group_id'])
+				? intval($wfSettings['pf_customer_group_id'])
+				: 0;
+		}
+
+		public function getPJPersonTypeCustomerGroupId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['pj_customer_group_id'])
+				? intval($wfSettings['pj_customer_group_id'])
+				: 0;
+		}
+
+		public function savePersonTypeCustomerGroupMapping($pfCustomerGroupId, $pjCustomerGroupId) {
+			$this->_saveWorkflowSettigs(array(
+				'pf_customer_group_id' => $pfCustomerGroupId,
+				'pj_customer_group_id' => $pjCustomerGroupId
+			));
+		}
+
+		public function getVatCodeCustomFieldId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['vat_code_custom_field_id'])
+				? intval($wfSettings['vat_code_custom_field_id'])
+				: 0;
+		}
+
+		public function getRegComNumberCustomFieldId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['reg_com_number_custom_field_id'])
+				? intval($wfSettings['reg_com_number_custom_field_id'])
+				: 0;
+		}
+
+		public function getBankAccountCustomFieldId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['bank_account_custom_field_id'])
+				? intval($wfSettings['bank_account_custom_field_id'])
+				: 0;
+		}
+
+		public function getBankNameCustomFieldId() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['bank_name_custom_field_id'])
+				? intval($wfSettings['bank_name_custom_field_id'])
+				: 0;
+		}
+
+		public function saveCustomFieldsMapping($vatCodeCustomFieldId, 
+			$regComNumberCustomFieldId, 
+			$bankAccountCustomFieldId, 
+			$bankNameCustomFieldId) {
+			$this->_saveWorkflowSettigs(array(
+				'vat_code_custom_field_id' => $vatCodeCustomFieldId,
+				'reg_com_number_custom_field_id' => $regComNumberCustomFieldId,
+				'bank_account_custom_field_id' => $bankAccountCustomFieldId,
+				'bank_name_custom_field_id' => $bankNameCustomFieldId
+			));
+		}
+
 		private function _saveWorkflowSettigs($modifiedWfSettings) {
 			$wfSettings = array_merge($this->_getWorkflowSettings(), 
 				$modifiedWfSettings);

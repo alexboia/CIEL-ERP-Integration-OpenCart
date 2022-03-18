@@ -28,13 +28,23 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 
 			'wf_in_stock_status_id' => 0,
 			'wf_out_of_stock_status_id' => 0,
+
+			'wf_pf_customer_group_id' => 0,
+			'wf_pj_customer_group_id' => 0,
+			
+			'wf_vat_code_custom_field_id' => 0,
+			'wf_reg_com_number_custom_field_id' => 0,
+			'wf_bank_account_custom_field_id' => 0,
+			'wf_bank_name_custom_field_id' => 0,
+
 			'wf_new_tax_rate_customer_group_id' => 0,
 			'wf_new_tax_rate_geo_zone_id' => 0,
 			'wf_new_product_weight_class_id' => 0,
 			'wf_new_product_length_class_id' => 0,
 
 			'stock_statuses' => $this->_getOpenCartStockStatuses(),
-			'customer_grouops' => $this->_getOpenCartCustomerGroups(),
+			'customer_groups' => $this->_getOpenCartCustomerGroups(),
+			'customer_custom_fields' => $this->_getOpenCartCustomerCustomFields(),
 			'geo_zones' => $this->_getOpenCartGeoZones(),
 			'weight_classes' => $this->_getOpenCartWeightClasses(),
 			'length_classes' => $this->_getOpenCartLengthClasses()
@@ -45,6 +55,15 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 				'has_connection' => true,
 				'wf_in_stock_status_id' => $workflow->getInStockStatusId(),
 				'wf_out_of_stock_status_id' => $workflow->getOutOfStockStatusId(),
+
+				'wf_pf_customer_group_id' => $workflow->getPFPersonTypeCustomerGroupId(),
+				'wf_pj_customer_group_id' => $workflow->getPJPersonTypeCustomerGroupId(),
+
+				'wf_vat_code_custom_field_id' => $workflow->getVatCodeCustomFieldId(),
+				'wf_reg_com_number_custom_field_id' => $workflow->getRegComNumberCustomFieldId(),
+				'wf_bank_account_custom_field_id' => $workflow->getBankAccountCustomFieldId(),
+				'wf_bank_name_custom_field_id' => $workflow->getBankNameCustomFieldId(),
+
 				'wf_new_tax_rate_customer_group_id' => $workflow->getNewTaxRateCustomerGroupId(),
 				'wf_new_tax_rate_geo_zone_id' => $workflow->getNewTaxRateGeoZoneId(),
 				'wf_new_product_weight_class_id' => $workflow->getNewProductWeightClassId(),

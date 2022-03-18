@@ -56,6 +56,12 @@ namespace CielIntegration\Integration\Admin {
 				->getOpenCartGeoZones();
 		}
 
+		protected function _getOpenCartCustomerCustomFields($customerGroupId = null, $location = 'address') {
+			return $this->_getLookupDataProvider()
+				->getOpenCartCustomerCustomFields($customerGroupId, 
+					$location);
+		}
+
 		private function _getLookupDataProvider() {
 			if ($this->_lookupDataProvider === null) {
 				$this->_lookupDataProvider = new LookupDataProvider($this->registry);

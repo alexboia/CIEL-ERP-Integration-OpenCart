@@ -5,6 +5,7 @@ namespace CielIntegration\Integration\Admin {
     use Ciel\Api\Data\DocumentType;
     use CielIntegration\Integration\Admin\StockUpdateMode;
     use CielIntegration\WithLanguage;
+    use Exception;
     use ModelCustomerCustomerGroup;
     use ModelLocalisationGeoZone;
     use ModelLocalisationLengthClass;
@@ -176,6 +177,60 @@ namespace CielIntegration\Integration\Admin {
 		private function _getWeightClassModel() {
 			$this->load->model('localisation/weight_class');
 			return $this->model_localisation_weight_class;
+		}
+
+		public function getOpenCartCustomerCustomFields($customerGroupId = null, $location = 'address') {
+			$result = array();
+			$params = array();
+			$customFieldsModel = $this->_getCustomerCustomFieldsModel();
+
+			if (!empty($customerGroupId)) {
+				$params['filter_customer_group_id'] = $customerGroupId;
+			}
+
+			$customFieldsRows = $customFieldsModel
+				->getCustomFields($params);
+
+			foreach ($customFieldsRows as $row) {		
+				if (!empty($location)) {
+					if ($row['location'] != $location) {
+						continue;
+					}
+				}
+
+				$id = intval($row['custom_field_id']);
+				$result[$id] = array(
+					'id' => $id,
+					'name' => $row['name'],
+					'location' => $row['location'],
+					'status' => $row['status'],
+					'groups' => $this->_getCustomerCustomFieldGroups($id)
+				);
+			}
+
+			return $result;
+		}
+
+		private function _getCustomerCustomFieldGroups($customFieldId) {
+			$ids = array();
+			$customFieldsModel = $this->_getCustomerCustomFieldsModel();
+
+			$groups = $customFieldsModel->getCustomFieldCustomerGroups($customFieldId);
+			if (!empty($groups)) {
+				foreach ($groups as $g) {
+					$ids[] = intval($g['customer_group_id']);
+				}
+			}
+
+			return array_unique($ids);
+		}
+
+		/**
+		 * @return \ModelCustomerCustomField
+		 */
+		private function _getCustomerCustomFieldsModel() {
+			$this->load->model('customer/custom_field');
+			return $this->model_customer_custom_field;
 		}
 	}
 }
