@@ -77,6 +77,46 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 			}
 		}
 
+		public function setBillingInformation($orderId, $customerId, $billingInformation) {
+			$addRecord = false;
+			$orderData = $this->getByOrderId($orderId);
+			if (empty($orderData)) {
+				$addRecord = true;
+				$orderData = array(
+					'order_id' => $orderId
+				);
+			}
+
+			$orderData = array_merge($orderData, array(
+				'customer_id' => 
+					$customerId,
+				'billing_type' => !empty($billingInformation['billing_type'])
+					? $billingInformation['billing_type'] 
+					: null,
+				'billing_company_tax_attribute' => !empty($billingInformation['billing_company_tax_attribute'])
+					? $billingInformation['billing_company_tax_attribute']
+					: null,
+				'billing_company_trade_register_number' => !empty($billingInformation['billing_company_trade_register_number'])
+					? $billingInformation['billing_company_trade_register_number']
+					: null,
+				'billing_company_tax_code' => !empty($billingInformation['billing_company_tax_code'])
+					? $billingInformation['billing_company_tax_code']
+					: null,
+				'billing_company_iban' => !empty($billingInformation['billing_company_iban'])
+					? $billingInformation['billing_company_iban']
+					: null,
+				'billing_company_bank' => !empty($billingInformation['billing_company_bank'])
+					? $billingInformation['billing_company_bank']
+					: null
+			));
+
+			if ($addRecord) {
+				$this->add($orderData);
+			} else {
+				$this->update($orderData);
+			}
+		}
+
 		public function addAll(array $remoteOrdersInfos) {
 			if (empty($remoteOrdersInfos)) {
 				return;

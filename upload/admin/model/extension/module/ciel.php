@@ -114,8 +114,20 @@ class ModelExtensionModuleCiel extends CielModel {
 				'trigger' => 'admin/view/common/column_left/before',
 				'action' => 'extension/ciel_menu_entries'
 			),
+
 			array(
-				'code' => 'ciel_catalog_process_order_hist',
+				'code' => 'ciel_after_customer_add',
+				'trigger' => 'admin/model/customer/customer/addCustomer/after',
+				'action' => 'extension/ciel_custom_fields_sync/afterAdd'
+			),
+			array(
+				'code' => 'ciel_after_customer_edit',
+				'trigger' => 'admin/model/customer/customer/editCustomer/after',
+				'action' => 'extension/ciel_custom_fields_sync/afterEdit'
+			),
+
+			array(
+				'code' => 'ciel_after_add_order_history',
 				'trigger' => 'catalog/model/checkout/order/addOrderHistory/after',
 				'action' => 'extension/ciel_catalog_process_order_status_change'
 			)

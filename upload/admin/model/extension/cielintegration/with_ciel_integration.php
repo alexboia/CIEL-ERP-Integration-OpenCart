@@ -2,6 +2,7 @@
 namespace CielIntegration\Integration\Admin {
 
     use Ciel\Api\CielConfig;
+    use Ciel\Api\Data\DocumentIssueType;
     use Ciel\Api\Data\DocumentStatusType;
     use Ciel\Api\Data\DocumentType;
     use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
@@ -52,6 +53,46 @@ namespace CielIntegration\Integration\Admin {
 	
 			return $issueDocumentType == DocumentType::SaleInvoice 
 				|| $issueDocumentType == DocumentType::SaleOrder;
+		}
+
+		protected function _determinePersonTypeFromCustomerGroupId($customerGroupId) {
+			$workflow = $this->_getWorkflow();
+			$personType = DocumentIssueType::Person;
+
+			if ($customerGroupId == $workflow->getPJPersonTypeCustomerGroupId()) {
+				$personType = DocumentIssueType::Company;
+			}
+
+			return $personType;
+		}
+
+		protected function _extractAdditionalBillingFieldsFromCustomFields($customFields) {
+			$data = array(
+				'billing_company_tax_attribute' => null,
+				'billing_company_tax_code' => null,
+				'billing_company_trade_register_number' => null,
+				'billing_company_bank' => null,
+				'billing_company_iban' => null
+			);
+	
+			if (!empty($customFields)) {
+				$workflow = $this->_getWorkflow();
+				foreach ($customFields as $id => $postedValue) {
+					if ($id == $workflow->getVatCodeCustomFieldId()) {
+						$vatCodeParts = myc_extract_vat_code_parts($postedValue);
+						$data['billing_company_tax_attribute'] = $vatCodeParts['attribute'];
+						$data['billing_company_tax_code'] = $vatCodeParts['code'];
+					} else if ($id == $workflow->getRegComNumberCustomFieldId()) {
+						$data['billing_company_trade_register_number'] = $postedValue;
+					} else if ($id == $workflow->getBankAccountCustomFieldId()) {
+						$data['billing_company_iban'] = $postedValue;
+					} else if ($id == $workflow->getBankNameCustomFieldId()) {
+						$data['billing_company_bank'] = $postedValue;
+					}
+				}
+			}
+	
+			return $data;
 		}
 
 		/**

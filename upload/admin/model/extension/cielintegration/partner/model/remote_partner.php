@@ -48,12 +48,24 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 			}
 
 			$customerData = array_merge($customerData, array(
-				'billing_type' => $billingInformation['billing_type'],
-				'billing_company_tax_attribute' => $billingInformation['billing_company_tax_attribute'],
-				'billing_company_trade_register_number' => $billingInformation['billing_company_trade_register_number'],
-				'billing_company_tax_code' => $billingInformation['billing_company_tax_code'],
-				'billing_company_iban' => $billingInformation['billing_company_iban'],
-				'billing_company_bank' => $billingInformation['billing_company_bank']
+				'billing_type' => !empty($billingInformation['billing_type'])
+					? $billingInformation['billing_type'] 
+					: null,
+				'billing_company_tax_attribute' => !empty($billingInformation['billing_company_tax_attribute'])
+					? $billingInformation['billing_company_tax_attribute']
+					: null,
+				'billing_company_trade_register_number' => !empty($billingInformation['billing_company_trade_register_number'])
+					? $billingInformation['billing_company_trade_register_number']
+					: null,
+				'billing_company_tax_code' => !empty($billingInformation['billing_company_tax_code'])
+					? $billingInformation['billing_company_tax_code']
+					: null,
+				'billing_company_iban' => !empty($billingInformation['billing_company_iban'])
+					? $billingInformation['billing_company_iban']
+					: null,
+				'billing_company_bank' => !empty($billingInformation['billing_company_bank'])
+					? $billingInformation['billing_company_bank']
+					: null
 			));
 
 			if ($addRecord) {
