@@ -88,5 +88,47 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			$query = $db->query($sql);
 			return $query->rows;
 		}
+
+		public function productExits($productId) {
+			if (empty($productId)) {
+				return false;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT COUNT(product_id) as product_count FROM `' . DB_PREFIX . 'product` WHERE product_id = "' . intval($productId) . '"');
+			
+			$row = $result->row;
+			return !empty($row) && !empty($row['product_count'])
+				? intval($row['product_count']) > 0
+				: false;
+		}
+
+		public function lookupProductId($sku) {
+			if (empty($sku)) {
+				return 0;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT product_id FROM `' . DB_PREFIX . 'product` WHERE sku = "' . $db->escape($sku) . '" LIMIT 1');
+
+			$row = $result->row;
+			return !empty($row) && !empty($row['product_id'])
+				? intval($row['product_id'])
+				: 0;
+		}
+
+		public function lookupProductSku($productId) {
+			if (empty($productId)) {
+				return 0;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT sku FROM `' . DB_PREFIX . 'product` WHERE product_id = "' . intval($productId) . '"');
+
+			$row = $result->row;
+			return !empty($row) && !empty($row['sku'])
+				? $row['sku']
+				: null;
+		}
 	}
 }

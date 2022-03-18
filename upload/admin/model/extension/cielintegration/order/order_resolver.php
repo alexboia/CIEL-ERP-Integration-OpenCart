@@ -10,13 +10,9 @@ namespace CielIntegration\Integration\Admin\Order {
 				return false;
 			}
 
-			$db = $this->_getDb();
-			$result = $db->query('SELECT COUNT(order_id) as order_count FROM `' . DB_PREFIX . 'order` WHERE order_id = "' . intval($orderId) . '"');
-			
-			$row = $result->row;
-			return !empty($row) && !empty($row['order_count'])
-				? intval($row['order_count']) > 0
-				: false;
+			$orderModel = $this->_getLocalOrderModel();
+			return $orderModel
+				->orderExists($orderId);
 		}
 
 		public function getOrder($orderId) {

@@ -76,5 +76,33 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 
 			return $result;
 		}
+
+		public function getCustomerIdForOrder($orderId) {
+			if (empty($orderId)) {
+				return null;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT customer_id FROM `' . DB_PREFIX . 'order` WHERE order_id = "' . intval($orderId) . '"');
+
+			$row = $result->row;
+			return !empty($row) && !empty($row['customer_id'])
+				? intval($row['customer_id'])
+				: 0;
+		}
+
+		public function customerExists($customerId) {
+			if (empty($customerId)) {
+				return false;
+			}
+
+			$db = $this->_getDb();
+			$result = $db->query('SELECT COUNT(customer_id) as customer_count FROM `' . DB_PREFIX . 'customer` WHERE customer_id = "' . intval($customerId) . '"');
+			
+			$row = $result->row;
+			return !empty($row) && !empty($row['customer_count'])
+				? intval($row['customer_count']) > 0
+				: false;
+		}
 	}
 }
