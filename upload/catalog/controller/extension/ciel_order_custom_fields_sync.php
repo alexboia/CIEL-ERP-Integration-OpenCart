@@ -1,11 +1,10 @@
 <?php
 
 use CielIntegration\CielController;
-use CielIntegration\Integration\Admin\WithCielIntegration;
+use CielIntegration\Integration\Admin\Order\OrderCustomFieldsSyncService;
 use CielIntegration\WithLogging;
 
 class ControllerExtensionCielOrderCustomFieldsSync extends CielController {
-	use WithCielIntegration;
 	use WithLogging;
 
 	public function afterAdd(&$route, &$args, &$output) {
@@ -26,49 +25,12 @@ class ControllerExtensionCielOrderCustomFieldsSync extends CielController {
 
 	private function _syncOrderCustomerCustomFields($orderId, $orderData) {
 		$this->_logDebug('Intercepted order save for order id <' . $orderId . '>.');
-	
-		$remoteOrderModel = $this->_getRemoteOrderModel();
-		$customerId = $this->_extractOrderCustomerId($orderData);
-		$remoteOrderCustomerBillingInformation = $this->_extractRemoteOrderCustomerBillingInformation($orderData);
-
-		$remoteOrderModel->setBillingInformation($orderId,
-			$customerId,
-			$remoteOrderCustomerBillingInformation);
+		$this->_getOrderCustomFieldsSyncService()
+			->syncOrderCustomerCustomFields($orderId, 
+				$orderData);
 	}
 
-	private function _extractOrderCustomerId($orderData) {
-		return !empty($orderData['customer_id'])
-			? intval($orderData['customer_id'])
-			: 0;
-	}
-
-	private function _extractRemoteOrderCustomerBillingInformation($orderData) {
-		$billingType = $this->_determineCustomerPersonType($orderData);
-		$billingInformation = $this->_extractAdditionalBillingFields($orderData);
-
-		return array_merge($billingInformation, array(
-			'billing_type' => $billingType
-		));
-	}
-
-	private function _determineCustomerPersonType($orderData) {
-		$customerGroupId = $this->_findCustomerGroupId($orderData);
-		return $this->_determinePersonTypeFromCustomerGroupId($customerGroupId);
-	}
-
-	private function _findCustomerGroupId($orderData) {
-		return intval($orderData['customer_group_id'])
-			? intval($orderData['customer_group_id'])
-			: 0;
-	}
-
-	private function _extractAdditionalBillingFields($orderData) {
-		$customFields = array();
-
-		if (!empty($orderData['payment_custom_field'])) {
-			$customFields = $orderData['payment_custom_field'];
-		}
-
-		return $this->_extractAdditionalBillingFieldsFromCustomFields($customFields);
+	private function _getOrderCustomFieldsSyncService() {
+		return new OrderCustomFieldsSyncService($this->registry);
 	}
 }

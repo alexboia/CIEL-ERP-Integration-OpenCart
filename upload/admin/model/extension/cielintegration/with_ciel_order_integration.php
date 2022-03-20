@@ -3,6 +3,7 @@ namespace CielIntegration\Integration\Admin {
 
     use Ciel\Api\Integration\Orders\BatchDischargePolicy;
     use Ciel\Api\Integration\Orders\DischargePolicies\NoBatchDischargePolicy;
+    use CielIntegration\Integration\Admin\Order\OrderCustomFieldsSyncService;
     use CielIntegration\WithLogging;
     use Exception;
 
@@ -47,6 +48,9 @@ namespace CielIntegration\Integration\Admin {
 				}
 	
 				if ($status->canOrderItemsBeAddedToDocument()) {
+					//Sync order custom fields first
+					$this->_syncOrderCustomerCustomFields($orderId);
+
 					//Export partner data for this order
 					$this->_tryAutoConnectOrderPartner($orderId);
 					$this->_exportLocalOrderPartner($orderId);
@@ -79,6 +83,12 @@ namespace CielIntegration\Integration\Admin {
 		private function _determineDocumentPrerequisiteStatus($orderId) {
 			return $this->_getOrderIntegration()
 				->determineOrderDocumentPreRequisitesStatus($orderId);
+		}
+
+		private function _syncOrderCustomerCustomFields($orderId) {
+			$this->_getOrderCustomFieldsSyncService()
+				->syncOrderCustomerCustomFields($orderId, 
+					null);
 		}
 	
 		private function _tryAutoConnectOrderPartner($orderId) {
@@ -215,6 +225,10 @@ namespace CielIntegration\Integration\Admin {
 				'quantity' => $rawRemoteLine['Quantity'],
 				'priceOutNoVat' => $rawRemoteLine['PriceOut']
 			);
+		}
+
+		private function _getOrderCustomFieldsSyncService() {
+			return new OrderCustomFieldsSyncService($this->registry);
 		}
 	}
 }

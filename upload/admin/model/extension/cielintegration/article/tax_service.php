@@ -22,6 +22,8 @@ namespace CielIntegration\Integration\Admin\Article {
 			if (empty($taxRate)) {
 				$taxRate = $this->_createTaxRate($vatQuotaName, 
 					$vatQuotaValue);
+			} else {
+				$taxRate = $this->_syncTaxRateWithSettings($taxRate);
 			}
 
 			$taxClassName = $this->_deriveTaxClassNameFromOptionAndQuotaNames($vatOptionName, 
@@ -41,8 +43,7 @@ namespace CielIntegration\Integration\Admin\Article {
 		private function _getTaxRatesByVatQuotaProperties($vatQuotaName, $vatQuotaValue) {
 			$taxRate = null;
 			$taxRatesRows = $this->_getAllTaxRates();
-			$geoZoneId = $this->_getWorkflow()
-				->getNewTaxRateGeoZoneId();
+			$geoZoneId = $this->_getNewTaxRateGeoZoneId();
 
 			foreach ($taxRatesRows as $tRow) {
 				if (strcasecmp($tRow['name'], $vatQuotaName) === 0 
@@ -68,19 +69,15 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		private function _createTaxRate($vatQuotaName, $vatQuotaValue) {
-			$geoZoneId = $this->_getWorkflow()
-				->getNewTaxRateGeoZoneId();
-			$customerGroupId = $this->_getWorkflow()
-				->getNewTaxRateCustomerGroupId();
-
+			$geoZoneId = $this->_getNewTaxRateGeoZoneId();
+			$newTaxRateCustomerGroupIds = $this->_getNewTaxRateCustomerGroupIds();
+			
 			$data = array(
 				'type' => 'P',
 				'name' => $vatQuotaName,
 				'rate' => $vatQuotaValue,
 				'geo_zone_id' => $geoZoneId,
-				'tax_rate_customer_group' => array(
-					$customerGroupId
-				)
+				'tax_rate_customer_group' => $newTaxRateCustomerGroupIds
 			);
 
 			$taxRateModel = $this->_getTaxRateModel();
@@ -88,6 +85,49 @@ namespace CielIntegration\Integration\Admin\Article {
 
 			return $taxRateModel
 				->getTaxRate($taxRateId);
+		}
+
+		private function _getNewTaxRateGeoZoneId() {
+			return $this->_getWorkflow()
+				->getNewTaxRateGeoZoneId();
+		}
+
+		private function _getNewTaxRateCustomerGroupIds() {
+			$customerGroupIds = array();
+			$workflow = $this->_getWorkflow();
+
+			$newTaxRateCustomerGroupId = $workflow->getNewTaxRateCustomerGroupId();
+			if ($newTaxRateCustomerGroupId > 0) {
+				$customerGroupIds[] = $newTaxRateCustomerGroupId;
+			}
+
+			$pfCustomerGroupId = $workflow->getPFPersonTypeCustomerGroupId();
+			if ($pfCustomerGroupId > 0) {
+				$customerGroupIds[] = $pfCustomerGroupId;
+			}
+
+			$pjCustomerGroupId = $workflow->getPJPersonTypeCustomerGroupId();
+			if ($pjCustomerGroupId > 0) {
+				$customerGroupIds[] = $pjCustomerGroupId;
+			}
+
+			return array_unique($customerGroupIds);
+		}
+
+		private function _syncTaxRateWithSettings($taxRate) {
+			$newTaxRateCustomerGroupIds = $this->_getNewTaxRateCustomerGroupIds();
+			$syncedTaxRate = array_merge($taxRate, 
+				array(
+					'tax_rate_customer_group' => $newTaxRateCustomerGroupIds
+				)
+			);
+
+			$taxRateId = intval($taxRate['tax_rate_id']);
+			$taxRateModel = $this->_getTaxRateModel();
+			$taxRateModel->editTaxRate($taxRateId, 
+				$syncedTaxRate);
+
+			return $syncedTaxRate;
 		}
 
 		private function _deriveTaxClassNameFromOptionAndQuotaNames($vatOptionName, $vatQuotaName) {
