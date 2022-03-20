@@ -2,6 +2,7 @@
 namespace CielIntegration\Integration\Admin\Partner {
 
     use CielIntegration\Integration\Admin\IntegrationService;
+    use CielIntegration\Integration\Admin\Partner\Model\LocalCustomer;
     use CielIntegration\Integration\Admin\WithCielIntegration;
     use CielIntegration\WithInputSanitization;
     use CielIntegration\WithLogging;
@@ -13,12 +14,27 @@ namespace CielIntegration\Integration\Admin\Partner {
 
 		public function syncCustomerCustomFields($customerId, $customerData) {
 			$this->_logDebug('Syncing customer custom fields for customer id <' . $customerId . '>.');
+
+			if (empty($customerData)) {
+				$this->_logDebug('Null or empty customer data given. Retrieving by ID...');
+				$customerData = $this->_getCustomerData($customerId);
+				if (empty($customerData)) {
+					$this->_logDebug('No customer data found. Exiting...');
+					return;
+				}
+			}
 	
 			$remotePartnerModel = $this->_getRemotePartnerModel();
 			$remoteCustomerBillingInformation = $this->_extractRemoteCustomerBillingInformation($customerData);
 	
 			$remotePartnerModel->setBillingInformation($customerId, 
 				$remoteCustomerBillingInformation);
+		}
+
+		private function _getCustomerData($customerId) {
+			return $this->_getLocalCustomerModel()
+				->getCustomer($customerId, 
+					true);
 		}
 	
 		private function _extractRemoteCustomerBillingInformation($customerData) {
@@ -69,6 +85,10 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 	
 			return $defaultAddress;
+		}
+
+		private function _getLocalCustomerModel() {
+			return new LocalCustomer($this->registry);
 		}
 	}
 }

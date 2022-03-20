@@ -6,6 +6,8 @@ namespace CielIntegration\Integration\Admin\Order {
     use CielIntegration\Integration\Admin\PriceFormatter;
 
 	class LocalOrderToRemoteDocumentMarshaller extends IntegrationService {
+		const DISCOUNT_DELTA = 0.1;
+
 		/**
 		 * @var OrderResolver
 		 */
@@ -206,7 +208,7 @@ namespace CielIntegration\Integration\Admin\Order {
 
 			//If the base price is greater than the sale price, we consider this to be a discount
 			//	otherwise, it's a regular price change and we just keep the sale price
-			if ($baseUnitPriceNoVat - $saleUnitPriceNoVat >= 0.1) {
+			if ($baseUnitPriceNoVat - $saleUnitPriceNoVat >= self::DISCOUNT_DELTA) {
 				$totalBasePriceNoVat = $baseUnitPriceNoVat * $quantity;
 				$baseUnitPriceTax = $this->_calculateTax($baseUnitPriceNoVat, 
 					$productTaxClassId);
@@ -317,11 +319,13 @@ namespace CielIntegration\Integration\Admin\Order {
 			$totalDiscountNotVat = $this->_calculatePriceNoVat($totalDiscount, 
 				$discountVatQuotaValue);
 			
-			$discounts[] = array(
-				'item_discount' => $totalDiscountNotVat,
-				'item_discount_tax' => $totalDiscount - $totalDiscountNotVat,
-				'item_vat_out_quota_value' => $discountVatQuotaValue
-			);
+			if ($totalDiscount >= self::DISCOUNT_DELTA) {
+				$discounts[] = array(
+					'item_discount' => $totalDiscountNotVat,
+					'item_discount_tax' => $totalDiscount - $totalDiscountNotVat,
+					'item_vat_out_quota_value' => $discountVatQuotaValue
+				);
+			}
 
 			$this->_computedOrderDiscountLines = $discounts;
 			return $this->_computedOrderDiscountLines;

@@ -4,7 +4,7 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
     use CielIntegration\CielModel;
 
 	class LocalCustomer extends CielModel {
-		public function getCustomer($customerId) {
+		public function getCustomer($customerId, $loadAddresses = false) {
 			$result = null;
 
 			if (!empty($customerId)) {
@@ -12,10 +12,29 @@ namespace CielIntegration\Integration\Admin\Partner\Model {
 				$query = $db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customerId . "'");	
 				if (!empty($query) && !empty($query->row)) {
 					$result = $query->row;
+					if ($loadAddresses) {
+						$result['address'] = $this->getAddresses($customerId);
+					}
 				}
 			}
 			
 			return $result;
+		}
+
+		public function getAddresses($customerId) {
+			$db = $this->_getDb();
+			$addressData = array();
+			$query = $db->query("SELECT address_id FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customerId . "'");
+	
+			foreach ($query->rows as $result) {
+				$addressInfo = $this->getAddress($result['address_id']);
+	
+				if ($addressInfo) {
+					$addressData[$result['address_id']] = $addressInfo;
+				}
+			}
+	
+			return $addressData;
 		}
 
 		public function getAddress($addressId) {

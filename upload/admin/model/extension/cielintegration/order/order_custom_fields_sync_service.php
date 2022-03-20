@@ -3,6 +3,7 @@ namespace CielIntegration\Integration\Admin\Order {
 
     use CielIntegration\Integration\Admin\IntegrationService;
     use CielIntegration\Integration\Admin\Order\Model\LocalOrder;
+    use CielIntegration\Integration\Admin\Partner\CustomerCustomFieldsSyncService;
     use CielIntegration\Integration\Admin\WithCielIntegration;
     use CielIntegration\WithLogging;
 
@@ -29,6 +30,12 @@ namespace CielIntegration\Integration\Admin\Order {
 			$remoteOrderModel->setBillingInformation($orderId,
 				$customerId,
 				$remoteOrderCustomerBillingInformation);
+
+			if ($customerId > 0) {
+				$this->_getCustomerCustomFieldsSyncService()
+					->syncCustomerCustomFields($customerId,
+						null);
+			}
 		}
 
 		private function _getOrderData($orderId) {
@@ -74,6 +81,10 @@ namespace CielIntegration\Integration\Admin\Order {
 
 		private function _getLocalOrderModel() {
 			return new LocalOrder($this->registry);
+		}
+
+		private function _getCustomerCustomFieldsSyncService() {
+			return new CustomerCustomFieldsSyncService($this->registry);
 		}
 	}
 }
