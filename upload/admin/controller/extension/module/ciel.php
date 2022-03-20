@@ -442,7 +442,7 @@ class ControllerExtensionModuleCiel extends CielController {
 		$shippingService = $this->_getShippingService();
 		$taxService = $this->_getTaxService();
 
-		$taxClass = $taxService->getOrCreateTaxClass('Transport Taxabil', 
+		$taxClass = $taxService->getOrCreateTaxClass('Livrare Taxabila', 
 			$storeBinding->getShippingVatQuotaName(), 
 			$storeBinding->getShippingVatQuotaValue());
 

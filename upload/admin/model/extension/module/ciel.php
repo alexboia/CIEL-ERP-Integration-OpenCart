@@ -130,6 +130,17 @@ class ModelExtensionModuleCiel extends CielModel {
 				'code' => 'ciel_after_add_order_history',
 				'trigger' => 'catalog/model/checkout/order/addOrderHistory/after',
 				'action' => 'extension/ciel_catalog_process_order_status_change'
+			),
+
+			array(
+				'code' => 'ciel_after_checkout_order_add',
+				'trigger' => 'catalog/model/checkout/order/addOrder/after',
+				'action' => 'extension/ciel_order_custom_fields_sync/afterAdd'
+			),
+			array(
+				'code' => 'ciel_after_checkout_order_edit',
+				'trigger' => 'catalog/model/checkout/order/editOrder/after',
+				'action' => 'extension/ciel_order_custom_fields_sync/afterEdit'
 			)
 		);
 	}

@@ -22,7 +22,7 @@ function myc_extract_vat_code_parts($fullVatCode) {
 	);
 
 	$fullVatCode = strtoupper($fullVatCode);
-	if (preg_match('/^([A-Z]{2})([0-9]{9,})$/i', $fullVatCode)) {
+	if (preg_match('/^([A-Z]{2})([0-9]{5,})$/i', $fullVatCode)) {
 		$parts['attribute'] = substr($fullVatCode, 0, 2);
 		$parts['code'] = substr($fullVatCode, 2);
 	} else {
