@@ -2,10 +2,8 @@
 
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\WithCielOrderIntegration;
-use CielIntegration\WithLogging;
 
 class ControllerExtensionCielCatalogProcessOrderStatusChange extends CielController {
-	use WithLogging;
 	use WithCielOrderIntegration;
 
 	public function index(&$route, &$args, &$output) {

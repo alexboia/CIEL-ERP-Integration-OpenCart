@@ -45,7 +45,7 @@ class ControllerExtensionCielProductActions extends CielController {
 	}
 
 	private function _logRemoteArticleNotFoundError(RemoteArticleNotFoundException $exc) {
-		$this->_logError($exc, 'Could not execute product action. Remote article not found (by <' . $exc->getIdentifierType() . '>, value <' . $exc->getIdentifierValue() . '>).', );
+		$this->_logError($exc, 'Could not execute product action. Remote article not found (by <' . $exc->getIdentifierType() . '>, value <' . $exc->getIdentifierValue() . '>).');
 	}
 
 	private function _logGenericProductActionError(Exception $exc) {
