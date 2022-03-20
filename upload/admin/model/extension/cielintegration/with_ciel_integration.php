@@ -68,11 +68,11 @@ namespace CielIntegration\Integration\Admin {
 
 		protected function _extractAdditionalBillingFieldsFromCustomFields($customFields) {
 			$data = array(
-				'billing_company_tax_attribute' => null,
-				'billing_company_tax_code' => null,
-				'billing_company_trade_register_number' => null,
-				'billing_company_bank' => null,
-				'billing_company_iban' => null
+				'billing_company_tax_attribute' => '',
+				'billing_company_tax_code' => '',
+				'billing_company_trade_register_number' => '',
+				'billing_company_bank' => '',
+				'billing_company_iban' => ''
 			);
 	
 			if (!empty($customFields)) {

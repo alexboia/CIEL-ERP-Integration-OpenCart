@@ -10,6 +10,7 @@
 	var $ctlBindingDocumentTypeSelect = null;
 	var $ctlBindingShippingQuotaNameSelect = null;
 	var $ctlBindingSettingsContainer = null;
+	var $ctlWorkflowSettingsContainer = null;
 
 	function _updateContext(newVals) {
 		_context = $.extend({}, _context, newVals);
@@ -131,6 +132,7 @@
 		$ctlBindingWarehousesSelect.html(warehousesOptions);
 		$ctlBindingShippingQuotaNameSelect.html(shippingVatQuotasOptions);
 		$ctlBindingSettingsContainer.show();
+		$ctlWorkflowSettingsContainer.show();
 
 		_updateContext({
 			hasConnectionInfo: true
@@ -252,6 +254,7 @@
 		$ctlBindingDocumentTypeSelect = $('#myc_runtime_issue_doctype');
 		$ctlBindingShippingQuotaNameSelect = $('#myc_runtime_shipping_vat_quota_name');
 		$ctlBindingSettingsContainer = $('#myc_binding_runtime_settings_container');
+		$ctlWorkflowSettingsContainer = $('#myc_workflow_settings_container');
 	}
 
 	function _initListeners() {

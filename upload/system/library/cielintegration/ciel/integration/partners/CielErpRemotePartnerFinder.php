@@ -225,8 +225,11 @@ namespace Ciel\Api\Integration\Partners {
 
 		private function _isMatchByTaxCode(array $remotePartnerData) {
 			$matches = false;
+			$normalizedTaxCode = $this->_getNormalizedRemotePartnerTaxCode($remotePartnerData);
 			if (!empty($this->_searchTaxCode)) {
-				$matches = ($this->_searchTaxCode == $this->_getNormalizedRemotePartnerTaxCode($remotePartnerData));
+				$matches = ($this->_searchTaxCode == $normalizedTaxCode);
+			} else {
+				$matches = empty($normalizedTaxCode);
 			}
 			return $matches;
 		}
@@ -239,8 +242,11 @@ namespace Ciel\Api\Integration\Partners {
 
 		private function _isMatchByTaxAttribute(array $remotePartnerData) {
 			$matches = false;
+			$normalizedTaxAttribute = $this->_getNormalizedRemotePartnerTaxAttribute($remotePartnerData);
 			if (!empty($this->_searchTaxAttribute)) {
-				$matches = ($this->_searchTaxAttribute == $this->_getNormalizedRemotePartnerTaxAttribute($remotePartnerData));
+				$matches = ($this->_searchTaxAttribute == $normalizedTaxAttribute);
+			} else {
+				$matches = empty($normalizedTaxAttribute);
 			}
 			return $matches;
 		}

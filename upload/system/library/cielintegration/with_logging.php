@@ -1,6 +1,7 @@
 <?php
 namespace CielIntegration {
 
+    use Ciel\Api\Exception\WebserviceErrorException;
     use Exception;
     use Log;
 
@@ -43,6 +44,10 @@ namespace CielIntegration {
 
 			$logMessageParts[] = get_class($exc);
 			$logMessageParts[] = $exc->getMessage();
+			if ($exc instanceof WebserviceErrorException) {
+				$error = $exc->getError();
+				$logMessageParts[] = print_r($error->getData(), true);
+			}
 			$logMessageParts[] = $exc->getTraceAsString();
 
 			$logMessage = join(' - ', $logMessageParts);

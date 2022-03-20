@@ -17,8 +17,8 @@ function myc_underscorize($value) {
 
 function myc_extract_vat_code_parts($fullVatCode) {
 	$parts = array(
-		'attribute' => null,
-		'code' => null
+		'attribute' => '',
+		'code' => ''
 	);
 
 	$fullVatCode = strtoupper($fullVatCode);
