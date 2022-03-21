@@ -10,6 +10,10 @@ $_['lbl_txt_yes'] = 'Yes';
 $_['lbl_txt_no'] = 'No';
 $_['lbl_txt_none'] = 'None';
 
+$_['lbl_column_product_connected_to_ciel_erp_header'] = 'Connected to CIEL ERP';
+$_['lbl_column_customer_connected_to_ciel_erp_header'] = 'Connected to CIEL ERP';
+$_['lbl_column_order_connected_to_ciel_erp_header'] = 'Document issued in CIEL ERP';
+
 $_['option_txt_document_status_type_valid'] = 'Valid';
 $_['option_txt_document_status_type_temporary'] = 'Temporary';
 

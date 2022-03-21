@@ -14,8 +14,10 @@ class ControllerExtensionCielStatusOrderColumn extends CielController {
 			'td input[name="selected[]"]', 
 			$dataSource);
 
-		$listingRewriter->addColumn('ciel_document_issued', 
-			'Document issued in CIEL ERP');
+		$listingRewriter->addColumn(
+			'ciel_document_issued', 
+			$this->_t('lbl_column_order_connected_to_ciel_erp_header')
+		);
 
 		return $listingRewriter
 			->rewrite($output);
@@ -29,8 +31,8 @@ class ControllerExtensionCielStatusOrderColumn extends CielController {
 		foreach ($cielErpDocumentStatuses as $id => $isDocumentIssued) {
 			$data[$id] = array(
 				'ciel_document_issued' => myc_status_label($isDocumentIssued, 
-					'yes', 
-					'no')
+					$this->_t('lbl_txt_yes'), 
+					$this->_t('lbl_txt_no'))
 			);
 		}
 

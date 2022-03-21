@@ -13,8 +13,10 @@ class ControllerExtensionCielStatusCustomerColumn extends CielController {
 			'td input[name="selected[]"]', 
 			$dataSource);
 
-		$listingRewriter->addColumn('ciel_customer_connected', 
-			'Connected to CIEL ERP');
+		$listingRewriter->addColumn(
+			'ciel_customer_connected', 
+			$this->_t('lbl_column_customer_connected_to_ciel_erp_header')
+		);
 
 		return $listingRewriter
 			->rewrite($output);
@@ -28,8 +30,8 @@ class ControllerExtensionCielStatusCustomerColumn extends CielController {
 		foreach ($cielCustomerStatuses as $id => $isConnected) {
 			$data[$id] = array(
 				'ciel_customer_connected' => myc_status_label($isConnected, 
-					'yes', 
-					'no')
+					$this->_t('lbl_txt_yes'), 
+					$this->_t('lbl_txt_no'))
 			);
 		}
 
