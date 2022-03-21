@@ -16,7 +16,24 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 			'txt_test_connection_action' 
 				=> $this->_t('button_test_connection'),
 			'url_test_connection_action' 
-				=> $this->_createRouteUrl('extension/module/ciel/testConnection')
+				=> $this->_createRouteUrl('extension/module/ciel/testConnection'),
+
+			'lbl_connection_endpoint_url_field' 
+				=> $this->_t('lbl_connection_endpoint_url_field'),
+			'txt_placeholder_connection_endpoint_url_field'
+				=> $this->_t('txt_placeholder_connection_endpoint_url_field'),
+			'lbl_connection_username_field'
+				=> $this->_t('lbl_connection_username_field'),
+			'txt_placeholder_connection_username_field'
+				=> $this->_t('txt_placeholder_connection_username_field'),
+			'lbl_connection_society_code_field'
+				=> $this->_t('lbl_connection_society_code_field'),
+			'txt_placeholder_connection_society_code_field'
+				=> $this->_t('txt_placeholder_connection_society_code_field'),
+			'lbl_connection_password_field'
+				=> $this->_t('lbl_connection_password_field'),
+			'txt_placeholder_connection_password_field'
+				=> $this->_t('txt_placeholder_connection_password_field')
 		));
 
 		return $this->_renderView('extension/ciel_connection_settings_form', 

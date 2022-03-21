@@ -39,6 +39,14 @@ $_['msg_err_fill_in_valid_stock_update_mode'] = 'Please fill in a valid stock up
 $_['msg_err_fill_in_valid_document_status_type'] = 'Please fill in a valid document status type.';
 $_['msg_err_fill_in_valid_document_due_days'] = 'Please fill in a valid document due days interval.';
 $_['msg_err_fill_in_valid_shipping_vat_quota'] = 'Please fill in a valid shipping VAT quota.';
+$_['lbl_connection_endpoint_url_field'] = 'Webservice URL';
+$_['txt_placeholder_connection_endpoint_url_field'] = 'CIEL server webservice URL';
+$_['lbl_connection_username_field'] = 'Username';
+$_['txt_placeholder_connection_username_field'] = 'Username used for CIEL webserivce server logon';
+$_['lbl_connection_password_field'] = 'Password';
+$_['txt_placeholder_connection_password_field'] = 'Password used for CIEL webserivce server logon';
+$_['lbl_connection_society_code_field'] = 'Society code';
+$_['txt_placeholder_connection_society_code_field'] = 'Society code bound to this store';
 
 $_['text_workflow_settings_form_heading'] = 'CIEL ERP OpenCart Workflow Options';
 $_['msg_err_fill_in_valid_in_stock_status_id'] = 'Please fill in a valid in-stock status id.';

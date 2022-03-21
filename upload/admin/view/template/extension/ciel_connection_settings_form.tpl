@@ -7,49 +7,49 @@
 	</div>
 	<div class="panel-body">
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_connection_endpoint_url">URL serviciu web:</label>
+			<label class="col-sm-2 control-label" for="myc_connection_endpoint_url"><?php echo $lbl_connection_endpoint_url_field; ?>:</label>
 			<div class="col-sm-10">
 				<input class="form-control" 
 					type="text" 
 					name="myc_connection_endpoint_url" 
 					id="myc_connection_endpoint_url" 
 					value="<?php echo $connection_endpoint_url; ?>" 
-					placeholder="URL serviciu web CIEL Server" 
+					placeholder="<?php echo $txt_placeholder_connection_endpoint_url_field; ?>" 
 				/>
 		</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_connection_username">Nume utilizator:</label>
+			<label class="col-sm-2 control-label" for="myc_connection_username"><?php echo $lbl_connection_username_field; ?>:</label>
 			<div class="col-sm-10">
 				<input class="form-control" 
 					type="text" 
 					name="myc_connection_username" 
 					id="myc_connection_username" 
 					value="<?php echo $connection_username; ?>" 
-					placeholder="Nume utilizator serviciu web CIEL Server" 
+					placeholder="<?php echo $txt_placeholder_connection_username_field; ?>" 
 				/>
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_connection_password">Parola:</label>
+			<label class="col-sm-2 control-label" for="myc_connection_password"><?php echo $lbl_connection_password_field; ?>:</label>
 			<div class="col-sm-10">
 				<input class="form-control" 
 					type="password" 
 					name="myc_connection_password" 
 					id="myc_connection_password" 
-					placeholder="Parola serviciu web CIEL Server" 
+					placeholder="<?php echo $txt_placeholder_connection_password_field; ?>" 
 				/>
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_connection_society_code">Cod societate:</label>
+			<label class="col-sm-2 control-label" for="myc_connection_society_code"><?php echo $lbl_connection_society_code_field; ?>:</label>
 			<div class="col-sm-10">
 				<input class="form-control" 
 					type="text" 
 					name="myc_connection_society_code" 
 					id="myc_connection_society_code" 
 					value="<?php echo $connection_society_code; ?>" 
-					placeholder="Cod societate" 
+					placeholder="<?php echo $txt_placeholder_connection_society_code_field; ?>" 
 				/>
 			</div>
 		</div>
