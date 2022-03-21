@@ -12,12 +12,12 @@
 	</div>
 	<div class="panel-body">
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_warehouse">Depozit:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_warehouse"><?php echo $lbl_runtime_warehouse_field; ?>:</label>
 			<div class="col-sm-10">
 				<select class="form-control" 
 					name="myc_runtime_warehouse" 
 					id="myc_runtime_warehouse" 
-					placeholder="Depozit">
+					placeholder="<?php echo $txt_placeholder_runtime_warehouse_field; ?>">
 
 					<?php if (!empty($data_warehouses)): ?>
 						<?php foreach ($data_warehouses as $id => $w): ?>
@@ -45,12 +45,12 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_issue_doctype">Ce tip de document se emite atunci când este plasată o comanda:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_issue_doctype"><?php echo $lbl_runtime_issue_doctype_field; ?>:</label>
 			<div class="col-sm-10">
 				<select class="form-control" 
 					name="myc_runtime_issue_doctype" 
 					id="myc_runtime_issue_doctype" 
-					placeholder="Tip document emis">
+					placeholder="<?php echo $txt_placeholder_runtime_issue_doctype_field; ?>">
 					<?php foreach ($data_available_document_types as $id => $label): ?>
 						<option value="<?php echo $id; ?>" <?php echo $id == $runtime_issue_doctype ? ' selected="selected"' : '' ?>><?php echo $label; ?></option>
 					<?php endforeach; ?>
@@ -58,7 +58,7 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_issue_auto_order_status">Emite documentul pentru statusurile de comanda:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_issue_auto_order_status"><?php echo $lbl_runtime_issue_auto_order_status_field; ?>:</label>
 			<div class="col-sm-10">
 				<?php foreach ($data_available_order_statuses as $id => $label): ?>
 					<input type="checkbox" 
@@ -70,7 +70,7 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_remove_auto_order_status">Sterge documentul pentru statusurile de comanda:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_remove_auto_order_status"><?php echo $lbl_runtime_remove_auto_order_status_field; ?>:</label>
 			<div class="col-sm-10">
 				<?php foreach ($data_available_order_statuses as $id => $label): ?>
 					<input type="checkbox" 
@@ -82,12 +82,12 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_issue_doc_status">Emite documentul cu statusul selectat:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_issue_doc_status"><?php echo $lbl_runtime_issue_doc_status_field; ?>:</label>
 			<div class="col-sm-10">
 				<select class="form-control" 
 					name="myc_runtime_issue_doc_status" 
 					id="myc_runtime_issue_doc_status" 
-					placeholder="Status document emis">
+					placeholder="<?php echo $txt_placeholder_runtime_issue_doc_status_field; ?>">
 					<?php foreach ($data_available_document_status_types as $id => $label): ?>
 						<option value="<?php echo $id; ?>" 
 							<?php echo $runtime_issue_doc_status == $id ? 'selected="selected"' : '' ?>><?php echo $label; ?></option>
@@ -96,20 +96,20 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_issue_doc_due_days">Scadenta documentului:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_issue_doc_due_days"><?php echo $lbl_runtime_issue_doc_due_days_field; ?>:</label>
 			<div class="col-sm-10">
 				<input 
 					type="text"
 					class="form-control" 
 					name="myc_runtime_issue_doc_due_days" 
 					id="myc_runtime_issue_doc_due_days" 
-					placeholder="Scadenta documentului, in zile" 
+					placeholder="<?php echo $txt_placeholder_runtime_issue_doc_due_days_field; ?>" 
 					value="<?php echo $runtime_issue_doc_due_days; ?>"
 				/>
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_use_company_billing_fields">Se folosesc câmpuri suplimentare pentru facturare pe persoană juridică:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_use_company_billing_fields"><?php echo $lbl_runtime_use_company_billing_fields_field; ?>:</label>
 			<div class="col-sm-10">
 				<div class="checkbox">
 					<label>
@@ -124,14 +124,14 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_shipping_vat_quota_name">Cota TVA transport:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_shipping_vat_quota_name"><?php echo $lbl_runtime_shipping_vat_quota_field; ?></label>
 			<div class="col-sm-10">
 				<select 
 					type="text"
 					class="form-control" 
 					name="myc_runtime_shipping_vat_quota_name" 
 					id="myc_runtime_shipping_vat_quota_name" 
-					placeholder="Cota TVA folosita pentru transport">
+					placeholder="<?php echo $txt_placeholder_runtime_shipping_vat_quota_field; ?>">
 					<?php foreach ($data_vat_quotas as $name => $value): ?>
 						<option value="<?php echo $name ?>" 
 							data-quota-value="<?php echo $value ?>" 
@@ -149,7 +149,7 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_stock_update_mode">Cum se actualizeaza stocurile de produse:</label>
+			<label class="col-sm-2 control-label" for="myc_runtime_stock_update_mode"><?php echo $lbl_runtime_stock_update_mode_field; ?>:</label>
 			<div class="col-sm-10">
 				<select 
 					type="text"
