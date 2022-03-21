@@ -223,11 +223,11 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 
 	private function _getNotFoundProductsCsvHeader() {
 		return array(
-			'ID',
-			'SKU',
-			'Model',
-			'Name',
-			'New SKU'
+			$this->_t('txt_not_found_csv_id_header'),
+			$this->_t('txt_not_found_csv_sku_header'),
+			$this->_t('txt_not_found_csv_model_header'),
+			$this->_t('txt_not_found_csv_name_header'),
+			$this->_t('txt_not_found_csv_new_sku_header')
 		);
 	}
 
