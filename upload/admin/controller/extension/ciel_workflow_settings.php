@@ -11,9 +11,38 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 		$data = array_merge($data, 
 			$this->_getWorkflowSettingsFormData());
 
-		$data = array_merge($data, array(
-			'text_workflow_settings_form_heading' => $this->_t('text_workflow_settings_form_heading')
-		));
+		$data = array_merge($data, 
+			array(
+				'text_workflow_settings_form_heading' 
+					=> $this->_t('text_workflow_settings_form_heading'),
+				'lbl_txt_none' 
+					=> $this->_t('lbl_txt_none'),
+				'lbl_in_stock_status_id_field' 
+					=> $this->_t('lbl_in_stock_status_id_field'),
+				'lbl_out_of_stock_status_id_field' 
+					=> $this->_t('lbl_out_of_stock_status_id_field'),
+				'lbl_pf_customer_group_id_field' 
+					=> $this->_t('lbl_pf_customer_group_id_field'),
+				'lbl_pj_customer_group_id_field' 
+					=> $this->_t('lbl_pj_customer_group_id_field'),
+				'lbl_vat_code_custom_field_id_field' 
+					=> $this->_t('lbl_vat_code_custom_field_id_field'),
+				'lbl_reg_com_number_custom_field_id_field' 
+					=> $this->_t('lbl_reg_com_number_custom_field_id_field'),
+				'lbl_bank_account_custom_field_id_field' 
+					=> $this->_t('lbl_bank_account_custom_field_id_field'),
+				'lbl_bank_name_custom_field_id_field' 
+					=> $this->_t('lbl_bank_name_custom_field_id_field'),
+				'lbl_new_tax_rate_customer_group_id_field' 
+					=> $this->_t('lbl_new_tax_rate_customer_group_id_field'),
+				'lbl_new_tax_rate_geo_zone_id_field' 
+					=> $this->_t('lbl_new_tax_rate_geo_zone_id_field'),
+				'lbl_new_product_weight_class_id_field' 
+					=> $this->_t('lbl_new_product_weight_class_id_field'),
+				'lbl_new_product_length_class_id_field' 
+					=> $this->_t('lbl_new_product_length_class_id_field')
+			)
+		);
 
 		return $this->_renderView('extension/ciel_workflow_settings_form', 
 			$data);

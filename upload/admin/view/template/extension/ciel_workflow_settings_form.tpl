@@ -12,7 +12,7 @@
 	<div class="panel-body">
 		<!-- Stock status bindings -->
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_in_stock_status_id">Status stoc pentru produse in stoc:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_in_stock_status_id"><?php echo $lbl_in_stock_status_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_in_stock_status_id" 
 					id="myc_wf_in_stock_status_id"
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_out_of_stock_status_id">Status stoc pentru produse epuizate din stoc:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_out_of_stock_status_id"><?php echo $lbl_out_of_stock_status_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_out_of_stock_status_id" 
 					id="myc_wf_out_of_stock_status_id"
@@ -39,12 +39,12 @@
 		<!-- Billing information bindings -->
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_pf_customer_group_id">Grupul de clienti pentru persoane fizice:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_pf_customer_group_id"><?php echo $lbl_pf_customer_group_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_pf_customer_group_id" 
 					id="myc_wf_pf_customer_group_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_groups as $cg_id => $cg_name): ?>
 						<option value="<?php echo $cg_id; ?>" <?php echo $cg_id == $wf_pf_customer_group_id ? 'selected="selected"' : ''; ?>><?php echo $cg_name; ?></option>
 					<?php endforeach; ?>
@@ -53,12 +53,12 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_pj_customer_group_id">Grupul de clienti pentru persoane juridice:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_pj_customer_group_id"><?php echo $lbl_pj_customer_group_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_pj_customer_group_id" 
 					id="myc_wf_pj_customer_group_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_groups as $cg_id => $cg_name): ?>
 						<option value="<?php echo $cg_id; ?>" <?php echo $cg_id == $wf_pj_customer_group_id ? 'selected="selected"' : ''; ?>><?php echo $cg_name; ?></option>
 					<?php endforeach; ?>
@@ -67,12 +67,12 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_vat_code_custom_field_id">Campul custom folosit pentru CUI:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_vat_code_custom_field_id"><?php echo $lbl_vat_code_custom_field_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_vat_code_custom_field_id" 
 					id="myc_wf_vat_code_custom_field_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>
 						<option value="<?php echo $cf_id; ?>" <?php echo $cf_id == $wf_vat_code_custom_field_id ? 'selected="selected"' : ''; ?>><?php echo $cf_info['name']; ?></option>
 					<?php endforeach; ?>
@@ -81,12 +81,12 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_reg_com_number_custom_field_id">Campul custom folosit pentru nr. reg. com.:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_reg_com_number_custom_field_id"><?php echo $lbl_reg_com_number_custom_field_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_reg_com_number_custom_field_id" 
 					id="myc_wf_reg_com_number_custom_field_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>
 						<option value="<?php echo $cf_id; ?>" <?php echo $cf_id == $wf_reg_com_number_custom_field_id ? 'selected="selected"' : ''; ?>><?php echo $cf_info['name']; ?></option>
 					<?php endforeach; ?>
@@ -95,12 +95,12 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_bank_account_custom_field_id">Campul custom folosit pentru contul bancar:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_bank_account_custom_field_id"><?php echo $lbl_bank_account_custom_field_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_bank_account_custom_field_id" 
 					id="myc_wf_bank_account_custom_field_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>
 						<option value="<?php echo $cf_id; ?>" <?php echo $cf_id == $wf_bank_account_custom_field_id ? 'selected="selected"' : ''; ?>><?php echo $cf_info['name']; ?></option>
 					<?php endforeach; ?>
@@ -109,12 +109,12 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_bank_name_custom_field_id">Campul custom folosit pentru denumirea bancii:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_bank_name_custom_field_id"><?php echo $lbl_bank_name_custom_field_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_bank_name_custom_field_id" 
 					id="myc_wf_bank_name_custom_field_id"
 					class="form-control">
-					<option value="0">Niciunul</option>
+					<option value="0"><?php echo $lbl_txt_none; ?></option>
 					<?php foreach ($customer_custom_fields as $cf_id => $cf_info): ?>
 						<option value="<?php echo $cf_id; ?>" <?php echo $cf_id == $wf_bank_name_custom_field_id ? 'selected="selected"' : ''; ?>><?php echo $cf_info['name']; ?></option>
 					<?php endforeach; ?>
@@ -125,7 +125,7 @@
 		<!-- Other customer-related bindings -->
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_new_tax_rate_customer_group_id">Grup clienti pentru taxele nou-importate din CIEL:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_new_tax_rate_customer_group_id"><?php echo $lbl_new_tax_rate_customer_group_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_new_tax_rate_customer_group_id" 
 					id="myc_wf_new_tax_rate_customer_group_id"
@@ -139,7 +139,7 @@
 
 		<!-- CIEL-imported products bindings -->
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_new_tax_rate_geo_zone_id">Zona geografica pentru taxele nou-importate din CIEL:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_new_tax_rate_geo_zone_id"><?php echo $lbl_new_tax_rate_geo_zone_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_new_tax_rate_geo_zone_id" 
 					id="myc_wf_new_tax_rate_geo_zone_id"
@@ -152,7 +152,7 @@
 		</div>
 
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_new_product_weight_class_id">Clasa de greutate pentru produsele nou-importate din CIEL:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_new_product_weight_class_id"><?php echo $lbl_new_product_weight_class_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_new_product_weight_class_id" 
 					id="myc_wf_new_product_weight_class_id"
@@ -164,7 +164,7 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_new_product_length_class_id">Clasa de lungime pentru produsele nou-importate din CIEL:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_new_product_length_class_id"><?php echo $lbl_new_product_length_class_id_field; ?>:</label>
 			<div class="col-sm-10">
 				<select name="myc_wf_new_product_length_class_id" 
 					id="myc_wf_new_product_length_class_id"
