@@ -2,11 +2,9 @@
 
 use Ciel\Api\Exception\WebserviceCommunicationException;
 use CielIntegration\CielController;
-use CielIntegration\Integration\Admin\Article\ProductResolver;
 use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\WithAdminLayoutLoader;
 use CielIntegration\WithLogging;
-use openbay\fba;
 
 class ControllerExtensionCielImportOcRomania extends CielController {
 	use WithCielIntegration;
