@@ -48,6 +48,8 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 
 		$data['txt_cancel_action'] = $this->_t('button_cancel');
 		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
+
+		$data['ciel_import_new_products_text'] = $this->_t('ciel_import_new_products_text');
 		$data['ciel_import_new_products_action'] = $this->_createRouteUrl('extension/ciel_import_new_products/execute');
 
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
