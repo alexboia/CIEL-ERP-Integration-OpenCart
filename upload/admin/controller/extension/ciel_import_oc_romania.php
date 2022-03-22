@@ -30,13 +30,19 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 		$data = $this->_loadAdminLayout();
 		$data['is_bound'] = $this->_isStoreBound();
 
-		$data['ciel_import_oc_romania_title'] = $this->_t('ciel_import_oc_romania_title');
-		$data['ciel_import_oc_romania_info'] = $this->_t('ciel_import_oc_romania_info');
-		$data['ciel_err_migrate_products_store_not_bound'] = $this->_t('ciel_err_migrate_products_store_not_bound');
+		$data['ciel_import_oc_romania_title'] = 
+			$this->_t('ciel_import_oc_romania_title');
+		$data['ciel_import_oc_romania_info'] = 
+			$this->_t('ciel_import_oc_romania_info');
+		$data['ciel_err_migrate_products_store_not_bound'] = 
+			$this->_t('ciel_err_migrate_products_store_not_bound');
 
-		$data['ciel_migrate_products_eligible_count_header'] = $this->_t('ciel_migrate_products_eligible_count_header');
-		$data['ciel_migrate_products_updated_count_header'] = $this->_t('ciel_migrate_products_updated_count_header');
-		$data['ciel_migrate_products_not_found_count_header'] = $this->_t('ciel_migrate_products_not_found_count_header');
+		$data['ciel_migrate_products_eligible_count_header'] = 
+			$this->_t('ciel_migrate_products_eligible_count_header');
+		$data['ciel_migrate_products_updated_count_header'] = 
+			$this->_t('ciel_migrate_products_updated_count_header');
+		$data['ciel_migrate_products_not_found_count_header'] = 
+			$this->_t('ciel_migrate_products_not_found_count_header');
 
 		$data['ciel_migrate_btn_text'] = $this->_t('ciel_migrate_btn_text');
 		$data['ciel_migrate_btn_action'] = $this->_createRouteUrl('extension/ciel_import_oc_romania/execute');

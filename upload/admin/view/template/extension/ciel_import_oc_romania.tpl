@@ -3,7 +3,7 @@
 
 <div id="content">
 	<div class="page-header">
-	<div class="container-fluid">
+		<div class="container-fluid">
 			<div class="pull-right">
 				<a href="<?php echo $url_cancel_action; ?>" 
 					data-toggle="tooltip" 

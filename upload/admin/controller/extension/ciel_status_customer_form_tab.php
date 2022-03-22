@@ -6,7 +6,7 @@ use CielIntegration\TabPanelContentsRewriter;
 
 class ControllerExtensionCielStatusCustomerFormTab extends CielController {
 	public function assets() {
-
+		return;
 	}
 
 	public function index(&$route, &$data, &$output) {

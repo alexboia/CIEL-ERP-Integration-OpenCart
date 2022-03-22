@@ -59,6 +59,14 @@ class ControllerExtensionCielMenuEntries extends CielController {
 				);
 			}
 
+			if ($this->user->hasPermission('modify', 'extension/ciel_import_new_products')) {
+				$items[] = array(
+					'name' => 'Import produse noi',
+					'href' => $this->_createRouteUrl('extension/ciel_import_new_products'),
+					'children' => array()
+				);
+			}
+
 			if ($this->user->hasPermission('modify', 'extension/ciel_import_oc_romania')) {
 				$items[] = array(
 					'name' => 'Migrare OC Romania',

@@ -255,6 +255,47 @@ namespace Ciel\Api\Integration\Articles {
 			return $this->_adapter->getAllLocalArticlesForExport();
 		}
 
+		public function tryDetermineNewRemoteProducts() {
+			$maybeNewRemoteProducts = array();
+
+			$localArticleCodes = $this->_getAllLocalArticleCodes();
+			$remoteArticles = $this->_getAllFilteredRemoteArticles(true, true);
+
+			foreach ($remoteArticles as $remoteArticle) {
+				if ($this->_shouldExcludeRemoteArticleFromProcessing($remoteArticle)) {
+					continue;
+				}
+
+				$remoteArticleCode = $remoteArticle['Code'];
+				if (empty($localArticleCodes[$remoteArticleCode])) {
+					continue;
+				}
+
+				$maybeNewRemoteProducts[] = array(
+					'id' => $remoteArticle['Id'],
+					'code' => $remoteArticleCode,
+					'name' => $remoteArticle['Name'],
+					'category' => isset($remoteArticle['ArticleCategoryName'])
+						? $remoteArticle['ArticleCategoryName']
+						: null
+				);
+			}
+
+			return $maybeNewRemoteProducts;
+		}
+
+		private function _getAllLocalArticleCodes() {
+			$localArticleCodes = array();
+			$localArticles = $this->_adapter->getAllLocalArticles();
+
+			foreach ($localArticles as $localArticle) {
+				$code = $localArticle['code'];
+				$localArticleCodes[$code] = $code;
+			}
+
+			return $localArticleCodes;
+		}
+
 		public function tryMatchAllArticles($similarityMatchThreshold = 0.25) {
 			$matchVariations = $this->_storeBinding
 				->getMatchArticleVariations();
@@ -336,7 +377,7 @@ namespace Ciel\Api\Integration\Articles {
 			$processRemoteArticles = array();
 
 			foreach ($remoteArticles as $remoteArticle) {
-				if (in_array($remoteArticle['Code'], $this->_excludeCodesFromRemote)) {
+				if ($this->_shouldExcludeRemoteArticleFromProcessing($remoteArticle)) {
 					continue;
 				}
 
@@ -369,6 +410,11 @@ namespace Ciel\Api\Integration\Articles {
 			}
 
 			return $processRemoteArticles;
+		}
+
+		private function _shouldExcludeRemoteArticleFromProcessing($remoteArticle) {
+			return in_array($remoteArticle['Code'], 
+				$this->_excludeCodesFromRemote);
 		}
 
 		private function _getLocalArticlesToProcess($localArticles, $matchVariations) {
