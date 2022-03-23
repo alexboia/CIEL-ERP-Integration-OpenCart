@@ -315,6 +315,12 @@ namespace Ciel\Api\Integration\Orders {
 				$document['Series'] = $series;
 			}
 
+			if (empty($orderData['order_date'])) {
+				$document['Date'] = $this->_formatNow();
+			} else {
+				$document['Date'] = $orderData['order_date'];
+			}
+
 			$dueDays = $this->_getDueDaysForNewDocument();
 			if (!empty($dueDays)) {
 				$document['DueDate'] = $this->_formatDueDate($dueDays);
@@ -454,6 +460,10 @@ namespace Ciel\Api\Integration\Orders {
 
 		private function _formatDueDate($dueDays) {
 			return date('Y-m-d', time() + $dueDays * 24 * 3600);
+		}
+
+		private function _formatNow() {
+			return date('Y-m-d', time());
 		}
 
 		private function _getShippingArticleCode() {
