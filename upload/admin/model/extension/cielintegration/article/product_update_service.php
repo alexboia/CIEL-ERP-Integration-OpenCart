@@ -433,10 +433,15 @@ namespace CielIntegration\Integration\Admin\Article {
 		public function setProductStockInformationFromStockData(array $remoteArticleStockData) {
 			if ($this->_shopStockManagementEnabled()) {
 				$stockQuantity = $this->_getProductStockQuantityFromStockData($remoteArticleStockData);
+				$newStockStatusId = $this->_determineNewStockStatusId($stockQuantity);
 				if (!is_null($stockQuantity)) {
-					$newStockStatusId = $this->_determineNewStockStatusId($stockQuantity);
 					$this->_updateProduct(array(
 						'quantity' => $stockQuantity,
+						'stock_status_id' => $newStockStatusId
+					));
+				} else {
+					$this->_updateProduct(array(
+						'quantity' => 0,
 						'stock_status_id' => $newStockStatusId
 					));
 				}

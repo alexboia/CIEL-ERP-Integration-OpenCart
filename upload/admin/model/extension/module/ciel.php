@@ -50,6 +50,7 @@ class ModelExtensionModuleCiel extends CielModel {
 			'extension/ciel_order_actions',
 			'extension/ciel_sync_products',
 			'extension/ciel_import_oc_romania',
+			'extension/ciel_import_new_products',
 			'extension/ciel_status'
 		);
 	}
