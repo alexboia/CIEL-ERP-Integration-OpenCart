@@ -267,7 +267,7 @@ namespace Ciel\Api\Integration\Articles {
 				}
 
 				$remoteArticleCode = $remoteArticle['Code'];
-				if (empty($localArticleCodes[$remoteArticleCode])) {
+				if (!empty($localArticleCodes[$remoteArticleCode])) {
 					continue;
 				}
 
@@ -290,7 +290,9 @@ namespace Ciel\Api\Integration\Articles {
 
 			foreach ($localArticles as $localArticle) {
 				$code = $localArticle['code'];
-				$localArticleCodes[$code] = $code;
+				if (!empty($code)) {
+					$localArticleCodes[$code] = $code;
+				}
 			}
 
 			return $localArticleCodes;

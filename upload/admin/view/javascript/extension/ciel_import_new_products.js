@@ -7,6 +7,34 @@
 	var _atLeastOneSucceeded = false;
 	var _remotArticleIdsImportQueue = [];
 
+	var _messages = {
+		import_new_products_global_success_msg: null,
+		import_new_products_global_error_msg: null
+	};
+
+	function _initState() {
+		_messages = {
+			import_new_products_global_success_msg: 
+				window['myc_ciel_import_new_products_global_success_msg'],
+			import_new_products_global_error_msg: 
+				window['myc_ciel_import_new_products_global_error_msg']
+		}	
+	}
+
+	function _showError(message) {
+		$('#myc_operation_status_message')
+			.cielOperationStatus('show', 
+				false, 
+				message);
+	}
+
+	function _showSuccess(message) {
+		$('#myc_operation_status_message')
+			.cielOperationStatus('show', 
+				true, 
+				message);
+	}
+
 	function _isAtLeastOneSucceeded() {
 		return _atLeastOneSucceeded;
 	}
@@ -15,11 +43,57 @@
 		_atLeastOneSucceeded = false;
 	}
 
+	function _hasMoreProductsToImport() {
+		return ('.myc_import_remote_ids').size() > 0;
+	}
+
 	function _addImportOperationBatchResult(success, results) {
 		_atLeastOneSucceeded = _atLeastOneSucceeded || success;
-		if (success) {
-
+		if (!!results) {
+			for (var remoteId in results) {
+				if (results.hasOwnProperty(remoteId)) {
+					var result = results[remoteId];
+					if (!!result.success) {
+						_removeSuccessfulImportedProductRow(remoteId);
+					} else {
+						_showImportProductErrorRowMessage(remoteId, result);
+					}
+				}
+			}
 		}
+	}
+
+	function _removeSuccessfulImportedProductRow(remoteId) {
+		var $targetRow = _getImportedProductRow(remoteId);
+		$targetRow.remove();
+	}
+
+	function _getImportedProductRow(remoteId) {
+		return $('#myc_remote_product_row-' + remoteId);
+	}
+
+	function _showImportProductErrorRowMessage(remoteId, result) {
+		var $targetRow = _getImportedProductRow(remoteId);
+		var $errorRow = $(_constructImportProductErrorRowMessageHtml(remoteId, 
+			result));
+
+		$errorRow.insertAfter($targetRow);
+	}
+
+	function _constructImportProductErrorRowMessageHtml(remoteId, result) {
+		return [
+			'<tr id="myc_remote_product_row_error-' + remoteId + '" class="myc-row-error myc-import-product-error-row">',
+				'<td colspan="5">',
+					'<div class="alert alert-danger" role="alert">',
+						result.message,
+					'</div>',
+				'</td>',
+			'</tr>'
+		].join('');
+	}
+
+	function _removeAllImportProductErrorRows() {
+		$('.myc-import-product-error-row').remove();
 	}
 
 	function _getNewRemoteProductsCount() {
@@ -72,9 +146,9 @@
 			data: postData
 		}).done(function(data, status, xhr) {
 			if (data && data.success) {
-				_addImportOperationBatchResult(true, data.results);
+				_addImportOperationBatchResult(true, data.results || []);
 			} else {
-				_addImportOperationBatchResult(false, null);
+				_addImportOperationBatchResult(false, data.results || []);
 			}
 
 			onReady();
@@ -106,12 +180,17 @@
 	function _startImportingRemoteProductsFromQueue() {
 		$.showCielLoading();
 		_resetLastImportOperationResult();
+		_removeAllImportProductErrorRows();
 		_processRemoteProductsQueue(function() {
 			$.hideCielLoading();
 			if (_isAtLeastOneSucceeded()) {
-
+				_showSuccess(_messages.import_new_products_global_success_msg);
 			} else {
+				_showError(_messages.import_new_products_global_error_msg);
+			}
 
+			if (!_hasMoreProductsToImport()) {
+				$ctlImportNewProductsForm.hide();
 			}
 		});
 	}
@@ -167,6 +246,7 @@
 	}
 
 	$(document).ready(function() {
+		_initState();
 		_initControls();
 		_initEvents();
 	});

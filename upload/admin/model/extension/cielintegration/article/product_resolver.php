@@ -134,9 +134,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		public function getAllProducts() {
 			return $this->_getLocalProductModel()
-				->getProducts(array(
-					'filter_status' => 1
-				));
+				->getProducts();
 		}
 
 		public function getProduct($productId) {

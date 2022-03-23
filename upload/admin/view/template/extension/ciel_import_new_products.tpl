@@ -26,54 +26,60 @@
 
 			<form id="myc-importNewProducts-form" action="<?php echo $ciel_import_new_products_action; ?>" method="POST">
 				<?php if ($new_remote_products !== null): ?>
-					<div class="table-responsive">
-						<table id="myc-potential-new-products" 
-							class="table table-striped table-bordered table-hover" >
-							<thead>
-								<th>
-									<input type="checkbox"
-										name="import_remote_ids_all" 
-										id="myc_import_remote_ids_all" 
-										value="1" 
-										checked="checked" 
-									/>
-								</th>
-								<th>ID</th>
-								<th>Code</th>
-								<th>CIEL ERP Name</th>
-								<th>CIEL ERP Category</th>
-							</thead>
-							<tbody>
-								<?php foreach ($new_remote_products as $p): ?>
-									<tr id="myc_remote_product_row-<?php echo $p['id']; ?>">
-										<td>
-											<input type="checkbox"
-												name="import_remote_ids[]" 
-												class="myc_import_remote_ids"
-												id="myc_import_remote_ids-<?php echo $p['id']; ?>" 
-												value="<?php echo $p['id']; ?>" 
-												checked="checked" 
-											/>
-										</td>
-										<td><?php echo $p['id']; ?></td>
-										<td><?php echo $p['code']; ?></td>
-										<td><?php echo $p['name']; ?></td>
-										<td><?php echo !empty($p['category']) 
-											? $p['category'] 
-											: '-'; ?></td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
+					<?php if (!empty($new_remote_products)): ?>
+						<div class="table-responsive">
+							<table id="myc-potential-new-products" 
+								class="table table-striped table-bordered table-hover" >
+								<thead>
+									<th>
+										<input type="checkbox"
+											name="import_remote_ids_all" 
+											id="myc_import_remote_ids_all" 
+											value="1" 
+											checked="checked" 
+										/>
+									</th>
+									<th>ID</th>
+									<th>Code</th>
+									<th>CIEL ERP Name</th>
+									<th>CIEL ERP Category</th>
+								</thead>
+								<tbody>
+									<?php foreach ($new_remote_products as $p): ?>
+										<tr id="myc_remote_product_row-<?php echo $p['id']; ?>">
+											<td>
+												<input type="checkbox"
+													name="import_remote_ids[]" 
+													class="myc_import_remote_ids"
+													id="myc_import_remote_ids-<?php echo $p['id']; ?>" 
+													value="<?php echo $p['id']; ?>" 
+													checked="checked" 
+												/>
+											</td>
+											<td><?php echo $p['id']; ?></td>
+											<td><?php echo $p['code']; ?></td>
+											<td><?php echo $p['name']; ?></td>
+											<td><?php echo !empty($p['category']) 
+												? $p['category'] 
+												: '-'; ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
 
-					<div id="myc-import-products-actions" class="import-products-actions">
-						<button id="myc-import-products-start" type="button" class="btn btn-primary"><?php echo $ciel_import_new_products_text; ?></button>
-					</div>
+						<div id="myc-import-products-actions" class="import-products-actions">
+							<button id="myc-import-products-start" type="button" class="btn btn-primary"><?php echo $ciel_import_new_products_text; ?></button>
+						</div>
 
-					<script type="text/javascript">
-						window['myc_new_remote_products_count'] = <?php echo count($new_remote_products); ?>;
-					</script>
+						<script type="text/javascript">
+							window['myc_new_remote_products_count'] = <?php echo count($new_remote_products); ?>;
+						</script>
+					<?php else: ?>
+						<div class="alert alert-warning" role="alert">
+							<?php echo $ciel_err_import_new_products_none_found; ?>
+						</div>
+					<?php endif; ?>
 				<?php else: ?>
 					<div class="alert alert-danger" role="alert">
 						<?php echo $ciel_err_import_new_products_error_computing_products; ?>
@@ -86,6 +92,19 @@
 			</div>
 		<?php endif; ?>
 	</div>
+
+	<?php echo $html_loading_indicator; ?>
 </div>
+
+<style type="text/css">
+	.myc-row-error .alert {
+		margin-bottom: 0px;
+	}
+</style>
+
+<script type="text/javascript">
+	window['myc_ciel_import_new_products_global_success_msg'] = '<?php echo $ciel_import_new_products_global_success_msg; ?>';
+	window['myc_ciel_import_new_products_global_error_msg'] = '<?php echo $ciel_import_new_products_global_error_msg; ?>';
+</script>
 
 <?php echo $html_footer; ?>

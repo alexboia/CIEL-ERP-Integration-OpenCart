@@ -1,5 +1,6 @@
 <?php
 
+use Ciel\Api\Exception\ArticleCodeAlreadyExistsException;
 use Ciel\Api\Exception\RemoteArticleNotFoundException;
 use Ciel\Api\Exception\WebserviceCommunicationException;
 use CielIntegration\CielController;
@@ -38,6 +39,13 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 			$this->_t('ciel_err_import_new_products_store_not_bound');
 		$data['ciel_err_import_new_products_error_computing_products'] = 
 			$this->_t('ciel_err_import_new_products_error_computing_products');
+		$data['ciel_err_import_new_products_none_found'] = 
+			$this->_t('ciel_err_import_new_products_none_found');
+
+		$data['ciel_import_new_products_global_success_msg'] = 
+			$this->_t('ciel_import_new_products_global_success_msg');
+		$data['ciel_import_new_products_global_error_msg'] = 
+			$this->_t('ciel_import_new_products_global_error_msg');
 
 		$data['is_bound'] = $this->_isStoreBound();
 		if ($data['is_bound']) {
@@ -95,6 +103,7 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 
 	public function execute() {
 		$response = null;
+
 		if ($this->_isHttpPost() && $this->_isStoreBound()) {
 			$remoteIds = $this->_getRemoteIdsFromHttpPost();
 			if (!empty($remoteIds)) {
@@ -106,7 +115,7 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 			$response = $this->_createEmptyImportProductsAjaxResponse();
 		}
 
-		return $response;
+		$this->_renderJsonToResponseOutput($response);
 	}
 
 	private function _getRemoteIdsFromHttpPost() {
@@ -132,8 +141,10 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 
 		if ($atLeastOneSucceeded) {
 			$response->success = true;
+			$response->message = $this->_t('ciel_import_new_products_global_success_msg');
 			$this->_logDebug('Sucessfully imported at least one article.');
 		} else {
+			$response->message = $this->_t('ciel_import_new_products_global_error_msg');
 			$this->_logDebug('No article could be imported.');
 		}
 
@@ -160,6 +171,9 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 		} catch (WebserviceCommunicationException $exc) {
 			$importProductResult->message = $this->_t('ciel_import_new_products_connection_error_msg');
 			$this->_logError($exc, 'CIEL ERP Server communication issue.');
+		} catch (ArticleCodeAlreadyExistsException $exc) {
+			$importProductResult->message = $this->_t('ciel_import_new_products_sku_exists_msg_error_msg');
+			$this->_logError($exc, 'Article with this code already exists locally: <' . $exc->getArticleCode() . '>.');
 		} catch (Exception $exc) {
 			$importProductResult->message = $this->_t('ciel_import_new_products_error_msg');
 			$this->_logError($exc, 'Failed to import remote article');

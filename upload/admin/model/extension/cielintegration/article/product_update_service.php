@@ -56,23 +56,22 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		public function createNewProduct(array $remoteArticleData) {
-			$sku = $this->_getRemoteCode($remoteArticleData);
-
 			$initialProductData = $this->_buildInitialProductData($remoteArticleData);
+			
 			$productId = $this->_addProduct($initialProductData);
+			$this->_productId = $productId;
 
-			if ($productId > 0) {
+			if ($this->_productId > 0) {
 				$this->setProductBindingInformation($remoteArticleData);
 			}
 
-			$this->_productId = $productId;
 			return $productId;
 		}
 
 		private function _buildInitialProductData($remoteArticleData) {
 			$nowDate = $this->_getNowAsDate();
 			$sku = $this->_getRemoteCode($remoteArticleData);
-			$manufacturerId = $this->_getOrCreteDefaultManufacturerId();
+			$manufacturerId = $this->_getOrCreateDefaultManufacturerId();
 			
 			$stockQuantity = $this->_getProductStockQuantity($remoteArticleData);
 			$stockStatusId = $this->_determineNewStockStatusId($stockQuantity);
@@ -88,7 +87,6 @@ namespace CielIntegration\Integration\Admin\Article {
 			return array(
 				'model' => '',
 				'sku' => $sku,
-				'sku' => '',
 				'upc' => '',
 				'ean' => '',
 				'jan' => '',
@@ -114,6 +112,8 @@ namespace CielIntegration\Integration\Admin\Article {
 				'minimum' => 1,
 				'status' => 0,
 				'viewed' => 0,
+				'keyword' => null,
+				'sort_order' => 0,
 				'date_added' => $nowDate,
 				'date_modified' => $nowDate,
 				'product_description' => array(
@@ -132,7 +132,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			);
 		}
 
-		private function  _getOrCreteDefaultManufacturerId() {
+		private function  _getOrCreateDefaultManufacturerId() {
 			return $this->_manufacturerService
 				->getOrCreateDefaultManufacturer();
 		}
@@ -165,7 +165,7 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		public function setProductBindingInformation(array $remoteArticleData) {
-			$producId = $this->_productId;
+			$productId = $this->_productId;
 			$remoteId = $this->_getRemoteId($remoteArticleData);
 			$measuringUnitName = $this->_getMeasurementUnitName($remoteArticleData);
 			$vatOutQuotaValue = $this->_getVatOutQuotaValue($remoteArticleData);
@@ -173,7 +173,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			$batchTrackingEnabled = $this->_getBatchTrackingEnabled($remoteArticleData);
 
 			$saveRemoteArticleData = array(
-				'product_id' => $producId,
+				'product_id' => $productId,
 				'remote_id' => $remoteId,
 				'remote_measurement_unit' => $measuringUnitName,
 				'remote_price_vat_quota_value' => $vatOutQuotaValue,
@@ -184,7 +184,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			);
 
 			$remoteArticleModel = $this->_getRemoteArticleModel();
-			if (!$remoteArticleModel->existsForProductId($producId)) {
+			if (empty($productId) || !$remoteArticleModel->existsForProductId($productId)) {
 				$remoteArticleModel->add($saveRemoteArticleData);
 			} else {
 				$remoteArticleModel->update($saveRemoteArticleData);
