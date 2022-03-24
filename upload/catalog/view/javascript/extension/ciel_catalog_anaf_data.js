@@ -82,10 +82,10 @@
 	function _initControls($target, opts) {
 		var mapping = _getCustomFieldsMapping();
 		if (mapping.vat_code_field_id) {
-			var selVatCodeFieldPrefix = opts.sel_vat_code_field_prefix 
+			var selVatCodeInputFieldPrefix = opts.sel_vat_code_input_prefix 
 				|| '#input-custom-field';
 
-			$ctlVatCodeField = $target.find(selVatCodeFieldPrefix + mapping.vat_code_field_id);
+			$ctlVatCodeField = $target.find(selVatCodeInputFieldPrefix + mapping.vat_code_field_id);
 			if ($ctlVatCodeField.size() == 0) {
 				$ctlVatCodeField = $target.find('input[name="custom_field[' + mapping.vat_code_field_id + ']"]:first');
 				if ($ctlVatCodeField.size() == 0) {
@@ -98,7 +98,7 @@
 					|| '#input-company');
 				$ctlPostCodeField = $target.find(opts.sel_input_post_code 
 					|| '#input-postcode');
-				$ctlAddress1Field = $target.find(opts.sel_address_1 
+				$ctlAddress1Field = $target.find(opts.sel_input_address_1 
 					|| '#input-address-1');
 			}
 		}

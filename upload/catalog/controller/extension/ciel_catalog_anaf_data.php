@@ -13,6 +13,8 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 	use WithLogging;
 	use WithInputSanitization;
 
+	//TODO: ?route=quick_checkout/address&address_type=payment
+
 	public function assets() {
 		$this->_addHeaderScript('extension/ciel_catalog_anaf_data.js', 
 			true);
@@ -28,6 +30,7 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			$output);
 	}
 
+	
 	private function _getViewData() {
 		$viewData = array();
 		$viewData['myc_custom_fields_mapping'] = $this->_getCustomFieldsMapping();
@@ -53,6 +56,23 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 		$token = uniqid('myc_', true);
 		$this->session->data['myc_csrf_token'] = $token;
 		return $token;
+	}
+
+	public function checkout(&$route, &$data, &$output) {
+		$viewData = $this->_getViewData();
+		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data_checkout', 
+			$viewData);
+
+		return str_ireplace('</body>', 
+			$viewContents . '</body>', 
+			$output);
+	}
+
+	public function checkoutPayment(&$route, &$data, &$output) {
+		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data_checkout_payment', 
+			array());
+		return $output 
+			. $viewContents;
 	}
 	
 	public function lookup() {
