@@ -4,11 +4,13 @@ use CielIntegration\AnafApiClient;
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\Partner\CustomerCustomFieldsMappingProvider;
 use CielIntegration\WithInputSanitization;
+use CielIntegration\WithLogging;
 
 /**
  * @property \Session $session
  */
 class ControllerExtensionCielCatalogAnafData extends CielController {
+	use WithLogging;
 	use WithInputSanitization;
 
 	public function assets() {
@@ -17,6 +19,16 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 	}
 
 	public function index(&$route, &$data, &$output) {
+		$viewData = $this->_getViewData();
+		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data_address_form', 
+			$viewData);
+
+		return str_ireplace('</body>', 
+			$viewContents . '</body>', 
+			$output);
+	}
+
+	private function _getViewData() {
 		$viewData = array();
 		$viewData['myc_custom_fields_mapping'] = $this->_getCustomFieldsMapping();
 		$viewData['myc_vat_code_lookup_action_url'] = $this->_createRouteUrlRaw('extension/ciel_catalog_anaf_data/lookup', 
@@ -25,12 +37,7 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			)
 		);
 
-		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data', 
-			$viewData);
-
-		return str_ireplace('</body>', 
-			$viewContents . '</body>', 
-			$output);
+		return $viewData;
 	}
 
 	private function _getCustomFieldsMapping() {
@@ -58,18 +65,29 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			die;
 		}
 
-		$anafApiClient = $this->_getAnafApiClient();
+		$response = $this->_processLookupVatCode($vatCode);
+		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _processLookupVatCode($vatCode) {
 		$response = $this->_createEmptyLookupAjaxResponse();
 
-		$vatPayerData = $anafApiClient->getVatInfoByVatCode($vatCode);
+		try {
+			$anafApiClient = $this->_getAnafApiClient();
+			$vatPayerData = $anafApiClient->getVatInfoByVatCode($vatCode);
 
-		$response->success = true;
-		if ($vatPayerData != null) {
-			$response->exists = true;
-			$response->info = $vatPayerData->toArray();
+			if ($vatPayerData != null) {
+				$response->exists = true;
+				$response->info = $vatPayerData->toArray();
+			}
+
+			$response->success = true;
+			$response->message = null;
+		} catch (Exception $exc) {
+			$this->_logError($exc, 'Failed to lookup vat code via ANAF.');
 		}
 
-		$this->_renderJsonToResponseOutput($response);
+		return $response;
 	}
 
 	private function _createEmptyLookupAjaxResponse() {

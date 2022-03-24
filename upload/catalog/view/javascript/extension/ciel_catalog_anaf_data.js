@@ -79,21 +79,27 @@
 				VAT_CODE_CHANGE_LOOKUP_TIMEOUT);
 	}
 
-	function _initControls() {
+	function _initControls($target, opts) {
 		var mapping = _getCustomFieldsMapping();
 		if (mapping.vat_code_field_id) {
-			$ctlVatCodeField = $('#input-custom-field' + mapping.vat_code_field_id);
+			var selVatCodeFieldPrefix = opts.sel_vat_code_field_prefix 
+				|| '#input-custom-field';
+
+			$ctlVatCodeField = $target.find(selVatCodeFieldPrefix + mapping.vat_code_field_id);
 			if ($ctlVatCodeField.size() == 0) {
-				$ctlVatCodeField = $('input[name="custom_field[' + mapping.vat_code_field_id + ']"]:first');
+				$ctlVatCodeField = $target.find('input[name="custom_field[' + mapping.vat_code_field_id + ']"]:first');
 				if ($ctlVatCodeField.size() == 0) {
 					$ctlVatCodeField = null;
 				}
 			}
 
 			if ($ctlVatCodeField != null) {
-				$ctlCompanyNameField = $('#input-company');
-				$ctlPostCodeField = $('#input-postcode');
-				$ctlAddress1Field = $('#input-address-1');
+				$ctlCompanyNameField = $target.find(opts.sel_input_company 
+					|| '#input-company');
+				$ctlPostCodeField = $target.find(opts.sel_input_post_code 
+					|| '#input-postcode');
+				$ctlAddress1Field = $target.find(opts.sel_address_1 
+					|| '#input-address-1');
 			}
 		}
 	}
@@ -104,10 +110,14 @@
 		}
 	}
 
-	$(document).ready(function() {
+	$.fn.cielCatalogAnafData = function() {
+		var $target = $(this);
+		var opts = (arguments.length > 0 ? arguments[0] : null) 
+			|| {};
+
 		if (_hasCustomFieldsMapping()) {
-			_initControls();
-			_initEvents();
+			_initControls($target, opts);
+			_initEvents(opts);
 		}
-	});
+	}
 })(jQuery);
