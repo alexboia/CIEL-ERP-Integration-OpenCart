@@ -49,13 +49,21 @@ namespace CielIntegration {
 			);
 		}
 
-		protected function _addHeaderScript($scriptHref) {
+		protected function _addHeaderScript($scriptHref, $catalog = false) {
 			$fullScriptHref = 'view/javascript/' . $scriptHref;
+			if ($catalog) { 
+				$fullScriptHref = 'catalog/' . $fullScriptHref;
+			}
+			
 			$this->document->addScript($fullScriptHref);
 		}
 
-		protected function _addStylesheet($stylesheetHref) {
+		protected function _addStylesheet($stylesheetHref, $catalog = false) {
 			$fullStylesheetHref = 'view/stylesheet/' . $stylesheetHref;
+			if ($catalog) { 
+				$fullStylesheetHref = 'catalog/' . $fullStylesheetHref;
+			}
+
 			$this->document->addStyle($fullStylesheetHref);
 		}
 
