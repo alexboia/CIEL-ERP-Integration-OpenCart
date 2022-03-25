@@ -2,6 +2,12 @@
 	window['myc_customer_custom_fields'] = eval(<?php echo json_encode($customer_custom_fields, JSON_FORCE_OBJECT); ?>);
 </script>
 
+<style type="text/css">
+	.form-group input[type="checkbox"] {
+		margin-top: 10px;
+	}
+</style>
+
 <div class="panel panel-default" 
 	id="myc_workflow_settings_container"
 	style="<?php echo !$has_connection ? 'display:none;' : ''; ?>">
@@ -10,6 +16,19 @@
 	</div>
 
 	<div class="panel-body">
+		<!-- Shipping bindings -->
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="myc_wf_add_shipping_to_document"><?php echo $lbl_add_shipping_to_document_field_; ?>:</label>
+			<div class="col-sm-10">
+				<input type="checkbox" 
+					name="myc_wf_add_shipping_to_document"
+					id="myc_wf_add_shipping_to_document"
+					value="yes"
+					<?php echo $myc_wf_add_shipping_to_document ? 'checked="checked"' : ''; ?>
+				/>
+			</div>
+		</div>
+
 		<!-- Stock status bindings -->
 		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_wf_in_stock_status_id"><?php echo $lbl_in_stock_status_id_field; ?>:</label>

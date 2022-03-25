@@ -99,7 +99,9 @@ namespace CielIntegration\Integration\Admin\Order {
 				'order_curency_symbol' => $this->_sourceOrder['currency_code'],
 				'order_notes' => $this->_sourceOrder['comment'],
 
-				'order_shipping' => $orderShipping,
+				'order_shipping' => $this->_shouldAddShippingToDocument() 
+					? $orderShipping 
+					: null,
 				'order_product_lines' => $orderProductLines,
 				'order_discount_lines' => $orderDiscountLines
 			);
@@ -390,6 +392,11 @@ namespace CielIntegration\Integration\Admin\Order {
 				->calculatePriceWithoutVat($priceWithVat, 
 					$vatQuotaValue);
 			return $this->_roundPrice($priceNoVat);
+		}
+
+		private function _shouldAddShippingToDocument() {
+			return $this->_getWorkflow()
+				->getAddShippingToDocument();
 		}
 
 		/**

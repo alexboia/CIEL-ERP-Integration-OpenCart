@@ -77,7 +77,7 @@ namespace CielIntegration\Integration\Admin\Partner {
 			if (!empty($addresses)) {
 				$defaultAddress = reset($addresses);
 				foreach ($addresses as $addr) {
-					if ($addr['default'] == 1) {
+					if (isset($addr['default']) && $addr['default'] == 1) {
 						$defaultAddress = $addr;
 						break;
 					}

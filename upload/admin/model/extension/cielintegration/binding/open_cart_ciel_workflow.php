@@ -13,6 +13,19 @@ namespace CielIntegration\Integration\Admin\Binding {
 			$this->_bindingSettingsModel = new IntegrationSettings($registry);
 		}
 
+		public function getAddShippingToDocument() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['add_shipping_to_document']) 
+				? $wfSettings['add_shipping_to_document'] == true
+				: true;
+		}
+
+		public function saveShippingSettings($addShippingToDocument) {
+			$this->_saveWorkflowSettigs(array(
+				'add_shipping_to_document' => ($addShippingToDocument == true)
+			));
+		}
+
 		public function getOutOfStockStatusId() {
 			$wfSettings = $this->_getWorkflowSettings();
 			return isset($wfSettings['out_of_stock_status_id'])

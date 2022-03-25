@@ -180,6 +180,10 @@ class ControllerExtensionModuleCiel extends CielController {
 				: '';
 
 			//Workflow settings
+			$wfAddShippingToDocument = isset($this->request->post['myc_wf_add_shipping_to_document'])
+				? $this->request->post['myc_wf_add_shipping_to_document'] == 'yes'
+				: false;
+
 			$wfInStockStatusId = isset($this->request->post['myc_wf_in_stock_status_id'])
 				? intval($this->request->post['myc_wf_in_stock_status_id'])
 				: 0;
@@ -348,6 +352,7 @@ class ControllerExtensionModuleCiel extends CielController {
 					$this->_reconfigureStoreForBindingConfiguration();
 
 					//Save workflow
+					$workflow->saveShippingSettings($wfAddShippingToDocument);
 					$workflow->saveProductStockStatuses($wfInStockStatusId, 
 						$wfOutOfStockStatusId);
 					$workflow->savePersonTypeCustomerGroupMapping($wfPfCustomerGroupId, 
