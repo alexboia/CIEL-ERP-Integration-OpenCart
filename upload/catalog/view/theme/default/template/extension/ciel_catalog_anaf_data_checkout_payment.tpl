@@ -1,5 +1,7 @@
 <script type="text/javascript">
 	(function($) {
+		"use strict";
+		
 		$(document).ready(function() {
 			$('#payment-new').cielCatalogAnafData({
 				sel_vat_code_input_prefix: '#input-payment-custom-field',

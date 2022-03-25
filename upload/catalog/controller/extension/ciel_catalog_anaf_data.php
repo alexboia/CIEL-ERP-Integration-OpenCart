@@ -13,7 +13,7 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 	use WithLogging;
 	use WithInputSanitization;
 
-	//TODO: ?route=quick_checkout/address&address_type=payment
+	//TODO: ?route=quick_checkout/address&address_type=payment (support for quick checkout)
 
 	public function assets() {
 		$this->_addHeaderScript('extension/ciel_catalog_anaf_data.js', 

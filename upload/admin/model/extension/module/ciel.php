@@ -142,6 +142,27 @@ class ModelExtensionModuleCiel extends CielModel {
 				'code' => 'ciel_after_checkout_order_edit',
 				'trigger' => 'catalog/model/checkout/order/editOrder/after',
 				'action' => 'extension/ciel_order_custom_fields_sync/afterEdit'
+			),
+
+			array(
+				'code' => 'ciel_catalog_anaf_data_assets',
+				'trigger' => 'catalog/controller/common/header/before',
+				'action' => 'extension/ciel_catalog_anaf_data/assets'
+			),
+			array(
+				'code' => 'ciel_catalog_anaf_data_addr',
+				'trigger' => 'catalog/view/*/template/account/address_form/after',
+				'action' => 'extension/ciel_catalog_anaf_data'
+			),
+			array(
+				'code' => 'ciel_catalog_anaf_data_ck_root',
+				'trigger' => 'catalog/view/*/template/checkout/checkout/after',
+				'action' => 'extension/ciel_catalog_anaf_data/checkout'
+			),
+			array(
+				'code' => 'ciel_catalog_anaf_data_ck_paddr',
+				'trigger' => 'catalog/view/*/template/checkout/payment_address/after',
+				'action' => 'extension/ciel_catalog_anaf_data/checkoutPayment'
 			)
 		);
 	}
