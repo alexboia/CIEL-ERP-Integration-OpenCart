@@ -15,7 +15,7 @@ namespace CielIntegration {
 			}
 			
 			$lookupData = $this->_buildVatInfoClookupData($vatCode);
-			$response = $this->_sendRequest(self::ANAF_VAT_PAYER_API_URL, 
+			$response = $this->_sendHttpPostRequest(self::ANAF_VAT_PAYER_API_URL, 
 				$lookupData);
 
 			if (!empty($response['found']) && !empty($response['found'][0])) {
@@ -43,10 +43,10 @@ namespace CielIntegration {
 			);
 		}
 
-		private function _sendRequest($url, $data) {
+		private function _sendHttpPostRequest($url, $data) {
 			$response = null;
 			
-			$ch = $this->_createCurlChannel($url, $data);
+			$ch = $this->_createHttpPostCurlChannel($url, $data);
 			$responseContents = curl_exec($ch);
 			
 			$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -59,7 +59,7 @@ namespace CielIntegration {
 			return $response;
 		}
 
- 		private function _createCurlChannel($url, $data) {
+ 		private function _createHttpPostCurlChannel($url, $data) {
 			$ch = curl_init($url);
 			
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -70,12 +70,12 @@ namespace CielIntegration {
 			curl_setopt($ch, CURLOPT_VERBOSE, 0);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 
-			if ( !empty($data) ) {
+			if (!empty($data)) {
 				$headers[] = "Content-Type: application/json";
 				curl_setopt($ch, CURLOPT_POST, 1);
 				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 			}
-			
+
 			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			return $ch;
     	}
