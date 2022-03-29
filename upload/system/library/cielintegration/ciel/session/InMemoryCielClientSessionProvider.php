@@ -10,6 +10,7 @@ namespace Ciel\Api\Session {
 		public function registerSessionToken(CielClientSessionCredentials $credentials, $token) { 
 			$hash = $credentials->computeHash();
 			$this->_sessions[$hash] = $token;
+			return $token;
 		}
 
 		public function resolveSessionToken(CielClientSessionCredentials $credentials) { 

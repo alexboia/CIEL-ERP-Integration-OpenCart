@@ -213,7 +213,8 @@ namespace Ciel\Api {
 					$societyCode);
 
 				if (!empty($authenticationToken)) {
-					$this->_sessionProvider->registerSessionToken($credentials, $authenticationToken);
+					$authenticationToken = $this->_sessionProvider->registerSessionToken($credentials, 
+						$authenticationToken);
 				}
 			}
 
