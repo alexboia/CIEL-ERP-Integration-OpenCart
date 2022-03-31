@@ -6,6 +6,10 @@ namespace CielIntegration {
     use Log;
 
 	trait WithLogging {
+		private static $_CIEL_DEBUG_FILE_NAME = 'ciel-oc-debug.log';
+
+		private static $_CIEL_ERROR_FILE_NAME = 'ciel-oc-error.log';
+
 		/**
 		 * @var \Log
 		 */
@@ -18,7 +22,7 @@ namespace CielIntegration {
 
 		protected function _getDebugLogger() {
 			if ($this->_debugLogger === null) {
-				$this->_debugLogger = new Log('ciel-oc-debug.log');
+				$this->_debugLogger = new Log(self::$_CIEL_DEBUG_FILE_NAME);
 			}
 			return $this->_debugLogger;
 		}
@@ -31,7 +35,7 @@ namespace CielIntegration {
 
 		protected function _getErrorLogger() {
 			if ($this->_errorLogger === null) {
-				$this->_errorLogger = new Log('ciel-oc-error.log');
+				$this->_errorLogger = new Log(self::$_CIEL_ERROR_FILE_NAME);
 			}
 			return $this->_errorLogger;
 		}
@@ -48,13 +52,21 @@ namespace CielIntegration {
 				$error = $exc->getError();
 				$logMessageParts[] = print_r($error->getData(), true);
 			}
-			$logMessageParts[] = $exc->getTraceAsString();
 
+			$logMessageParts[] = $exc->getTraceAsString();
 			$logMessage = join(' - ', $logMessageParts);
 
 			$errorLogger = $this->_getErrorLogger();
 			$errorLogger->write(sprintf('[ERROR] %s', 
 				$logMessage));
+		}
+
+		protected function _getDebugLogFileManager() {
+			return new LogFileManager(self::$_CIEL_DEBUG_FILE_NAME);
+		}
+
+		protected function _getErrorLogFileManager() {
+			return new LogFileManager(self::$_CIEL_ERROR_FILE_NAME);
 		}
 	}
 }

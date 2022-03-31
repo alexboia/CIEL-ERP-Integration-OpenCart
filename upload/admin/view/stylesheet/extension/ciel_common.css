@@ -4,3 +4,12 @@
 	content: "\f059";
 	margin-left: 4px;
 }
+
+.myc-log-window {
+	resize: none;
+	margin-bottom: 10px;
+}
+
+.myc-status-label {
+	text-align: right;
+}

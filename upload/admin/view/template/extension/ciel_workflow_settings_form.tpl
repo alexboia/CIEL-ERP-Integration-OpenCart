@@ -18,7 +18,7 @@
 	<div class="panel-body">
 		<!-- Shipping bindings -->
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_add_shipping_to_document"><?php echo $lbl_add_shipping_to_document_field_; ?>:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_add_shipping_to_document"><?php echo $lbl_add_shipping_to_document_field; ?>:</label>
 			<div class="col-sm-10">
 				<input type="checkbox" 
 					name="myc_wf_add_shipping_to_document"

@@ -17,8 +17,8 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 					=> $this->_t('text_workflow_settings_form_heading'),
 				'lbl_txt_none' 
 					=> $this->_t('lbl_txt_none'),
-				'lbl_add_shipping_to_document_field_' 
-					=> $this->_t('lbl_add_shipping_to_document_field_'),
+				'lbl_add_shipping_to_document_field' 
+					=> $this->_t('lbl_add_shipping_to_document_field'),
 				'lbl_in_stock_status_id_field' 
 					=> $this->_t('lbl_in_stock_status_id_field'),
 				'lbl_out_of_stock_status_id_field' 
