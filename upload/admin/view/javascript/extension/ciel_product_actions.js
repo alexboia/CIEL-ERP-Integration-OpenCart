@@ -1,6 +1,12 @@
 (function($) {
 	"use strict";
 
+	var DEFAULT_MSG_CONNECT_PRODUCT_SUCCESS = 'The product has been successfully connected to CIEL ERP. This page will automatically reload in 5 seconds.';
+	var DEFAULT_MSG_CONNECT_PRODUCT_ERROR = 'The product could not be connected to CIEL ERP.';
+
+	var DEFAULT_MSG_UPDATE_PRODUCT_SUCCESS = 'The product has been successfully updated. This page will automatically reload in 5 seconds.';
+	var DEFAULT_MSG_UPDATE_PRODUCT_ERROR = 'The product could not be updated.';
+
 	function _getActionUrl($target) {
 		return $.getCielActionUrl($target);
 	}
@@ -49,16 +55,18 @@
 		var $me = $(this);
 		var actionUrl = _getActionUrl($me);
 		_doAction(actionUrl,
-			'Produsul a fost conectat cu succes la CIEL ERP. Pagina se va reincarca in 5 secunde.',
-			'Produsul nu a putut fi conectat la CIEL ERP.');
+			DEFAULT_MSG_CONNECT_PRODUCT_SUCCESS,
+			DEFAULT_MSG_CONNECT_PRODUCT_ERROR
+		);
 	}
 
 	function _syncProductInformation() {
 		var $me = $(this);
 		var actionUrl = _getActionUrl($me);
 		_doAction(actionUrl,
-			'Produsul a fost actualizat cu succes. Pagina se va reincarca in 5 secunde.',
-			'Produsul nu a putut fi actualizat.');
+			DEFAULT_MSG_UPDATE_PRODUCT_SUCCESS,
+			DEFAULT_MSG_UPDATE_PRODUCT_ERROR
+		);
 	}
 
 	$(document).ready(function() {

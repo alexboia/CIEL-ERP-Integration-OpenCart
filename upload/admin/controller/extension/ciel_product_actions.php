@@ -9,6 +9,11 @@ class ControllerExtensionCielProductActions extends CielController {
 	use WithCielIntegration;
 	use WithLogging;
 
+	public function __construct(\Registry $registry) {
+		parent::__construct($registry);
+		$this->_setTextDomain('extension/ciel_product_actions');
+	}
+
 	public function connect() {
 		$response = $this->_createAjaxResponse();
 		
@@ -17,9 +22,12 @@ class ControllerExtensionCielProductActions extends CielController {
 			if (!empty($productId)) {
 				try {
 					$response->success = $this->_doConnectToCielErp($productId);
+					$response->message = $this->_t('ciel_product_connect_product_success_msg');
 				} catch (RemoteArticleNotFoundException $exc) {
+					$response->message = $this->_t('ciel_product_connect_product_not_found_error_msg');
 					$this->_logRemoteArticleNotFoundError($exc);
 				} catch (Exception $exc) {
+					$response->message = $this->_t('ciel_product_connect_product_error_msg');
 					$this->_logGenericProductActionError($exc);
 				}
 			}
@@ -60,10 +68,13 @@ class ControllerExtensionCielProductActions extends CielController {
 			if (!empty($productId)) {
 				try {
 					$response->success = $this->_doUpdateAllProductInformation($productId);
+					$response->message = $this->_t('ciel_product_updated_product_success_msg');
 				} catch (RemoteArticleNotFoundException $exc) {
 					$this->_logRemoteArticleNotFoundError($exc);
+					$response->message = $this->_t('ciel_product_udpate_product_not_found_error_msg');
 				} catch (Exception $exc) {
 					$this->_logGenericProductActionError($exc);
+					$response->message = $this->_t('ciel_product_udpate_product_error_msg');
 				}
 			}
 		}
