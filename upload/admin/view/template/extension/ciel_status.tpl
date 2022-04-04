@@ -24,6 +24,14 @@
 						<div class="col-sm-10"><?php echo $status['module_version']; ?></div>
 					</div>
 					<div class="form-group">
+						<div class="col-sm-2 myc-status-label"><?php echo $lbl_php_version; ?>:</div>
+						<div class="col-sm-10"><?php echo $status['php_version']; ?></div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2 myc-status-label"><?php echo $lbl_opencart_version; ?>:</div>
+						<div class="col-sm-10"><?php echo $status['opencart_version']; ?></div>
+					</div>
+					<div class="form-group">
 						<div class="col-sm-2 myc-status-label"><?php echo $lbl_module_configured; ?>:</div>
 						<div class="col-sm-10">
 							<?php echo $status['module_configured']; ?>
@@ -44,16 +52,23 @@
 						</div>
 					<?php endif; ?>
 
+					<div id="myc_debug_log_operation_status_message" 
+						style="display: none;"></div>
+
 					<textarea wrap="off" 
 						rows="15" 
 						readonly="readonly" 
+						id="myc-debug-log-display"
 						class="form-control myc-log-window"><?php echo $debug_log_status['log_file_contents']; ?></textarea>
 
 					<?php if ($debug_log_status['log_file_exists']): ?>
 						<a href="<?php echo $download_debug_log_btn_action; ?>" 
 							class="btn btn-info"
+							id="myc-download-debug-log-btn"
 							target="_blank"><?php echo $download_log_btn_text; ?></a>
-						<a href="<?php echo $clear_debug_log_btn_action; ?>" 
+						<a href="javascript:void(0)" 
+							data-action-url="<?php echo $clear_debug_log_btn_action; ?>"
+							id="myc-clear-debug-log-btn"
 							class="btn btn-danger"><?php echo $clear_log_btn_text; ?></a>
 					<?php endif; ?>
 				</div>
@@ -69,16 +84,24 @@
 							<button type="button" class="close" data-dismiss="alert">&times;</button>
 						</div>
 					<?php endif; ?>
+
+					<div id="myc_error_log_operation_status_message" 
+						style="display: none;"></div>
+
 					<textarea wrap="off" 
 						rows="15" 
 						readonly="readonly" 
+						id="myc-error-log-display"
 						class="form-control myc-log-window"><?php echo $error_log_status['log_file_contents']; ?></textarea>
 
 					<?php if ($error_log_status['log_file_exists']): ?>
 						<a href="<?php echo $download_error_log_btn_action; ?>" 
 							class="btn btn-info"
+							id="myc-download-error-log-btn"
 							target="_blank"><?php echo $download_log_btn_text; ?></a>
-						<a href="<?php echo $clear_error_log_btn_action; ?>" 
+						<a href="javascript:void(0)" 
+							id="myc-clear-error-log-btn"
+							data-action-url="<?php echo $clear_error_log_btn_action; ?>"
 							class="btn btn-danger"><?php echo $clear_log_btn_text; ?></a>
 					<?php endif; ?>
 				</div>

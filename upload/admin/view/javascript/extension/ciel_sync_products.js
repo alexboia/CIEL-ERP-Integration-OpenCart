@@ -1,6 +1,9 @@
 (function($) {
 	"use strict";
 
+	var DEFAULT_MSG_PRODUCTS_UPDATED = 'Product information successfully updated.';
+	var DEFAULT_MSG_PRODUCTS_UPDATE_ERROR = 'Product information could not be updated.';
+
 	var $ctlSyncInfoStats = null;
 	var $ctlTotalEligibleCount = null;
 	var $ctlTotalUpdatedCount = null;
@@ -45,13 +48,15 @@
 			$.hideCielLoading();
 			if (data && data.success) {
 				_showInfoStats(data.result);
-				_showSuccess(data.message || 'Product information successfully updated.');
+				_showSuccess(data.message 
+					|| DEFAULT_MSG_PRODUCTS_UPDATED);
 			} else {
-				_showError(data.message || 'Product information could not be updated.');
+				_showError(data.message 
+					|| DEFAULT_MSG_PRODUCTS_UPDATE_ERROR);
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			_showError('Product information could not be updated.');
+			_showError(DEFAULT_MSG_PRODUCTS_UPDATE_ERROR);
 		});
 	}
 

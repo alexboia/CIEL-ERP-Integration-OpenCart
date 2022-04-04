@@ -5,7 +5,6 @@ use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\LogFileManager;
 use CielIntegration\WithAdminLayoutLoader;
 use CielIntegration\WithLogging;
-use openbay\fba;
 
 class ControllerExtensionCielStatus extends CielController {
 	use WithCielIntegration;
@@ -37,6 +36,11 @@ class ControllerExtensionCielStatus extends CielController {
 		//Prepare document assets
 		$this->_setDocumentTitleLangKey('ciel_status_title');
 		$this->_addStylesheet('extension/ciel_common.css');
+
+		$this->_includeLoadingIndicatorScript();
+		$this->_includeOperationStatusScript();
+		$this->_includeCommonScript();
+		$this->_addHeaderScript('extension/ciel_status.js');
 
 		//Prepare data
 		$debugLogActionsParams = $this->_getDebugLogActionParams();
@@ -70,6 +74,8 @@ class ControllerExtensionCielStatus extends CielController {
 
 		$data['lbl_module_version'] = $this->_t('lbl_module_version');
 		$data['lbl_module_configured'] = $this->_t('lbl_module_configured');
+		$data['lbl_php_version'] = $this->_t('lbl_php_version');
+		$data['lbl_opencart_version'] = $this->_t('lbl_opencart_version');
 
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
 		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
@@ -93,9 +99,23 @@ class ControllerExtensionCielStatus extends CielController {
 
 	private function _getStatus() {
 		return array(
+			'php_version' => $this->_getPhpVersionString(),
+			'opencart_version' => $this->_getOpenCartVersionString(),
 			'module_version' => $this->_getVersionString(),
 			'module_configured' => $this->_getIsConfiguredDescription()
 		);
+	}
+
+	private function _getPhpVersionString() {
+		return function_exists('phpversion') 
+			? phpversion() 
+			: 'n/a';
+	}
+
+	private function _getOpenCartVersionString() {
+		return defined('VERSION') 
+			? VERSION 
+			: 'n/a';
 	}
 
 	private function _getVersionString() {
@@ -189,10 +209,35 @@ class ControllerExtensionCielStatus extends CielController {
 		$logFileNameWithoutExtension = str_ireplace('.log', '', 
 			$logFileName);
 
-		return $logFileNameWithoutExtension . '_' . date('Y-m-d_H-i-s', time()) . '.log';
+		return $logFileNameWithoutExtension . '_' 
+			. date('Y-m-d_H-i-s', time()) 
+			. '.log';
 	}
 
 	public function clearLog() {
+		$logType = $this->_getLogFileTypeFromUrl();
+		if (!$this->_isLogFileTypeValid($logType)) {
+			die;
+		}
 
+		$response = $this->_createAjaxResponse();
+
+		try {
+			$this->_processClearLog($logType);
+			$response->success = true;
+			$response->message = $this->_t('ciel_log_file_cleared_succes_msg');
+		} catch (Exception $exc) {
+			$this->_logError($exc, 'Error clearing log file.');
+			$response->message = $this->_t('ciel_log_file_cleared_error_msg');
+		}
+
+		$this->_renderJsonToResponseOutput($response);
+	}
+
+	private function _processClearLog($logType) {
+		$logFileManager = $this->_getLogFileManager($logType);
+		if ($logFileManager->exists()) {
+			$logFileManager->clear();
+		}
 	}
 }

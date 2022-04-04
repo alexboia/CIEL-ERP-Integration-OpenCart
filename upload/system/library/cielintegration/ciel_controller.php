@@ -55,7 +55,20 @@ namespace CielIntegration {
 				$fullScriptHref = 'catalog/' . $fullScriptHref;
 			}
 			
-			$this->document->addScript($fullScriptHref);
+			$this->document->addScript(
+				$this->_addVersionToAssetHref($fullScriptHref)
+			);
+		}
+
+		private function _addVersionToAssetHref($assetHref) {
+			if (stripos($assetHref, '?') === false) {
+				$assetHref .= '?';
+			} else {
+				$assetHref .= '&';
+			}
+
+			$assetHref .= '_version=' . ExtensionInfo::VERSION;
+			return $assetHref;
 		}
 
 		protected function _addStylesheet($stylesheetHref, $catalog = false) {
@@ -64,7 +77,9 @@ namespace CielIntegration {
 				$fullStylesheetHref = 'catalog/' . $fullStylesheetHref;
 			}
 
-			$this->document->addStyle($fullStylesheetHref);
+			$this->document->addStyle(
+				$this->_addVersionToAssetHref($fullStylesheetHref)
+			);
 		}
 
 		protected function _renderView($viewRoute, $viewData) {

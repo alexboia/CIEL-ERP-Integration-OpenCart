@@ -23,7 +23,7 @@
 		$.delayedReloadCielPage(timeoutSeconds);
 	}
 
-	function _doAction(actionUrl, successMessage, errorMessage) {
+	function _doAction(actionUrl, defaultSuccessMessage, defaultErrorMessage) {
 		$.showCielLoading();
 
 		$.ajax(actionUrl, {
@@ -34,14 +34,14 @@
 		}).done(function(data, status, xhr) {
 			$.hideCielLoading();
 			if (data && !!data.success) {
-				_showSuccess(successMessage);
+				_showSuccess(data.message || defaultSuccessMessage);
 				_delayedReloadPage(5);
 			} else {
-				_showError(data.message || errorMessage);	
+				_showError(data.message || defaultErrorMessage);	
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			_showError(errorMessage);
+			_showError(defaultErrorMessage);
 		});
 	}
 
