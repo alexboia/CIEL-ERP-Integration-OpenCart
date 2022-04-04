@@ -104,6 +104,10 @@ $_['lbl_product_action_connect'] = 'Connect to CIEL ERP by SKU';
 // CIEL customer form tab
 //
 
+$_['lbl_customer_connected_to_ciel_erp'] = $_['lbl_product_connected_to_ciel_erp'];
+$_['lbl_customer_ciel_erp_partner_code'] = 'CIEL ERP partner code';
+$_['lbl_customer_ciel_erp_partner_address_worksite_id'] = 'CIEL ERP partner address worksite ID';
+
 //
 // CIEL order view panel
 //

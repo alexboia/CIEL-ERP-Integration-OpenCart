@@ -12,13 +12,13 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
-					<th scope="row" class="text-right" style="width: 30%;">Conectat la CIEL ERP</th>
+					<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_customer_connected_to_ciel_erp; ?></th>
 					<td class="text-left" style="width: 70%;">
-						<?php echo $is_connected_to_ciel_erp ? 'da' : 'nu'; ?>
+						<?php echo $is_connected_to_ciel_erp ? $lbl_txt_yes : $lbl_txt_no; ?>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="text-right">Cod partner CIEL ERP</th>
+					<th scope="row" class="text-right"><?php echo $lbl_customer_ciel_erp_partner_code; ?></th>
 					<td class="text-left">
 						<?php echo $is_connected_to_ciel_erp 
 							? $remote_partner_data['remote_partner_code'] 
@@ -26,7 +26,7 @@
 					</td>
 				</tr>
 				<tr>
-					<th scope="row" class="text-right">Id adresa CIEL ERP</th>
+					<th scope="row" class="text-right"><?php echo $lbl_customer_ciel_erp_partner_address_worksite_id; ?></th>
 					<td class="text-left">
 						<?php echo $is_connected_to_ciel_erp 
 							? $remote_partner_data['remote_partner_addr_worksite_id'] 

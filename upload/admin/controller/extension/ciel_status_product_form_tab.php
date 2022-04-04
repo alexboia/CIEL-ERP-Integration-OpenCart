@@ -50,6 +50,10 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 				$productActionParams);
 
 		//Labels
+		$viewData['lbl_txt_yes'] = $this
+			->_t('lbl_txt_yes');
+		$viewData['lbl_txt_no'] = $this
+			->_t('lbl_txt_no');
 		$viewData['lbl_product_connected_to_ciel_erp'] = $this
 			->_t('lbl_product_connected_to_ciel_erp');
 		$viewData['lbl_product_ciel_erp_article_id'] = $this
