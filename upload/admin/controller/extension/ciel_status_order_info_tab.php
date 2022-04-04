@@ -1,5 +1,4 @@
 <?php
-
 use Ciel\Api\Data\DocumentType;
 use CielIntegration\CielController;
 use CielIntegration\ContentsAppender;
