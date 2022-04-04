@@ -14,6 +14,9 @@ $_['lbl_column_product_connected_to_ciel_erp_header'] = 'Connected to CIEL ERP';
 $_['lbl_column_customer_connected_to_ciel_erp_header'] = 'Connected to CIEL ERP';
 $_['lbl_column_order_connected_to_ciel_erp_header'] = 'Document issued in CIEL ERP';
 
+$_['lbl_tab_product_label'] = 'CIEL ERP Integration';
+$_['lbl_tab_customer_label'] = $_['lbl_tab_product_label'];
+
 $_['option_txt_document_status_type_valid'] = 'Valid';
 $_['option_txt_document_status_type_temporary'] = 'Temporary';
 
@@ -82,3 +85,25 @@ $_['lbl_new_tax_rate_customer_group_id_field'] = 'Customer group used for CIEL-i
 $_['lbl_new_tax_rate_geo_zone_id_field'] = 'Geozone used for CIEL-imported new tax rates';
 $_['lbl_new_product_weight_class_id_field'] = 'Weight class used for CIEL-imported new products';
 $_['lbl_new_product_length_class_id_field'] = 'Length class used for CIEL-imported new products';
+
+//
+// CIEL product form tab
+// 
+
+$_['lbl_product_connected_to_ciel_erp'] = 'Connected to CIEL ERP';
+$_['lbl_product_ciel_erp_article_id'] = 'CIEL ERP article ID';
+$_['lbl_product_ciel_erp_vat_option_name'] = 'CIEL ERP VAT option name';
+$_['lbl_product_ciel_erp_vat_quota_value'] = 'CIEL ERP VAT quota value';
+$_['lbl_product_ciel_erp_batch_tracking_enabled'] = 'Batch tracking enabled';
+$_['lbl_product_actions'] = 'Available actions';
+$_['lbl_product_action_update_full'] = 'Update entire information from CIEL ERP';
+$_['lbl_product_action_update_stocks'] = 'Update stock information from CIEL ERP';
+$_['lbl_product_action_connect'] = 'Connect to CIEL ERP by SKU';
+
+//
+// CIEL customer form tab
+//
+
+//
+// CIEL order view panel
+//

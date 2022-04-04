@@ -49,13 +49,33 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 			->_createRouteUrl('extension/ciel_product_actions/updateStocks', 
 				$productActionParams);
 
+		//Labels
+		$viewData['lbl_product_connected_to_ciel_erp'] = $this
+			->_t('lbl_product_connected_to_ciel_erp');
+		$viewData['lbl_product_ciel_erp_article_id'] = $this
+			->_t('lbl_product_ciel_erp_article_id');
+		$viewData['lbl_product_ciel_erp_vat_option_name'] = $this
+			->_t('lbl_product_ciel_erp_vat_option_name');
+		$viewData['lbl_product_ciel_erp_vat_quota_value'] = $this
+			->_t('lbl_product_ciel_erp_vat_quota_value');
+		$viewData['lbl_product_ciel_erp_batch_tracking_enabled'] = $this
+			->_t('lbl_product_ciel_erp_batch_tracking_enabled');
+		$viewData['lbl_product_actions'] = $this
+			->_t('lbl_product_actions');
+		$viewData['lbl_product_action_update_full'] = $this
+			->_t('lbl_product_action_update_full');
+		$viewData['lbl_product_action_update_stocks'] = $this
+			->_t('lbl_product_action_update_stocks');
+		$viewData['lbl_product_action_connect'] = $this
+			->_t('lbl_product_action_connect');
+
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_product_form_tab_contents', 
 			$viewData);
 
 		$tabPanelRewriter = new TabPanelContentsRewriter('#form-product');
 		$tabPanelRewriter->addTab('tab-ciel-status', 
-			'Integrare CIEL ERP', 
+			$this->_t('lbl_tab_product_label'), 
 			$viewContents);
 
 		return $tabPanelRewriter

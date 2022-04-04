@@ -28,7 +28,7 @@ class ControllerExtensionCielStatusCustomerFormTab extends CielController {
 
 		$tabPanelRewriter = new TabPanelContentsRewriter('#form-customer');
 		$tabPanelRewriter->addTab('tab-ciel-customer-status', 
-			'Integrare CIEL ERP', 
+			$this->_t('lbl_tab_customer_label'), 
 			$viewContents);
 
 		return $tabPanelRewriter
