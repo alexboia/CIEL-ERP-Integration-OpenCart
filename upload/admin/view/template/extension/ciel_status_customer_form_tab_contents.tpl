@@ -14,7 +14,9 @@
 				<tr>
 					<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_customer_connected_to_ciel_erp; ?></th>
 					<td class="text-left" style="width: 70%;">
-						<?php echo $is_connected_to_ciel_erp ? $lbl_txt_yes : $lbl_txt_no; ?>
+						<?php echo $is_connected_to_ciel_erp 
+							? $lbl_txt_yes 
+							: $lbl_txt_no; ?>
 					</td>
 				</tr>
 				<tr>

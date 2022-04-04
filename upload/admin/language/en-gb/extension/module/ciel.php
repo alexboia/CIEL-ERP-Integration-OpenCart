@@ -16,6 +16,7 @@ $_['lbl_column_order_connected_to_ciel_erp_header'] = 'Document issued in CIEL E
 
 $_['lbl_tab_product_label'] = 'CIEL ERP Integration';
 $_['lbl_tab_customer_label'] = $_['lbl_tab_product_label'];
+$_['lbl_tab_order_label'] = $_['lbl_tab_product_label'];
 
 $_['option_txt_document_status_type_valid'] = 'Valid';
 $_['option_txt_document_status_type_temporary'] = 'Temporary';
@@ -111,3 +112,13 @@ $_['lbl_customer_ciel_erp_partner_address_worksite_id'] = 'CIEL ERP partner addr
 //
 // CIEL order view panel
 //
+
+$_['msg_order_cant_issue_not_all_products_connected'] = 'No document can be issued, because not all order products are connected to CIEL ERP.';
+$_['msg_order_cant_issue_batch_tracking_not_posssible'] = 'No document can be issued, because the order has products that use batch tracking, but the selected warehouse is not of En-Gross type.';
+$_['msg_order_cant_issue_batch_tracking_not_available'] = 'No document can be issued, because the order has products that use batch tracking, but your license does not support issuing documents with batch-tracked articles.';
+$_['lbl_order_ciel_erp_document_issued'] = 'Document issued in CIEL ERP';
+$_['lbl_order_ciel_erp_document_type'] = 'CIEL ERP issued document type';
+$_['lbl_order_actions'] = $_['lbl_product_actions'];
+$_['lbl_order_action_issue_document'] = 'Issue CIEL ERP document';
+$_['lbl_order_action_remove_document'] = 'Remove CIEL ERP document';
+$_['msg_order_no_actions_available'] = 'No actions available at this time';

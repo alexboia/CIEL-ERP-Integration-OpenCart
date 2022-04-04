@@ -76,6 +76,32 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			->_createRouteUrl('extension/ciel_order_actions/checkDocumentIssued', 
 				$orderActionsData);
 
+		//Labels and messages
+		$viewData['lbl_txt_yes'] = $this
+			->_t('lbl_txt_yes');
+		$viewData['lbl_txt_no'] = $this
+			->_t('lbl_txt_no');
+		$viewData['lbl_tab_order_label'] = $this
+			->_t('lbl_tab_order_label');
+		$viewData['msg_order_cant_issue_not_all_products_connected'] = $this
+			->_t('msg_order_cant_issue_not_all_products_connected');
+		$viewData['msg_order_cant_issue_batch_tracking_not_posssible'] = $this
+			->_t('msg_order_cant_issue_batch_tracking_not_posssible');
+		$viewData['msg_order_cant_issue_batch_tracking_not_available'] = $this
+			->_t('msg_order_cant_issue_batch_tracking_not_available');
+		$viewData['lbl_order_ciel_erp_document_issued'] = $this
+			->_t('lbl_order_ciel_erp_document_issued');
+		$viewData['lbl_order_ciel_erp_document_type'] = $this
+			->_t('lbl_order_ciel_erp_document_type');
+		$viewData['lbl_order_actions'] = $this
+			->_t('lbl_order_actions');
+		$viewData['lbl_order_action_issue_document'] = $this
+			->_t('lbl_order_action_issue_document');
+		$viewData['lbl_order_action_remove_document'] = $this
+			->_t('lbl_order_action_remove_document');
+		$viewData['msg_order_no_actions_available'] = $this
+			->_t('msg_order_no_actions_available');
+
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_order_info_tab_contents', 
 			$viewData);
