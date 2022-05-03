@@ -37,11 +37,13 @@
 				<input type="hidden" 
 					id="myc_runtime_warehouse_code" 
 					name="myc_runtime_warehouse_code" 
-					value="<?php echo $runtime_warehouse_code; ?>" />
+					value="<?php echo $runtime_warehouse_code; ?>" 
+				/>
 				<input type="hidden" 
 					id="myc_runtime_warehouse_type" 
 					name="myc_runtime_warehouse_type" 
-					value="<?php echo $runtime_warehouse_type; ?>" />
+					value="<?php echo $runtime_warehouse_type; ?>" 
+				/>
 			</div>
 		</div>
 		<div class="form-group required">
@@ -57,7 +59,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label" for="myc_runtime_issue_auto_order_status"><?php echo $lbl_runtime_issue_auto_order_status_field; ?>:</label>
 			<div class="col-sm-10">
 				<?php foreach ($data_available_order_statuses as $id => $label): ?>
@@ -69,7 +71,7 @@
 				<?php endforeach; ?>
 			</div>
 		</div>
-		<div class="form-group required">
+		<div class="form-group">
 			<label class="col-sm-2 control-label" for="myc_runtime_remove_auto_order_status"><?php echo $lbl_runtime_remove_auto_order_status_field; ?>:</label>
 			<div class="col-sm-10">
 				<?php foreach ($data_available_order_statuses as $id => $label): ?>

@@ -150,6 +150,11 @@ class ModelExtensionModuleCiel extends CielModel {
 				'action' => 'extension/ciel_catalog_anaf_data/assets'
 			),
 			array(
+				'code' => 'ciel_catalog_anaf_data_assets_qc',
+				'trigger' => 'catalog/controller/quick_checkout/header/before',
+				'action' => 'extension/ciel_catalog_anaf_data/assets'
+			),
+			array(
 				'code' => 'ciel_catalog_anaf_data_addr',
 				'trigger' => 'catalog/view/*/template/account/address_form/after',
 				'action' => 'extension/ciel_catalog_anaf_data'
@@ -163,6 +168,11 @@ class ModelExtensionModuleCiel extends CielModel {
 				'code' => 'ciel_catalog_anaf_data_ck_paddr',
 				'trigger' => 'catalog/view/*/template/checkout/payment_address/after',
 				'action' => 'extension/ciel_catalog_anaf_data/checkoutPayment'
+			),
+			array(
+				'code' => 'ciel_catalog_anaf_data_qc_paddr',
+				'trigger' => 'catalog/view/*/template/quick_checkout/address/after',
+				'action' => 'extension/ciel_catalog_anaf_data/quickCheckoutPayment'
 			)
 		);
 	}

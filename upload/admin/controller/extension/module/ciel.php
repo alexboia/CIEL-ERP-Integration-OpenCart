@@ -225,7 +225,7 @@ class ControllerExtensionModuleCiel extends CielController {
 				? intval($this->request->post['myc_wf_new_product_length_class_id'])
 				: 0;
 
-			if (empty($bindingPassword) && $storeBinding->hasConnectionInfo()) {
+			if (empty($bindingPassword) && $hadConnectionInfo) {
 				$bindingPassword = $storeBinding->getPassword();
 			}
 

@@ -13,8 +13,6 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 	use WithLogging;
 	use WithInputSanitization;
 
-	//TODO: ?route=quick_checkout/address&address_type=payment (support for quick checkout)
-
 	public function assets() {
 		$this->_addHeaderScript('extension/ciel_catalog_anaf_data.js', 
 			true);
@@ -29,7 +27,6 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			$viewContents . '</body>', 
 			$output);
 	}
-
 	
 	private function _getViewData() {
 		$viewData = array();
@@ -71,6 +68,14 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 	public function checkoutPayment(&$route, &$data, &$output) {
 		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data_checkout_payment', 
 			array());
+		return $output 
+			. $viewContents;
+	}
+
+	public function quickCheckoutPayment(&$route, &$data, &$output) {
+		$viewData = $this->_getViewData();
+		$viewContents = $this->_renderView('extension/ciel_catalog_anaf_data_quick_checkout_payment', 
+			$viewData);
 		return $output 
 			. $viewContents;
 	}

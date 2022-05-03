@@ -14,6 +14,14 @@
 		function _show(success, message) {
 			_clear();
 
+			var message = _buildMessage(success, 
+				message);
+
+			$me.html(message)
+				.show();
+		}
+
+		function _buildMessage(success, message) {
 			var html = [];
 			if (success) {
 				html.push('<div class="alert alert-success"><i class="fa fa-check-circle"></i>');
@@ -25,8 +33,7 @@
 			html.push('<button type="button" class="close" data-dismiss="alert">&times;</button>');
 			html.push('</div>');
 
-			$me.html(html.join(''))
-				.show();
+			return html.join('');
 		}
 
 		function _hide() {

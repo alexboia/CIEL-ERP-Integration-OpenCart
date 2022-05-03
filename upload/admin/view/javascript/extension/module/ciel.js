@@ -54,6 +54,7 @@
 	}
 
 	function _testConnection(data) {
+		//TODO: check that the values are not empty
 		$.showCielLoading();
 		_clearStatusMessage();
 		$.ajax(_getConnectionTestUrl(), {
@@ -66,10 +67,12 @@
 			if (data && data.success) {
 				_showSuccess(data.message);
 			} else {
+				//TODO: add support for localization
 				_showError(data.message || 'The connection test failed');
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
+			//TODO: add support for localization
 			_showError('The connection test failed');
 		});
 	}
@@ -164,13 +167,16 @@
 					_initialSync();
 				}
 
+				//TODO: add support for localization
 				_showSuccess('The settings have been successfully saved.');
 				_storeInitialControlValues();
 			} else {
+				//TODO: add support for localization
 				_showError(data.message || 'The settings could not be saved.');
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
+			//TODO: add support for localization
 			_showError('The settings could not be saved.');
 		});
 	}
@@ -245,6 +251,7 @@
 	}
 
 	function _confirmWarehouseChange() {
+		//TODO: add support for localization
 		return confirm('Please confirm warehouse change! When saved, this will disconnect all your products from their corresponding CIEL ERP articles.');
 	}
 
