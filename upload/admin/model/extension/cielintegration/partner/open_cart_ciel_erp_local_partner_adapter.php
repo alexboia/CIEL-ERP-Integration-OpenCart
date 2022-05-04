@@ -68,6 +68,10 @@ namespace CielIntegration\Integration\Admin\Partner {
 				throw new LocalPartnerNotFoundException('id', $localPartnerId);
 			}
 
+			if ($remoteShopBillingAddressData == null) {
+				$remoteShopBillingAddressData = array();
+			}
+
 			$this->_setCustomerBindingInformation($localPartnerId, 
 				$remotePartnerData, 
 				$remoteShopBillingAddressData);
@@ -105,6 +109,10 @@ namespace CielIntegration\Integration\Admin\Partner {
 			$customerId = $this->_getCustomerIdForOrder($localOrderId);
 			if (empty($customerId) && $customerId != 0) {
 				throw new LocalOrderNotFoundException('id', $localOrderId);
+			}
+
+			if ($remoteShopBillingAddressData == null) {
+				$remoteShopBillingAddressData = array();
 			}
 
 			$this->_setOrderCustomerBindingInformation($localOrderId, 

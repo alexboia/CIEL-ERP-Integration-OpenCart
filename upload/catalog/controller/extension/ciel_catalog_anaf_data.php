@@ -96,6 +96,10 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 
 	private function _processLookupVatCode($vatCode) {
 		$response = $this->_createEmptyLookupAjaxResponse();
+		if ($this->_vatCodeSeemsInvalid($vatCode)) {
+			$this->_logDebug('Vat code format is invalid. Will not lookup using ANAF server!');
+			return $response;
+		}
 
 		try {
 			$anafApiClient = $this->_getAnafApiClient();
@@ -120,6 +124,10 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			'exists' => false,
 			'info' => null
 		));
+	}
+
+	private function _vatCodeSeemsInvalid($vatCode) {
+		return preg_match('/^([A-Z]{2})?([0-9]{1,9})([0-9]{1})$/', $vatCode) !== 1;
 	}
 
 	private function _getAnafApiClient() {
