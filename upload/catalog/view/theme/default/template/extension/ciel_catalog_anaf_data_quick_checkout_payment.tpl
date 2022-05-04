@@ -11,7 +11,8 @@
 				sel_vat_code_input_prefix: '#input-custom-field',
 				sel_input_company: '#input-company',
 				sel_input_post_code: '#input-postcode',
-				sel_input_address_1: '#input-address-1'
+				sel_input_address_1: '#input-address-1',
+				sel_submit_address_form: '#btn-address-save'
 			});
 		});
 	})(jQuery);

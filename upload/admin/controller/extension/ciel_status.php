@@ -81,7 +81,7 @@ class ControllerExtensionCielStatus extends CielController {
 		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
 
 		//Render view
-		$this->_renderViewToResponseOutput('extension/ciel_Status', 
+		$this->_renderViewToResponseOutput('extension/ciel_status', 
 			$data);
 	}
 

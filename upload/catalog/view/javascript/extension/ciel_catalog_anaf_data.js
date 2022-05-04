@@ -28,25 +28,31 @@
 		var $ctlCompanyNameField = null;
 		var $ctlPostCodeField = null;
 		var $ctlAddress1Field = null;
+		var $ctlBtnSubmitAddressForm = null;
 
 		function _lookupVatCode() {
 			var vatCode = $ctlVatCodeField.val();
 			if (_shouldLookupVatCode(vatCode)) {
+				_disableAddressFormSubmit();
 				$.ajax(_getVatCodeLookupActionUrl(), {
 					type: 'POST',
 					dataType: 'json',
 					cache: false,
 					data: _buildVatCodeLookupPostData(vatCode)
 				}).done(function(data, status, xhr) {
+					_enableAddressFormSubmit();
 					if (data && data.success) {
 						if (_isVatCodeValid(data)) {
 							_updateFieldsFromVatCodeLookupData(data);
 						} else {
 							_resetVatCodeField();
 						}
+					} else {
+						_resetVatCodeField();
 					}
 				}).fail(function(xhr, status, error) {
-					//nothing to be done
+					_enableAddressFormSubmit();
+					_resetVatCodeField();
 				});
 			}
 		}
@@ -54,6 +60,18 @@
 		function _shouldLookupVatCode(vatCode) {
 			return !!vatCode && vatCode.length 
 				> VAT_CODE_CHANGE_LOOKUP_MIN_LENGTH;
+		}
+
+		function _disableAddressFormSubmit() {
+			if ($ctlBtnSubmitAddressForm != null) {
+				$ctlBtnSubmitAddressForm.hide();
+			}
+		}
+
+		function _enableAddressFormSubmit() {
+			if ($ctlBtnSubmitAddressForm != null) {
+				$ctlBtnSubmitAddressForm.show();
+			}
 		}
 
 		function _isVatCodeValid(resultData) {
@@ -109,6 +127,13 @@
 						|| '#input-postcode');
 					$ctlAddress1Field = $target.find(opts.sel_input_address_1 
 						|| '#input-address-1');
+				}
+
+				if (opts.sel_submit_address_form) {
+					$ctlBtnSubmitAddressForm = $(opts.sel_submit_address_form);
+					if ($ctlBtnSubmitAddressForm.size() == 0) {
+						$ctlBtnSubmitAddressForm = null;
+					}
 				}
 			}
 		}
