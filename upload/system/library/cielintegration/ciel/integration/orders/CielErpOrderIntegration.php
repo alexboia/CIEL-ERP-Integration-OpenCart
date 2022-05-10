@@ -4,7 +4,8 @@ namespace Ciel\Api\Integration\Orders {
 	use Ciel\Api\CielClient;
 	use Ciel\Api\Data\DocumentType;
 	use Ciel\Api\Exception\DocumentAlreadyIssuedForOrderException;
-	use Ciel\Api\Exception\IssueDocumentNotEnabledException;
+    use Ciel\Api\Exception\DocumentCancellationNotSupportedException;
+    use Ciel\Api\Exception\IssueDocumentNotEnabledException;
 	use Ciel\Api\Exception\LocalOrderNotFoundException;
 	use Ciel\Api\Exception\OrderNotEligibleForDocumentIssueException;
 	use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
@@ -12,7 +13,8 @@ namespace Ciel\Api\Integration\Orders {
 	use Ciel\Api\Integration\Orders\Providers\CielErpLocalOrderAdapter;
 	use Ciel\Api\Request\Parameters\AddSaleInvoiceRequestParameters;
 	use Ciel\Api\Request\Parameters\AddSaleOrderRequestParameters;
-	use Ciel\Api\Request\Parameters\DeleteDocumentRequestParams;
+    use Ciel\Api\Request\Parameters\CancelSaleInvoicesParameters;
+    use Ciel\Api\Request\Parameters\DeleteDocumentRequestParams;
 	use Ciel\Api\Request\Parameters\GetArticleByCodeRequestParameters;
 	use Ciel\Api\Request\Parameters\SelectFromViewRequestParameters;
 	use InvalidArgumentException;
@@ -187,6 +189,32 @@ namespace Ciel\Api\Integration\Orders {
 				}
 
 				$this->_adapter->setDocumentRemovedForOrder($localId);
+			} else {
+				throw new LocalOrderNotFoundException('id', $localId);
+			}
+		}
+
+		public function cancelDocumentForOrder($localId) {
+			if (empty($localId)) {
+				throw new InvalidArgumentException('Order Id must not be empty');
+			}
+
+			if (!$this->isDocumentCancellationSupported()) {
+				throw new DocumentCancellationNotSupportedException($localId);
+			}
+
+			if (!$this->isDocumentIssuedForOrder($localId)) {
+				return;
+			}
+
+			$remoteDocumentData = $this->_adapter->lookupRemoteDocumentDataForOrder($localId);
+			if (!empty($remoteDocumentData)) {
+				if ($this->_remoteDocumentCanBeCancelled($remoteDocumentData)) {
+					$client = $this->_getCielClientAndLogon();
+					$this->_cancelRemoteDocument($client, $remoteDocumentData);
+				}
+
+				$this->_adapter->setRemoteDocumentCancelledForOrder($localId);
 			} else {
 				throw new LocalOrderNotFoundException('id', $localId);
 			}
@@ -416,8 +444,20 @@ namespace Ciel\Api\Integration\Orders {
 			return $this->_adapter->determineOrderDocumentPreRequisitesStatus($localId);
 		}
 
+		public function issueDocumentEnabled() {
+			$issueDocumentType = $this->_storeBinding
+				->getIssueDocumentType();
+
+			return $issueDocumentType == DocumentType::SaleInvoice 
+				|| $issueDocumentType == DocumentType::SaleOrder;
+		}
+
 		public function isBatchDischargeSupported() {
 			return $this->_adapter->isBatchDischargeSupported();
+		}
+
+		public function isDocumentCancellationSupported() {
+			return $this->_adapter->isDocumentCancellationSupported();
 		}
 
 		public function isBatchDischargePossible() {
@@ -454,7 +494,26 @@ namespace Ciel\Api\Integration\Orders {
 				->setDocumentId($remoteDocumentData['id']));
 		}
 
+		private function _cancelRemoteDocument(CielClient $client, $remoteDocumentData) {
+			if ($this->_isSaleInvoice($remoteDocumentData)) {
+				$this->_cancelRemoteSaleInvoice($client, $remoteDocumentData);
+			}
+		}
+
+		private function _cancelRemoteSaleInvoice(CielClient $client, $remoteDocumentData) {
+			return $client->cancelInvoices((new CancelSaleInvoicesParameters())
+				->addDocumentId($remoteDocumentData['id']));
+		}
+
 		private function _remoteDocumentCanBeDeleted($remoteDocumentData) {
+			return $this->_isSaleInvoice($remoteDocumentData);
+		}
+
+		private function _remoteDocumentCanBeCancelled($remoteDocumentData) {
+			return $this->_isSaleInvoice($remoteDocumentData);
+		}
+
+		private function _isSaleInvoice($remoteDocumentData) {
 			return $remoteDocumentData['type'] == DocumentType::SaleInvoice;
 		}
 

@@ -42,6 +42,9 @@ namespace CielIntegration\Integration\Admin\Order {
 		 */
 		private $_localToRemoteDocumentMarshallerFactory;
 
+		/**
+		 * @var OrderDocumentPreRequisitesStatusProvider
+		 */
 		private $_documentPreRequisitesStatusProvider;
 
 		public function __construct(\Registry $registry) {
@@ -60,6 +63,10 @@ namespace CielIntegration\Integration\Admin\Order {
 				new OrderPartnerResolver($registry);
 			$this->_priceFormatter = 
 				new PriceFormatter($registry);
+		}
+
+		public function setRemoteDocumentCancelledForOrder($localId) {
+			$this->setDocumentRemovedForOrder($localId);
 		}
 
 		public function setDocumentRemovedForOrder($localId) { 
@@ -151,7 +158,7 @@ namespace CielIntegration\Integration\Admin\Order {
 			}
 
 			if ($this->_orderExists($localId)) {
-				return $this->_canOrderItemsBeAddedToDocument($localId);				
+				return $this->_canOrderItemsBeAddedToDocument($localId);	
 			} else {
 				return false;
 			}
@@ -228,6 +235,10 @@ namespace CielIntegration\Integration\Admin\Order {
 		}
 
 		public function isBatchDischargeSupported() { 
+			return false;
+		}
+
+		public function isDocumentCancellationSupported() {
 			return false;
 		}
 	}

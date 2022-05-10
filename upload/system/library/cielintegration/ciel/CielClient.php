@@ -12,7 +12,8 @@ namespace Ciel\Api {
 	use Ciel\Api\Request\Parameters\AddPartnerRequestParameters;
 	use Ciel\Api\Request\Parameters\AddSaleInvoiceRequestParameters;
 	use Ciel\Api\Request\Parameters\AddSaleOrderRequestParameters;
-	use Ciel\Api\Request\Parameters\DeleteDocumentRequestParams;
+    use Ciel\Api\Request\Parameters\CancelSaleInvoicesParameters;
+    use Ciel\Api\Request\Parameters\DeleteDocumentRequestParams;
 	use Ciel\Api\Request\Parameters\DeletePartnerByIdRequestParameters;
 	use Ciel\Api\Request\Parameters\GetAllArticlesRequestParameters;
 	use Ciel\Api\Request\Parameters\GetAllDocumentSeriesAssociationRequestParameters;
@@ -33,6 +34,7 @@ namespace Ciel\Api {
 	use Ciel\Api\Session\CielClientSessionProvider;
 	use Ciel\Api\Session\InMemoryCielClientSessionProvider;
 	use InvalidArgumentException;
+    use phpDocumentor\Reflection\Types\This;
 
 	class CielClient {
 		const ERR_WEBSERVICE_CALL_FAILED = -1;
@@ -186,7 +188,8 @@ namespace Ciel\Api {
 					? $response['Result'] 
 					: null;
 				
-				return new CielResponse($serviceResult, $serviceError);
+				return new CielResponse($serviceResult, 
+					$serviceError);
 			} else {
 				throw new WebserviceResponseFormatException(
 					json_last_error_msg(), 
@@ -348,6 +351,11 @@ namespace Ciel\Api {
 
 		public function deleteDocument(DeleteDocumentRequestParams $params) {
 			return $this->_callAuthenticatedWebserviceMethod('DeleteDocument', 
+				$params->getParams());
+		}
+
+		public function cancelInvoices(CancelSaleInvoicesParameters $params) {
+			return $this->_callAuthenticatedWebserviceMethod('CancelSaleInvoices', 
 				$params->getParams());
 		}
 

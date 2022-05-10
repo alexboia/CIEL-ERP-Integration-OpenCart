@@ -47,12 +47,8 @@ namespace CielIntegration\Integration\Admin {
 		}
 
 		protected function _issueDocumentEnabled() {
-			//TODO: lift up to core CIEL integration API
-			$issueDocumentType = $this->_getStoreBinding()
-				->getIssueDocumentType();
-	
-			return $issueDocumentType == DocumentType::SaleInvoice 
-				|| $issueDocumentType == DocumentType::SaleOrder;
+			return $this->_getOrderIntegration()
+				->issueDocumentEnabled();
 		}
 
 		protected function _determinePersonTypeFromCustomerGroupId($customerGroupId) {

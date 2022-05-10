@@ -4,6 +4,8 @@ namespace Ciel\Api\Integration\Orders\Providers {
 	interface CielErpLocalOrderAdapter {
 		function setDocumentRemovedForOrder($localId);
 
+		function setRemoteDocumentCancelledForOrder($localId);
+
 		function isDocumentIssuedForOrder($localId);
 
 		function canDocumentBeIssuedForOrder($localId);
@@ -26,5 +28,10 @@ namespace Ciel\Api\Integration\Orders\Providers {
 		 * @return bool
 		 */
 		function isBatchDischargeSupported();
+
+		/**
+		 * @return bool
+		 */
+		function isDocumentCancellationSupported();
 	}
 }
