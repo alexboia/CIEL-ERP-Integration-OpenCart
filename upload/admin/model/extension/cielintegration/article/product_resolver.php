@@ -125,7 +125,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		public function lookupProductSku($productId) {
 			if (empty($productId)) {
-				return 0;
+				return null;
 			}
 
 			return $this->_getLocalProductModel()

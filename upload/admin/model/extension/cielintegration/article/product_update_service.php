@@ -297,8 +297,10 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		public function clearProductBindingInformation() {
-			$remoteArticleModel = $this->_getRemoteArticleModel();
-			$remoteArticleModel->removeByProductId($this->_productId);
+			if ($this->_productId > 0) {
+				$remoteArticleModel = $this->_getRemoteArticleModel();
+				$remoteArticleModel->removeByProductId($this->_productId);
+			}
 		}
 
 		public function setProductPriceInformation(array $remoteArticleData) {

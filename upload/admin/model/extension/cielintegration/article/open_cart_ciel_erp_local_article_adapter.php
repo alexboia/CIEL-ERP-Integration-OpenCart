@@ -1,7 +1,7 @@
 <?php
 namespace CielIntegration\Integration\Admin\Article {
 
-    use Ciel\Api\Data\StockUpdateFailureReason;
+    use Ciel\Api\Data\StockUpdateResult;
     use Ciel\Api\Exception\ArticleCodeAlreadyExistsException;
     use Ciel\Api\Exception\LocalArticleNotFoundException;
     use Ciel\Api\Integration\Articles\Providers\CielErpLocalArticleAdapter;
@@ -138,9 +138,6 @@ namespace CielIntegration\Integration\Admin\Article {
 		}
 
 		public function updateStocksForConnectedArticle($localId, $remoteArticleStockData) { 
-			$reason = null;
-			$updated = false;
-			
 			if (empty($localId)) {
 				throw new InvalidArgumentException('Local Id must not be empty');
 			}
@@ -149,26 +146,22 @@ namespace CielIntegration\Integration\Admin\Article {
 				throw new LocalArticleNotFoundException('id', $localId);
 			}
 
-			if ($this->_shopStockManagementEnabled()) {
-				if ($this->_hasStockQuantityInfo($remoteArticleStockData)) {
-					if ($this->_isConnectedToCielErp($localId)) {
-						$this->_updateProductStockQuantityFromRemoteStockData($localId, 
-							$remoteArticleStockData);
-						$updated = true;
-					} else {
-						$reason = StockUpdateFailureReason::NotConnected;
-					}
-				} else {
-					$reason = StockUpdateFailureReason::NoStockData;
-				}
-			} else {
-				$reason = StockUpdateFailureReason::NotManagingStock;
+			if (!$this->_shopStockManagementEnabled()) {
+				return StockUpdateResult::failedShopStockManagementNotEnabled();
 			}
 
-			return array(
-				'updated' => $updated,
-				'reason' => $reason
-			);
+			if (!$this->_hasStockQuantityInfo($remoteArticleStockData)) {
+				return StockUpdateResult::failedNoSourceStockData();
+			}
+
+			if (!$this->_isConnectedToCielErp($localId)) {
+				return StockUpdateResult::failedProductNotConnected();
+			}
+
+			$this->_updateProductStockQuantityFromRemoteStockData($localId, 
+				$remoteArticleStockData);
+
+			return StockUpdateResult::successful();
 		}
 
 		private function _shopStockManagementEnabled() {

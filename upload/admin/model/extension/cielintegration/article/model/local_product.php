@@ -119,7 +119,7 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 
 		public function lookupProductSku($productId) {
 			if (empty($productId)) {
-				return 0;
+				return null;
 			}
 
 			$db = $this->_getDb();
