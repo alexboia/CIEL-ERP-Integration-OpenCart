@@ -405,5 +405,9 @@ namespace CielIntegration\Integration\Admin\Order {
 		private function _getTaxCalculator() {
 			return $this->tax;
 		}
+		
+		public function getOrderId() {
+			return $this->_sourceOrderId;
+		}
 	}
 }

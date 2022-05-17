@@ -43,6 +43,16 @@ namespace CielIntegration\Integration\Admin\Order {
 
 			return $status;
 		}
+		
+		/**
+		 * @param int $orderId 
+		 * @return DocumentPreRequisiteStatus|null
+		 */
+		private function _getCachedOrderDocumentPreRequisitesStatus($orderId) {
+			return isset($this->_cachedOrderDocumentPreRequisitesStatus[$orderId])
+				? $this->_cachedOrderDocumentPreRequisitesStatus[$orderId]
+				: null;
+		}
 
 		private function _getOrderProducts($orderId) {
 			$orderProducts = $this->_orderResovler
@@ -79,16 +89,6 @@ namespace CielIntegration\Integration\Admin\Order {
 		private function _isBatchTrackingEnabled($productId) {
 			return $this->_productResolver
 				->getBatchTrackingStatus($productId) == 1;
-		}
-
-		/**
-		 * @param int $orderId 
-		 * @return DocumentPreRequisiteStatus|null
-		 */
-		private function _getCachedOrderDocumentPreRequisitesStatus($orderId) {
-			return isset($this->_cachedOrderDocumentPreRequisitesStatus[$orderId])
-				? $this->_cachedOrderDocumentPreRequisitesStatus[$orderId]
-				: null;
 		}
 
 		private function _cacheOrderDocumentPreRequisitesStatus($orderId, 
