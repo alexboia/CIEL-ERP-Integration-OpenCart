@@ -47,6 +47,15 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 		$data['ciel_import_new_products_global_error_msg'] = 
 			$this->_t('ciel_import_new_products_global_error_msg');
 
+		$data['ciel_import_new_products_product_id_header'] = 
+			$this->_t('ciel_import_new_products_product_id_header');
+		$data['ciel_import_new_products_product_code_header'] = 
+			$this->_t('ciel_import_new_products_product_code_header');
+		$data['ciel_import_new_products_product_remote_name_header'] = 
+			$this->_t('ciel_import_new_products_product_remote_name_header');
+		$data['ciel_import_new_products_product_remote_category_header'] = 
+			$this->_t('ciel_import_new_products_product_remote_category_header');
+
 		$data['is_bound'] = $this->_isStoreBound();
 		if ($data['is_bound']) {
 			$data['new_remote_products'] = $this->_getPotentialNewRemoteProducts();

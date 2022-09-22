@@ -1,6 +1,9 @@
 (function($) {
 	"use strict";
 
+	var DEFAULT_MSG_PRODUCTS_IMPORTED = 'Product information successfully migrated.';
+	var DEFAULT_MSG_PRODUCTS_IMPORT_ERROR = 'Product information could not be migrated.';
+
 	var $ctlMigrateInfoStats = null;
 	var $ctlTotalEligibleCount = null;
 	var $ctlTotalUpdatedCount = null;
@@ -73,13 +76,13 @@
 			if (data && data.success) {
 				_showInfoStats(data.result);
 				_storeDetailedInformation(data.connected, data.notFound);
-				_showSuccess(data.message || 'Product information successfully migrated.');
+				_showSuccess(data.message || DEFAULT_MSG_PRODUCTS_IMPORTED);
 			} else {
-				_showError(data.message || 'Product information could not be migrated.');
+				_showError(data.message || DEFAULT_MSG_PRODUCTS_IMPORT_ERROR);
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			_showError('Product information could not be migrated.');
+			_showError(DEFAULT_MSG_PRODUCTS_IMPORT_ERROR);
 		});
 	}
 

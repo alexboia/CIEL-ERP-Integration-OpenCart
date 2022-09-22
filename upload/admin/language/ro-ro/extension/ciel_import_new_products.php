@@ -14,3 +14,8 @@ $_['ciel_import_new_products_error_msg'] = 'Articolul nu a putut fi importat din
 
 $_['ciel_import_new_products_global_success_msg'] = 'Cel puțin un articol a fost importat cu succes.';
 $_['ciel_import_new_products_global_error_msg'] = 'Niciun articol nu a putut fi importat.';
+
+$_['ciel_import_new_products_product_id_header'] = 'ID';
+$_['ciel_import_new_products_product_code_header'] = 'Cod (SKU)';
+$_['ciel_import_new_products_product_remote_name_header'] = 'Denumire NextUp ERP';
+$_['ciel_import_new_products_product_remote_category_header'] = 'Categorie NextUp ERP';

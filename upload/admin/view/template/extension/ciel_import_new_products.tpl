@@ -39,10 +39,10 @@
 											checked="checked" 
 										/>
 									</th>
-									<th>ID</th>
-									<th>Code</th>
-									<th>CIEL ERP Name</th>
-									<th>CIEL ERP Category</th>
+									<th><?php echo $ciel_import_new_products_product_id_header; ?></th>
+									<th><?php echo $ciel_import_new_products_product_code_header; ?></th>
+									<th><?php echo $ciel_import_new_products_product_remote_name_header; ?></th>
+									<th><?php echo $ciel_import_new_products_product_remote_category_header; ?></th>
 								</thead>
 								<tbody>
 									<?php foreach ($new_remote_products as $p): ?>

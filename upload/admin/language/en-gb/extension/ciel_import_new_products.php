@@ -14,3 +14,8 @@ $_['ciel_import_new_products_error_msg'] = 'Failed to import remote article';
 
 $_['ciel_import_new_products_global_success_msg'] = 'Sucessfully imported at least one article.';
 $_['ciel_import_new_products_global_error_msg'] = 'No article could be imported.';
+
+$_['ciel_import_new_products_product_id_header'] = 'ID';
+$_['ciel_import_new_products_product_code_header'] = 'Code (SKU)';
+$_['ciel_import_new_products_product_remote_name_header'] = 'NextUp ERP Name';
+$_['ciel_import_new_products_product_remote_category_header'] = 'NextUp ERP Category';
