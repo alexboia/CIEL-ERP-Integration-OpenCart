@@ -83,10 +83,10 @@ $_['lbl_vat_code_custom_field_id_field'] = 'Custom field used for VAT Code entry
 $_['lbl_reg_com_number_custom_field_id_field'] = 'Custom field used for reg. com. number entry';
 $_['lbl_bank_account_custom_field_id_field'] = 'Custom field used for bank account (IBAN) entry';
 $_['lbl_bank_name_custom_field_id_field'] = 'Custom field used for bank name entry';
-$_['lbl_new_tax_rate_customer_group_id_field'] = 'Customer group used for CIEL-imported new tax rates';
-$_['lbl_new_tax_rate_geo_zone_id_field'] = 'Geozone used for CIEL-imported new tax rates';
-$_['lbl_new_product_weight_class_id_field'] = 'Weight class used for CIEL-imported new products';
-$_['lbl_new_product_length_class_id_field'] = 'Length class used for CIEL-imported new products';
+$_['lbl_new_tax_rate_customer_group_id_field'] = 'Customer group used for NextUp-imported new tax rates';
+$_['lbl_new_tax_rate_geo_zone_id_field'] = 'Geozone used for NextUp-imported new tax rates';
+$_['lbl_new_product_weight_class_id_field'] = 'Weight class used for NextUp-imported new products';
+$_['lbl_new_product_length_class_id_field'] = 'Length class used for NextUp-imported new products';
 
 //
 // CIEL product form tab

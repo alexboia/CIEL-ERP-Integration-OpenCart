@@ -9,6 +9,11 @@ use CielIntegration\Integration\Admin\WithCielIntegration;
 class ControllerExtensionCielMenuEntries extends CielController {
 	use WithCielIntegration;
 
+	public function __construct(\Registry $registry) {
+		parent::__construct($registry);
+		$this->_setTextDomain('extension/ciel_menu');
+	}
+
 	public function index(&$route, &$data, &$output) {
 		if (!empty($data['menus']) && is_array($data['menus'])) {
 			if ($this->_isExtensionActive()) {
@@ -32,7 +37,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 			? array(
 				'id' => 'menu-ciel-integration',
 				'icon' => 'fa-plug',
-				'name' => 'Integrare CIEL ERP',
+				'name' => $this->_t('ciel_menu_parent_item'),
 				'href' => '',
 				'children' => $entries
 			)
@@ -44,7 +49,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 		
 		if ($this->user->hasPermission('modify', 'extension/module/ciel')) {
 			$items[] = array(
-				'name' => 'Configurare',
+				'name' => $this->_t('ciel_menu_configure_item'),
 				'href' => $this->_createRouteUrl('extension/module/ciel'),
 				'children' => array()
 			);
@@ -53,7 +58,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 		if ($this->_isStoreBound()) {
 			if ($this->user->hasPermission('modify', 'extension/ciel_sync_products')) {
 				$items[] = array(
-					'name' => 'Sincronizare produse',
+					'name' => $this->_t('ciel_menu_sync_products'),
 					'href' => $this->_createRouteUrl('extension/ciel_sync_products'),
 					'children' => array()
 				);
@@ -61,7 +66,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 
 			if ($this->user->hasPermission('modify', 'extension/ciel_import_new_products')) {
 				$items[] = array(
-					'name' => 'Import produse noi',
+					'name' => $this->_t('ciel_menu_import_new_products'),
 					'href' => $this->_createRouteUrl('extension/ciel_import_new_products'),
 					'children' => array()
 				);
@@ -69,7 +74,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 
 			if ($this->user->hasPermission('modify', 'extension/ciel_import_oc_romania')) {
 				$items[] = array(
-					'name' => 'Migrare OC Romania',
+					'name' => $this->_t('ciel_menu_import_oc_romania'),
 					'href' => $this->_createRouteUrl('extension/ciel_import_oc_romania'),
 					'children' => array()
 				);
@@ -77,7 +82,7 @@ class ControllerExtensionCielMenuEntries extends CielController {
 
 			if ($this->user->hasPermission('access', 'extension/ciel_status')) {
 				$items[] = array(
-					'name' => 'Status',
+					'name' => $this->_t('ciel_menu_status'),
 					'href' => $this->_createRouteUrl('extension/ciel_status'),
 					'children' => array()
 				);
