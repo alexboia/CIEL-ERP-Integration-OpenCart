@@ -1,5 +1,5 @@
 <?php
-$_['ciel_status_title'] = 'Ciel ERP Integration Module Status';
+$_['ciel_status_title'] = 'NextUp ERP Integration Module Status';
 $_['ciel_status_box_heading'] = 'Integration status';
 $_['ciel_status_box_debug_log'] = 'Debug log';
 $_['ciel_status_box_error_log'] = 'Error log';

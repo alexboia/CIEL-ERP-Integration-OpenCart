@@ -1,5 +1,5 @@
 <?php
-$_['ciel_sync_products_title'] = 'Sync product information';
+$_['ciel_sync_products_title'] = 'Sync Product Information';
 $_['ciel_sync_products_info'] = 'This tool will help you update product information in your store from your CIEL ERP platform.';
 $_['ciel_sync_products_explanation'] = 'This will pull product-related data from CIEL ERP based on the product codes (SKUs) used in your store. Only previously connected products will be updated.';
 $_['ciel_err_sync_products_store_not_bound'] = 'Extension configuration required! In order to sync product information, you need to first configure your extension settings.';
