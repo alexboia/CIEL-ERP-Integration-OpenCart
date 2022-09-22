@@ -56,48 +56,44 @@
 		});
 	}
 
-	function _markLogCleared($logClearBtn, $logDownloadBtn, $logDisplayControl) {
-		$logClearBtn.remove();
-		$logDownloadBtn.remove();
-		$logDisplayControl.val('');
-	}
-
 	function _handleDebugLogBtnClicked() {
 		var $me = $(this);
-		var actionUrl = _getClearLogActionUrl($me);
-		_clearLog(actionUrl, function(success, message) {
-			if (success) {
-				_markLogCleared($me, 
-					$('#myc-download-debug-log-btn'), 
-					$('#myc-debug-log-display')
-				);
-
-				_showDebugLogOperationSuccess(message 
-					|| DEFAULT_MSG_LOG_CLEARED_SUCCESS);
-			} else {
-				_showDebugLogOperationError(message 
-					|| DEFAULT_MSG_LOG_CLEARED_ERROR);
-			}
-		});
+		_handleClearLogButtonClicked($me, 
+			$('#myc-download-debug-log-btn'), 
+			$('#myc-debug-log-display')
+		);
 	}
 
 	function _handleErrorLogBtnClicked() {
 		var $me = $(this);
-		var actionUrl = _getClearLogActionUrl($me);
+		_handleClearLogButtonClicked($me, 
+			$('#myc-download-error-log-btn'), 
+			$('#myc-error-log-display')
+		);
+	}
+	
+	function _handleClearLogButtonClicked($logClearBtn, $logDownloadBtn, $logDisplayControl) {
+		var actionUrl = _getClearLogActionUrl($logClearBtn);
 		_clearLog(actionUrl, function(success, message) {
 			if (success) {
-				_markLogCleared($me, 
-					$('#myc-download-error-log-btn'), 
-					$('#myc-error-log-display')
+				_markLogCleared($logClearBtn, 
+					$logDownloadBtn, 
+					$logDisplayControl
 				);
 
-				_showErrorLogOperationSuccess(message 
+				_showSuccess(message 
 					|| DEFAULT_MSG_LOG_CLEARED_SUCCESS);
 			} else {
-				_showErrorLogOperationError(message 
+				_showError(message 
 					|| DEFAULT_MSG_LOG_CLEARED_ERROR);
 			}
 		});
+	}
+	
+	function _markLogCleared($logClearBtn, $logDownloadBtn, $logDisplayControl) {
+		$logClearBtn.remove();
+		$logDownloadBtn.remove();
+		$logDisplayControl.val('');
 	}
 
 	function _initEvents() {

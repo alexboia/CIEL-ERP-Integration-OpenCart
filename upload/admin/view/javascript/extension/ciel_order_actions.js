@@ -122,8 +122,8 @@
 
 	function _initEvents() {
 		$(document).on('click', 
-		'#myc_connect_issue_ciel_erp_document', 
-		_issueCielErpDocument);
+			'#myc_connect_issue_ciel_erp_document', 
+			_issueCielErpDocument);
 
 		$(document).on('click', 
 			'#myc_connect_remove_ciel_erp_document', 
