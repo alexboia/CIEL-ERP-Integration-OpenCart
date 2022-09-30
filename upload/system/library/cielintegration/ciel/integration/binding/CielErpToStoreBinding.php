@@ -1,34 +1,36 @@
 <?php
 namespace Ciel\Api\Integration\Binding {
 	use Ciel\Api\CielClient;
-	use Ciel\Api\Data\ArticleSelectionType;
+    use Ciel\Api\CielConnectionTesterService;
+    use Ciel\Api\CielConnectionTestResult;
+    use Ciel\Api\CielLogger;
+    use Ciel\Api\Data\ArticleSelectionType;
 	use Ciel\Api\Data\DocumentStatusType;
-	use Ciel\Api\Data\DocumentType;
 	use Ciel\Api\Data\WarehouseType;
-	use Ciel\Api\Exception\StoreNotBoundException;
+    use Ciel\Api\DefaultCielClientFactory;
+    use Ciel\Api\Exception\StoreNotBoundException;
 	use Ciel\Api\Exception\VatQuotaValueNotSupportedException;
-	use Ciel\Api\Exception\WebserviceCommunicationException;
-	use Ciel\Api\Exception\WebserviceErrorException;
 	use Ciel\Api\Integration\Binding\Providers\CielErpToStoreBindingAdapter;
-	use Ciel\Api\Request\Parameters\AddArticleRequestParameters;
-	use Ciel\Api\Request\Parameters\AddAssociationRequestParameters;
-	use Ciel\Api\Request\Parameters\AddDocumentSeriesRequestParameters;
+    use Ciel\Api\Integration\Binding\RemoteDataProviders\VatQuotaDataProvider;
+    use Ciel\Api\Integration\Binding\RemoteDataProviders\WarehouseDataProvider;
+    use Ciel\Api\NullCielLogger;
+    use Ciel\Api\Request\Parameters\AddArticleRequestParameters;
 	use Ciel\Api\Request\Parameters\GetAllArticlesRequestParameters;
-	use Ciel\Api\Request\Parameters\GetAllDocumentSeriesAssociationRequestParameters;
-	use Ciel\Api\Request\Parameters\GetAllDocumentSeriesRequestParameters;
-	use Ciel\Api\Request\Parameters\GetAllWarehousesRequestParameters;
 	use Ciel\Api\Request\Parameters\GetArticleByCodeRequestParameters;
-	use Ciel\Api\Request\Parameters\SelectFromViewRequestParameters;
     use InvalidArgumentException;
 
 	class CielErpToStoreBinding {
-		const ERR_CONNECTION_TEST_NOT_BOUND = -1;
+		const ERR_CONNECTION_TEST_NOT_BOUND = 
+			CielConnectionTestResult::ERR_CONNECTION_TEST_NOT_BOUND;
 		
-		const ERR_CONNECTION_TEST_FAIL_ENDPOINT = -2;
+		const ERR_CONNECTION_TEST_FAIL_ENDPOINT = 
+			CielConnectionTestResult::ERR_CONNECTION_TEST_FAIL_ENDPOINT;
 
-		const ERR_CONNECTION_TEST_FAIL_AUTH = -3;
+		const ERR_CONNECTION_TEST_FAIL_AUTH = 
+			CielConnectionTestResult::ERR_CONNECTION_TEST_FAIL_AUTH;
 
-		const ERR_CONNECTION_TEST_OK = 0;
+		const ERR_CONNECTION_TEST_OK = 
+			CielConnectionTestResult::ERR_CONNECTION_TEST_OK;
 
 		/**
 		 * @var \Ciel\Api\Integration\Binding\Providers\CielErpToStoreBindingAdapter
@@ -38,46 +40,31 @@ namespace Ciel\Api\Integration\Binding {
 		/**
 		 * @var \Ciel\Api\CielClient
 		 */
-		private $_activeCielClient;
+		private $_ambientCielClient;
 
 		private $_data = null;
 
 		private $_articleServiceTypeId = null;
 
+		/**
+		 * @var DefaultCielClientFactory
+		 */
+		private $_cielClientFactory;
+
+		/**
+		 * @var CielLogger
+		 */
+		private $_logger;
+
 		public function __construct(CielErpToStoreBindingAdapter $adapter) {
 			$this->_adapter = $adapter;
-		}
-
-		private function _getCachedWarehouses() {
-			return $this->_adapter
-				->getCache()
-				->get('ciel_warehouses');
-		}
-
-		private function _setCachedWarehouses($warehouses) {
-			$cacheDuration = $this
-				->getConfig()
-				->getWarehousesCacheDuration();
-
-			$this->_adapter
-				->getCache()
-				->set('ciel_warehouses', $warehouses, $cacheDuration);
-		}
-
-		private function _getCachedVatQuotas() {
-			return $this->_adapter
-				->getCache()
-				->get('ciel_vat_quotas');
-		}
-
-		private function _setCachedVatQuotas($vatQuotas) {
-			$cacheDuration = $this
-				->getConfig()
-				->getVatQuotasCacheDuration();
-
-			$this->_adapter
-				->getCache()
-				->set('ciel_vat_quotas', $vatQuotas, $cacheDuration);
+			$this->_logger = new NullCielLogger();
+			$this->_cielClientFactory = new DefaultCielClientFactory(
+				$adapter->getClientSessionProvider(),
+				new CielErpToStoreBindingAmbientConnectionInfoProvider(
+					$this
+				)
+			);
 		}
 
 		private function _loadIfNeeded() {
@@ -100,6 +87,7 @@ namespace Ciel\Api\Integration\Binding {
 					'password' => null,
 					'society' => null
 				),
+				'timeoutSeconds' => null,
 				'warehouse' => array(
 					'id' => null,
 					'code' => null,
@@ -175,105 +163,6 @@ namespace Ciel\Api\Integration\Binding {
 			}
 
 			return $existingArticle;
-		}
-
-		private function _getDocumentSeriesByPrefix(CielClient $client, $prefix) {
-			$found = null;
-			$prefix = strtoupper($prefix);
-			$allSeries = $client->getAllDocumentSeries(new GetAllDocumentSeriesRequestParameters());
-
-			if (!empty($allSeries)) {
-				foreach ($allSeries as $series) {
-					if (strtoupper($series['Prefix']) == $prefix) {
-						$found = $series;
-						break;
-					}
-				}
-			}
-
-			return $found;
-		}
-
-		private function _createDocumentSeriesWithPrefix(CielClient $client, $prefix) {
-			$addSeriesParams = (new AddDocumentSeriesRequestParameters())
-				->setBlocked(false)
-				->setPrefix(strtoupper($prefix))
-				->setStartNumber(1)
-				->setNextNumber(1)
-				->setEndNumber(1000000)
-				->setDescription("Automatically created from connected e-shop");
-
-			return $client->addDocumentSeries($addSeriesParams);
-		}
-
-		private function _getAssociatedSeriesIdsForDocumentTypeIds(CielClient $client) {
-			$seriesIdsPerDocTypeIds = array();
-			$documentSeriesAssociations = $client->getAllDocumentSeriesAssociations(new GetAllDocumentSeriesAssociationRequestParameters());
-
-			if (!empty($documentSeriesAssociations)) {
-				foreach ($documentSeriesAssociations as $seriesAssoc) {
-					$documentTypeId = $seriesAssoc['DocumentLookupTypeId'];
-					$seriesId = $seriesAssoc['SeriesConfigurationId'];
-					if (!isset($seriesIdsPerDocTypeIds[$documentTypeId])) {
-						$seriesIdsPerDocTypeIds[$documentTypeId] = array();
-					}
-
-					$seriesIdsPerDocTypeIds[$documentTypeId][] = $seriesId;
-				}
-			}
-
-			return $seriesIdsPerDocTypeIds;
-		}
-
-		private function _isAssociatedWithDocumentTypeId(CielClient $client, $seriesId, $documentTypeId) {
-			$associated = false;
-			$seriesIdsPerDocTypeIds = $this->_getAssociatedSeriesIdsForDocumentTypeIds($client);
-			
-			if (!empty($seriesIdsPerDocTypeIds) && isset($seriesIdsPerDocTypeIds[$documentTypeId])) {
-				$associated = in_array($seriesId, $seriesIdsPerDocTypeIds[$documentTypeId]);
-			}
-
-			return $associated;
-		}
-
-		private function _getDocumentTypeId(CielClient $client, $documentType) {
-			return $documentType == DocumentType::SaleInvoice 
-				? 42 
-				: 43;
-		}
-
-		private function _associateSeriesWithDocumentTypeIfNeeded(CielClient $client, $seriesId, $documentType) {
-			$documentTypeId = $this->_getDocumentTypeId($client, $documentType);
-			if (!$this->_isAssociatedWithDocumentTypeId($client, $seriesId, $documentTypeId)) {
-				$this->_associateSeriesWithDocumentType($client, 
-					$seriesId, 
-					$documentTypeId);
-			}
-		}
-
-		private function _associateSeriesWithDocumentType(CielClient $client, $seriesId, $documentTypeId) {
-			$addAsssociationParams = (new AddAssociationRequestParameters())
-				->setDocumentLookupTypeId($documentTypeId)
-				->setSeriesConfigurationId($seriesId)
-				->setAutomaticGeneration(true)
-				->setIsDefault(false);
-
-			return $client->addDocumentSeriesAssociation($addAsssociationParams);
-		}
-
-		private function _createAndAssociateDocumentSeriesIfNeeded($prefix, $documentType) {
-			$client = $this->getAmbientCielClient(true);
-			$series = $this->_getDocumentSeriesByPrefix($client, $prefix);
-
-			if ($series != null) {
-				$seriesId = $series['Id'];
-			} else {
-				$seriesId = $this->_createDocumentSeriesWithPrefix($client, $prefix);
-			}
-
-			if ($seriesId > 0) {
-				$this->_associateSeriesWithDocumentTypeIfNeeded($client, $seriesId, $documentType);
-			}
 		}
 
 		private function _createDiscountArticleIfNeeded($vatQuotaValue) {
@@ -370,6 +259,14 @@ namespace Ciel\Api\Integration\Binding {
 				'password' => null,
 				'society' => null
 			));
+		}
+
+		public function setTimeoutSeconds($timeoutSeconds) {
+			$this->_setOption('timeoutSeconds', $timeoutSeconds);
+		}
+
+		public function getTimeoutSeconds() {
+			return $this->_getOption('timeoutSeconds', 10);
 		}
 
 		public function getUserName() {
@@ -603,23 +500,6 @@ namespace Ciel\Api\Integration\Binding {
 			}
 		}
 
-		public function setupDocumentSeriesIfNeeded() {
-			$this->_loadIfNeeded();
-			if ($this->_hasConnectionInfo()) {
-				$issueDocumentType = $this->getIssueDocumentType();
-				$issueWithDocumentSeries = $this->getIssueDocumentWithSeries();
-
-				if (!empty($issueWithDocumentSeries) && !empty($issueDocumentType)) {
-					$this->_createAndAssociateDocumentSeriesIfNeeded($issueWithDocumentSeries, $issueDocumentType);
-				}
-
-				$this->_setDocumentSeriesSetup(true);
-				$this->save();
-			} else {
-				throw new StoreNotBoundException();
-			}
-		}
-
 		public function setupDiscountForVatQuotaValueIfNeeded($vatQuotaValue) {
 			$this->_loadIfNeeded();
 			if ($this->_hasConnectionInfo()) {
@@ -645,152 +525,95 @@ namespace Ciel\Api\Integration\Binding {
 		public function getAmbientCielClient($autologon = true) {
 			$this->_loadIfNeeded();
 			if ($this->_hasConnectionInfo()) {
-				if ($this->_activeCielClient == null) {
-					$this->_activeCielClient = $this->createCielClient($this->getEndpoint());
+				if ($this->_ambientCielClient == null) {
+					$this->_ambientCielClient = $this->_cielClientFactory
+						->getAmbientCielClient();
 				}
 
-				if ($autologon && !$this->_activeCielClient->isAuthenticated()) {
-					$this->_activeCielClient->logon($this->getUserName(), 
-						$this->getPassword(), 
-						$this->getSociety());
-				}
-
-				return $this->_activeCielClient;
+				return $this->_ambientCielClient;
 			} else {
 				throw new StoreNotBoundException();
 			}
 		}
 
-		public function createCielClient($endpoint) {
+		public function createCielClient($endpoint, array $options = array()) {
 			if (empty($endpoint)) {
 				throw new InvalidArgumentException('Endpoint may not be empty');
 			}
 
-			$sessionProvider = $this->_adapter->getClientSessionProvider();
-			$sessionProvider->setup();
-
-			$clientInstance = new CielClient($endpoint);
-			$clientInstance->setSessionProvider($sessionProvider);
-
-			return $clientInstance;
+			return $this->_cielClientFactory
+				->createCielClientForEndpointAndOptions($endpoint, 
+					$options);
 		}
 
-		public function closeCielClient() {
-			if ($this->_activeCielClient != null) {
-				if ($this->_activeCielClient->isAuthenticated()) {
-					$this->_activeCielClient->logout();
+		public function closeAmbientCielClient() {
+			if ($this->_ambientCielClient != null) {
+				if ($this->_ambientCielClient->isAuthenticated()) {
+					$this->_ambientCielClient->logout();
 				}
-				$this->_activeCielClient = null;
+				$this->_ambientCielClient = null;
 			}
 		}
 
 		public function testConnection() {
 			$this->_loadIfNeeded();
 			if ($this->_hasConnectionInfo()) {
-				$result = null;
-				try {
-					$client = $this->createCielClient($this->getEndpoint());
-					$client->logon($this->getUserName(), 
-						$this->getPassword(), 
-						$this->getSociety());
-
-					if ($client->isAuthenticated()) {
-						$client->logout();
-						$result = self::ERR_CONNECTION_TEST_OK;
-					} else {
-						$result = self::ERR_CONNECTION_TEST_FAIL_AUTH;
-					}
-				} catch (WebserviceCommunicationException $exc) {
-					$result = self::ERR_CONNECTION_TEST_FAIL_ENDPOINT;
-				} catch (WebserviceErrorException $exc) {
-					$result = self::ERR_CONNECTION_TEST_FAIL_AUTH;
-				}
-
-				return $result;
+				$connectionTesterService = $this->createConnectionTesterService();
+				return $connectionTesterService->testConnection(
+					$this->getEndpoint(),
+					$this->getUserName(),
+					$this->getPassword(),
+					$this->getSociety(),
+					$this->getTimeoutSeconds()
+				);
 			} else {
-				return self::ERR_CONNECTION_TEST_NOT_BOUND;
+				return CielConnectionTestResult::ERR_CONNECTION_TEST_NOT_BOUND;
 			}
+		}
+
+		public function createConnectionTesterService() {
+			return new CielConnectionTesterService(
+				$this->_cielClientFactory, 
+				$this->_logger
+			);
 		}
 
 		public function getAvailableWarehouses() {
 			$this->_loadIfNeeded();
 			if ($this->_hasConnectionInfo()) {
-				$warehouses = $this->_getCachedWarehouses();
-				if ($warehouses === false || $warehouses === null) {
-					$client = $this->getAmbientCielClient(true);
-					$warehousesRaw = $client->getAllWarehouses(new GetAllWarehousesRequestParameters());
-
-					$warehouses = array();
-					if (!empty($warehousesRaw)) {
-						foreach ($warehousesRaw as $w) {
-							$wDropdownInfo = $this->_createWarehouseDropdownInfo($w);
-							if ($wDropdownInfo != null) {
-								$warehouses[$w['Id']] = $wDropdownInfo;
-							}
-						}
-					}
-
-					$this->_setCachedWarehouses($warehouses);
-				}
-
-				return $warehouses;
+				$dataProvider = $this->_getWarehouseDataProvider();
+				return $dataProvider->getAvailableWarehouses();
 			} else {
 				throw new StoreNotBoundException();
 			}
+		}
+
+		private function _getWarehouseDataProvider() {
+			return new WarehouseDataProvider(
+				$this->_cielClientFactory, 
+				$this->getConfig(), 
+				$this->getCache(), 
+				$this->_logger
+			);
 		}
 
 		public function getAvailableVatQuotas() {
 			$this->_loadIfNeeded();
 			if ($this->_hasConnectionInfo()) {
-				$quotas = $this->_getCachedVatQuotas();
-				if ($quotas === false || $quotas === null) {
-					$client = $this->getAmbientCielClient(true);
-					$quotasRaw = $client->selectFromView((new SelectFromViewRequestParameters())
-						->setViewName('CIEL_PS_Quotas'));
-
-					$quotas = array();
-					if (!empty($quotasRaw) && is_array($quotasRaw)) {
-						foreach ($quotasRaw as $q) {
-							$quotas[$q['name']] = $q['value'];
-						}
-					}
-
-					$this->_setCachedVatQuotas($quotas);
-				}
-
-				return $quotas;
+				$dataProvider = $this->_getVatQuotaDataProvider();
+				return $dataProvider->getAvailableVatQuotas();
 			} else {
 				throw new StoreNotBoundException();
 			}
 		}
 
-		private function _createWarehouseDropdownInfo($rawWarehouse) {
-			$typeId = $rawWarehouse['WarehouseTypeName'];
-			$type = WarehouseType::parse($typeId);
-
-			if ($type != null) {
-				return array(
-					'code' => $rawWarehouse['Code'],
-					'name' => $rawWarehouse['Name'],
-					'type' => $typeId,
-					'displayLabel' => $this->_formatWarehouseName( 
-						$rawWarehouse['Name'], 
-						$rawWarehouse['Code'], 
-						$typeId),
-					'properties' => $type->asPlainObject()
-				);
-			} else {
-				return null;
-			}
-		}
-
-		private function _formatWarehouseName($name, $code, $typeId) {
-			$format = $this->getConfig()
-				->getWarehouseDisplayLabelFormat();
-
-			return str_replace(array('%name', '%code', '%type_id'), 
-				array($name, $code, $typeId), 
-				$format);
+		private function _getVatQuotaDataProvider() {
+			return new VatQuotaDataProvider(
+				$this->_cielClientFactory, 
+				$this->getConfig(), 
+				$this->getCache(), 
+				$this->_logger
+			);
 		}
 
 		private function _hasConnectionInfo() {
@@ -855,8 +678,32 @@ namespace Ciel\Api\Integration\Binding {
 				->getShippingArticleCode();
 		}
 
+		public function usePhoneForPartnerMatching() {
+			return $this
+				->getConfig()
+				->usePhoneForPartnerMatching();
+		}
+
+		public function useNameForPartnerMatching() {
+			return $this
+				->getConfig()
+				->useNameForPartnerMatching();
+		}
+
+		public function getCielClientFactory() {
+			return $this->_cielClientFactory;
+		}
+
 		public function getConfig() {
 			return $this->_adapter->getConfig();
+		}
+
+		public function getCache() {
+			return $this->_adapter->getCache();
+		}
+
+		public function getLogger() {
+			return $this->_logger;
 		}
 	}
 }

@@ -21,12 +21,12 @@ namespace Ciel\Api\Data {
 			return new self($eligibleCount, $updatedCount);
 		}
 
-		public function offsetExists(mixed $offset): bool { 
+		public function offsetExists($offset) { 
 			return $offset === self::KEY_ELIGIBLE_COUNT 
 				|| $offset === self::KEY_UPDATED_COUNT;
 		}
 
-		public function offsetGet(mixed $offset): mixed { 
+		public function offsetGet($offset) { 
 			if ($offset === self::KEY_ELIGIBLE_COUNT) {
 				return $this->getEligibleCount();
 			} else if ($offset === self::KEY_UPDATED_COUNT) {
@@ -36,7 +36,7 @@ namespace Ciel\Api\Data {
 			}
 		}
 
-		public function offsetSet(mixed $offset, mixed $value): void { 
+		public function offsetSet($offset, $value) { 
 			$this->_throwReadOnly();
 		}
 
@@ -44,7 +44,7 @@ namespace Ciel\Api\Data {
 			throw new Exception('Bulk stock update result is read only!');
 		}
 
-		public function offsetUnset(mixed $offset): void { 
+		public function offsetUnset($offset): void { 
 			$this->_throwReadOnly();
 		}
 
@@ -54,6 +54,13 @@ namespace Ciel\Api\Data {
 
 		public function getUpdatedCount() {
 			return $this->_updatedCount;
+		}
+
+		public function toArray() {
+			return array(
+				self::KEY_ELIGIBLE_COUNT => $this->getEligibleCount(),
+				self::KEY_UPDATED_COUNT => $this->getUpdatedCount()
+			);
 		}
 	}
 }

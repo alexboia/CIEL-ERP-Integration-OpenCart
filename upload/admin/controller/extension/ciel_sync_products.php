@@ -107,7 +107,7 @@ class ControllerExtensionCielSyncProducts extends CielController {
 		$updateResult = $this->_updateInformationForAllArticles();
 
 		$this->_logDebug('Successfully updated all product stocks.');
-		return $updateResult;
+		return $updateResult->toArray();
 	}
 
 	private function _updateInformationForAllArticles() {

@@ -34,10 +34,11 @@ namespace Ciel\Api {
 	use Ciel\Api\Session\CielClientSessionProvider;
 	use Ciel\Api\Session\InMemoryCielClientSessionProvider;
 	use InvalidArgumentException;
-    use phpDocumentor\Reflection\Types\This;
-
+    
 	class CielClient {
 		const ERR_WEBSERVICE_CALL_FAILED = -1;
+
+		const DEFAULT_TIMEOUT_SECONDS = 30;
 
 		/**
 		 * @var string
@@ -61,13 +62,29 @@ namespace Ciel\Api {
 		 */
 		private $_sessionProvider;
 
-		public function __construct($serviceUrl) {
+		private $_options;
+
+		public function __construct($serviceUrl, array $options = array()) {
 			if (empty($serviceUrl)) {
 				throw new InvalidArgumentException('Service URL must not be empty');
 			}
 
 			$this->_endpoint = $serviceUrl;
 			$this->_sessionProvider = new InMemoryCielClientSessionProvider();
+			$this->_options = $this->_mergeOptionsWithDefaults($options);
+		}
+
+		private function _mergeOptionsWithDefaults(array $options) {
+			$defaultOptions = array(
+				'timeoutSeconds' => self::DEFAULT_TIMEOUT_SECONDS
+			);
+
+			if (isset($options['timeoutSeconds']) && empty($options['timeoutSeconds'])) {
+				unset($options['timeoutSeconds']);
+			}
+
+			return array_merge($defaultOptions, 
+				$options);
 		}
 
 		public function setSessionProvider(CielClientSessionProvider $sessionProvider) {
@@ -141,6 +158,15 @@ namespace Ciel\Api {
 			}
 
 			$channel = curl_init($this->_endpoint);
+			$timeoutSeconds = $this->_getTimeoutSeconds();
+
+			if ($timeoutSeconds >= 0) {
+				curl_setopt($channel, CURLOPT_CONNECTTIMEOUT, 
+					$timeoutSeconds); 
+				curl_setopt($channel, CURLOPT_TIMEOUT, 
+					$timeoutSeconds);
+			}
+
 			curl_setopt($channel, CURLOPT_CUSTOMREQUEST, 'POST');
 			curl_setopt($channel, CURLOPT_FOLLOWLOCATION, true);
 			curl_setopt($channel, CURLOPT_SSL_VERIFYPEER, false);
@@ -175,6 +201,12 @@ namespace Ciel\Api {
 			}
 
 			return $responseDataJson;
+		}
+
+		private function _getTimeoutSeconds() {
+			return isset($this->_options['timeoutSeconds'])
+				? $this->_options['timeoutSeconds']
+				: -1;
 		}
 
 		private function _processResponseData($responseDataJson) {

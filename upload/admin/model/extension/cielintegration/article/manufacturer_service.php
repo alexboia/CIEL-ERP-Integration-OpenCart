@@ -5,7 +5,7 @@ namespace CielIntegration\Integration\Admin\Article {
     use ModelCatalogManufacturer;
 
 	class ManufacturerService extends IntegrationService {
-		const DEFAULT_MANUFACTURER_NAME = 'CIEL ERP';
+		const DEFAULT_MANUFACTURER_NAME = 'NextUp ERP';
 
 		private static $_defaultManufacturerId = null;
 

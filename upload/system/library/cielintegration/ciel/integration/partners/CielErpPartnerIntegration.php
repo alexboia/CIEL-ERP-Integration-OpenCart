@@ -1,16 +1,13 @@
 <?php
 namespace Ciel\Api\Integration\Partners {
 
-	use Ciel\Api\Exception\LocalPartnerExportFailedException;
+    use Ciel\Api\CielLogger;
+    use Ciel\Api\Exception\LocalPartnerExportFailedException;
 	use Ciel\Api\Exception\LocalPartnerNotFoundException;
 	use Ciel\Api\Integration\Binding\CielErpToStoreBinding;
 	use Ciel\Api\Integration\Partners\Providers\CielErpLocalPartnerAdapter;
-	use Ciel\Api\Request\Parameters\AddPartnerRequestParameters;
-	use Ciel\Api\Request\Parameters\GetAllPartnersRequestParameters;
-	use Ciel\Api\Request\Parameters\GetPartnerByCodeRequestParameters;
-	use Ciel\Api\Request\Parameters\GetPartnerByIdRequestParameters;
-	use Ciel\Api\Request\Parameters\UpdatePartnerRequestParameters;
-	use InvalidArgumentException;
+    use Ciel\Api\Integration\Partners\RemoteDataProviders\RemotePartnerDataProvider;
+    use InvalidArgumentException;
 
 	class CielErpPartnerIntegration {
 		/**
@@ -23,17 +20,22 @@ namespace Ciel\Api\Integration\Partners {
 		 */
 		private $_adapter;
 
+		/**
+		 * @var RemotePartnerDataProvider
+		 */
+		private $_remoteDataProvider;
+
+		/**
+		 * @var CielLogger
+		 */
+		private $_logger;
+
 		public function __construct(CielErpToStoreBinding $storeBinding, 
 			CielErpLocalPartnerAdapter $adapter) {
 			$this->_storeBinding = $storeBinding;
 			$this->_adapter = $adapter;
-		}
-
-		/**
-		 * @return \Ciel\Api\CielClient 
-		 */
-		private function _getCielClientAndLogon() {
-			return $this->_storeBinding->getAmbientCielClient(true);
+			$this->_remoteDataProvider = new RemotePartnerDataProvider($storeBinding->getCielClientFactory());
+			$this->_logger = $storeBinding->getLogger();
 		}
 
 		public function removeCustomAddressBillingDataForAllConnectedPartners() {
@@ -98,16 +100,16 @@ namespace Ciel\Api\Integration\Partners {
 			}
 
 			$exportResult = null;
-			$localPartnerData = $this->_getLocalPartnerData($localPartnerId);
+			$localCustomerData = $this->_getLocalPartnerData($localPartnerId);
 			
-			if (!$localPartnerData->exists()) {
+			if (!$localCustomerData->exists()) {
 				throw new LocalPartnerNotFoundException('id', $localPartnerId);
 			}
 
-			if (!$localPartnerData->hasRemotePartnerCode()) {
-				$exportResult = $this->_createRemotePartnerFromLocalPartnerData($localPartnerData);
+			if (!$localCustomerData->hasRemotePartnerCode()) {
+				$exportResult = $this->_createRemotePartnerFromLocalPartnerData($localCustomerData);
 			} else {
-				$exportResult = $this->_updateRemotePartnerFromLocalPartnerData($localPartnerData);
+				$exportResult = $this->_updateRemotePartnerFromLocalPartnerData($localCustomerData);
 			}
 
 			$this->_adapter->connectWithRemotePartner($localPartnerId, 
@@ -125,13 +127,13 @@ namespace Ciel\Api\Integration\Partners {
 			}
 
 			$partnerMatch = null;
-			$localPartnerData = $this->_getLocalPartnerDataForOrder($localOrderId);
+			$localCustomerData = $this->_getLocalPartnerDataForOrder($localOrderId);
 
-			if (!$localPartnerData->exists()) {
+			if (!$localCustomerData->exists()) {
 				throw new LocalPartnerNotFoundException('orderId', $localOrderId);
 			}
 
-			if (!$localPartnerData->hasRemotePartnerCode()) {
+			if (!$localCustomerData->hasRemotePartnerCode()) {
 				//Fetch all partners, and attempt a match 
 				//  with the customer's data
 				$remotePartnersData = $this->_getAllRemotePartners();
@@ -139,15 +141,15 @@ namespace Ciel\Api\Integration\Partners {
 				//Try find a matching partner within the remote data
 				if (!empty($remotePartnersData)) {
 					$partnerMatch = $this->_findMatchingRemotePartner(
-						$localPartnerData->getData(), 
+						$localCustomerData->getData(), 
 						$remotePartnersData
 					);
 				}
 
 				if ($partnerMatch->isMatch()) {
-					if ($localPartnerData->isRegisteredLocalUser()) {
+					if ($localCustomerData->isRegisteredLocalUser()) {
 						$this->_adapter->connectWithRemotePartner(
-							$localPartnerData->getLocalPartnerId(), 
+							$localCustomerData->getLocalPartnerId(), 
 							$partnerMatch->getRemotePartnerData(), 
 							$partnerMatch->getRemotePartnerShopBillingAddressData()
 						);
@@ -159,36 +161,67 @@ namespace Ciel\Api\Integration\Partners {
 						$partnerMatch->getRemotePartnerShopBillingAddressData()
 					);
 				}
-			} else if ($localPartnerData->isRegisteredLocalUser()) {
+			} else if ($localCustomerData->isRegisteredLocalUser()) {
 				$this->_adapter->connectOrderFromLocalPartnerConnectionInfo($localOrderId);
 			}
 
-			return new PartnerConnectionResult($localPartnerData, 
+			return new PartnerConnectionResult($localCustomerData, 
 				$partnerMatch);
 		}
 
 		private function _getAllRemotePartners() {
-			$client = $this->_getCielClientAndLogon();
-			return $client->getAllPartners(
-				$this->_getGetAllPartnersRequestParams()
-			);
+			return $this->_remoteDataProvider
+				->getAllRemotePartners();
 		}
 
-		private function _getGetAllPartnersRequestParams() {
-			return (new GetAllPartnersRequestParameters())
-				->setIncludeAddresses(true)
-				->setIncludeOnlyUnblockedPartners(true);
+		private function _findMatchingRemotePartner(array $localCustomerData, array $remotePartnersData) {
+			$matchingRemotePartnerData = $this->_findMatchingRemotePartnerData($localCustomerData, 
+				$remotePartnersData);
+
+			if (!empty($matchingRemotePartnerData)) {
+				$matchingRemotePartnerAddressData = $this->_findMatchingRemotePartnerAddressData($localCustomerData, 
+					$matchingRemotePartnerData);
+			} else {
+				$matchingRemotePartnerData = array();
+				$matchingRemotePartnerAddressData = array();
+			}
+
+			return new RemotePartnerMatch($matchingRemotePartnerData, 
+				$matchingRemotePartnerAddressData);
 		}
 
-		private function _findMatchingRemotePartner(array $customerData, array $remotePartnersData) {
-			return $this
-				->_getRemotePartnerFinder($customerData)
-				->findMatchingRemotePartner($remotePartnersData);
+		private function _findMatchingRemotePartnerData(array $localCustomerData, array $remotePartnersData) {
+			$finder = $this->_getRemotePartnerFinder($localCustomerData);
+			return $finder->findRemotePartner($remotePartnersData);
 		}
 
-		private function _getRemotePartnerFinder(array $customerData) {
-			return (new CielErpRemotePartnerFinder($customerData))
-				->setUsePhoneForPartnerMatching($this->_usePhoneForPartnerMatching());
+		private function _getRemotePartnerFinder(array $localCustomerData) {
+			$searchInfo = $this->_buildRemotePartnerSearchInfo($localCustomerData);
+			$finder = new RemotePartnerFinder($searchInfo, $this->_logger);
+			return $finder
+				->setUsePhoneForPartnerMatching($this->_usePhoneForPartnerMatching())
+				->setUseNameForPartnerMatching($this->_useNameForPartnerMatching());
+		}
+
+		private function _buildRemotePartnerSearchInfo(array $localCustomerData) {
+			$builder = new RemotePartnerSearchInfoBuilder($localCustomerData);
+			return $builder->buildSearchData();
+		}
+
+		private function _findMatchingRemotePartnerAddressData(array $localCustomerData, array $remotePartnerData) {
+			$finder = $this->_getRemotePartnerAddressFinder($localCustomerData);
+			return $finder->findRemotePartnerAddress($remotePartnerData);
+		}
+
+		private function _getRemotePartnerAddressFinder(array $localCustomerData) {
+			$searchInfo = $this->_buildRemotePartnerAddressSearchInfo($localCustomerData);
+			$finder = new RemotePartnerAddressFinder($searchInfo, $this->_logger);
+			return $finder;
+		}
+
+		private function _buildRemotePartnerAddressSearchInfo(array $localCustomerData) {
+			$builder = new RemotePartnerAddressSearchInfoBuilder($localCustomerData);
+			return $builder->buildSearchData();
 		}
 
 		public function exportLocalOrderPartner($localOrderId) {
@@ -197,21 +230,21 @@ namespace Ciel\Api\Integration\Partners {
 			}
 
 			$exportResult = null;
-			$localPartnerData = $this->_getLocalPartnerDataForOrder($localOrderId);
+			$localCustomerData = $this->_getLocalPartnerDataForOrder($localOrderId);
 			
-			if (!$localPartnerData->exists()) {
+			if (!$localCustomerData->exists()) {
 				throw new LocalPartnerNotFoundException('orderId', $localOrderId);
 			}
 
-			if (!$localPartnerData->hasRemotePartnerCode()) {
-				$exportResult = $this->_createRemotePartnerFromLocalPartnerData($localPartnerData);
+			if (!$localCustomerData->hasRemotePartnerCode()) {
+				$exportResult = $this->_createRemotePartnerFromLocalPartnerData($localCustomerData);
 			} else {
-				$exportResult = $this->_updateRemotePartnerFromLocalPartnerData($localPartnerData);
+				$exportResult = $this->_updateRemotePartnerFromLocalPartnerData($localCustomerData);
 			}
 
-			if ($localPartnerData->isRegisteredLocalUser()) {
+			if ($localCustomerData->isRegisteredLocalUser()) {
 				$this->_adapter->connectWithRemotePartner(
-					$localPartnerData->getLocalPartnerId(), 
+					$localCustomerData->getLocalPartnerId(), 
 					$exportResult->getRemotePartnerData(), 
 					$exportResult->getRemotePartnerShopBillingAddressData()
 				);
@@ -227,14 +260,16 @@ namespace Ciel\Api\Integration\Partners {
 			return new LocalPartnerData($this->_adapter->getPartnerDataForOrder($localOrderId));
 		}
 
-		private function _createRemotePartnerFromLocalPartnerData(LocalPartnerData $localPartnerData) {
-			$remotePartnerData = $this->_getRemotePartnerDataFromLocalCustomerData($localPartnerData->getData(), true);
+		private function _createRemotePartnerFromLocalPartnerData(LocalPartnerData $localCustomerData) {
+			$remotePartnerData = $this->_getRemotePartnerDataFromLocalCustomerData($localCustomerData->getData(), true);
 			$remotePartnerId = $this->_createRemotePartner($remotePartnerData);
 
 			if(!empty($remotePartnerId)) {
 				$remotePartnerData = $this->_getRemotePartnerById($remotePartnerId);
-				$remotePartnerShopBillingAddressData = $this->_selectRemotePartnerBillingAddressData($localPartnerData, 
-					$remotePartnerData);
+				$remotePartnerShopBillingAddressData = $this->_findMatchingRemotePartnerAddressData(
+					$localCustomerData->getData(), 
+					$remotePartnerData
+				);
 
 				return new LocalPartnerExportResult($remotePartnerData, 
 					$remotePartnerShopBillingAddressData);
@@ -244,52 +279,25 @@ namespace Ciel\Api\Integration\Partners {
 		}
 
 		private function _createRemotePartner(array $remoteData) {
-			$client = $this->_getCielClientAndLogon();
-			return $client->addPartner(
-				$this->_getAddPartnerRequestParams(
-					$remoteData
-				)
-			);
-		}
-
-		private function _selectRemotePartnerBillingAddressData(LocalPartnerData $localPartnerData, array $remotePartnerData) {
-			return $this->_createRemotePartnerBillingAddressDataSelector($localPartnerData)
-				->selectRemoteBillingAddressData($remotePartnerData);
-		}
-
-		private function _createRemotePartnerBillingAddressDataSelector(LocalPartnerData $localPartnerData) {
-			return (new RemotePartnerBillingAddressDataSelector($localPartnerData))
-				->setUsePhoneForPartnerMatching($this->_usePhoneForPartnerMatching());
-		}
-
-		private function _getAddPartnerRequestParams(array $remoteData) {
-			return (new AddPartnerRequestParameters())
-				->setPartner($remoteData);
+			return $this->_remoteDataProvider
+				->createRemotePartner($remoteData);
 		}
 
 		private function _getRemotePartnerById($remotePartnerId) {
-			$client = $this->_getCielClientAndLogon();
-			return $client->getPartnerById(
-				$this->_getGetRemotePartnerByIdRequestParams(
-					$remotePartnerId
-				)
-			);
+			return $this->_remoteDataProvider
+				->getRemotePartnerById($remotePartnerId);
 		}
 
-		private function _getGetRemotePartnerByIdRequestParams($remotePartnerId) {
-			return (new GetPartnerByIdRequestParameters())
-				->setIncludeAddresses(true)
-				->setId($remotePartnerId);
-		}
-
-		private function _updateRemotePartnerFromLocalPartnerData(LocalPartnerData $localPartnerData) {
-			$remotePartnerData = $this->_getRemotePartnerDataFromLocalCustomerData($localPartnerData->getData(), false);
+		private function _updateRemotePartnerFromLocalPartnerData(LocalPartnerData $localCustomerData) {
+			$remotePartnerData = $this->_getRemotePartnerDataFromLocalCustomerData($localCustomerData->getData(), false);
 			$updateResult = $this->_updateRemotePartner($remotePartnerData);
 
 			if ($updateResult) {
-				$remotePartnerData = $this->_getRemotePartnerByCode($localPartnerData->getRemotePartnerCode());
-				$remotePartnerShopBillingAddressData = $this->_selectRemotePartnerBillingAddressData($localPartnerData, 
-					$remotePartnerData);
+				$remotePartnerData = $this->_getRemotePartnerByCode($localCustomerData->getRemotePartnerCode());
+				$remotePartnerShopBillingAddressData = $this->_findMatchingRemotePartnerAddressData(
+					$localCustomerData->getData(), 
+					$remotePartnerData
+				);
 
 				return new LocalPartnerExportResult($remotePartnerData, 
 					$remotePartnerShopBillingAddressData);
@@ -298,112 +306,35 @@ namespace Ciel\Api\Integration\Partners {
 			}
 		}
 
-		private function _getRemotePartnerDataFromLocalCustomerData(array $customerData, $exportAddressAsDefault) {
-			return $this->_getLocalToRemotePartnerDataMarshaller($customerData, $exportAddressAsDefault)
+		private function _getRemotePartnerDataFromLocalCustomerData(array $localCustomerData, $exportAddressAsDefault) {
+			return $this->_getLocalToRemotePartnerDataMarshaller($localCustomerData, $exportAddressAsDefault)
 				->getRemotePartnerData();
 		}
 
-		private function _getLocalToRemotePartnerDataMarshaller(array $customerData, $exportAddressAsDefault) {
-			return (new LocalToRemotePartnerDataMarshaller($customerData))
-				->setMarshalAddressAsDefaultRemotePartnerAddress($exportAddressAsDefault)
-				->setUsePhoneForPartnerMatching($this->_usePhoneForPartnerMatching());
+		private function _getLocalToRemotePartnerDataMarshaller(array $localCustomerData, $exportAddressAsDefault) {
+			$marshaller = new LocalToRemotePartnerDataMarshaller($localCustomerData);
+			return $marshaller->setMarshalAddressAsDefaultRemotePartnerAddress($exportAddressAsDefault);
 		}
 
 		private function _updateRemotePartner(array $remoteData) {
-			$client = $this->_getCielClientAndLogon();
-			return $client->updatePartner(
-				$this->_getUpdatePartnerRequestParams(
-					$remoteData
-				)
-			);
-		}
-
-		private function _getUpdatePartnerRequestParams(array $remoteData) {
-			$propertyPairsToUpdate = $this
-				->_getPartnerPropertyPairsForUpdate($remoteData);
-			$addressesToUpdate = $this
-				->_getPartnerAddressesToUpdate($remoteData);
-
-			return (new UpdatePartnerRequestParameters())
-				->setPartnerCode($remoteData['Code'])
-				->setPropertiesToUpdate($propertyPairsToUpdate)
-				->setAddressesToUpdate($addressesToUpdate);
-		}
-
-		private function _getPartnerPropertyPairsForUpdate(array $remoteData) {
-			$propertyPairsToUpdate = array();
-			$propNamesForUpdate = $this->_getPropNamesForUpdate();
-
-			foreach ($propNamesForUpdate as $pName) {
-				$propertyPairsToUpdate[] = array(
-					'Name' => $pName,
-					'Value' => $remoteData[$pName]
-				);
-			}
-
-			return $propertyPairsToUpdate;
-		}
-
-		private function _getPropNamesForUpdate() {
-			return array(
-				'Name',
-				'Code',
-				'TaxCode',
-				'TaxAttribute',
-				'TradeRegisterNumber',
-				'Bank',
-				'IBAN'
-			);
-		}
-
-		private function _getPartnerAddressesToUpdate(array $remoteData) {
-			$addressesToUpdate = array();
-
-			if (!empty($remoteData['Addresses'])) {
-				foreach ($remoteData['Addresses'] as $remoteAddrData) {
-					$addressesToUpdate[] = $this->_getPartnerAddressToUpdate($remoteAddrData);
-				}
-			}
-
-			return $addressesToUpdate;
-		}
-
-		private function _getPartnerAddressToUpdate(array $remoteAddressData) {
-			$addressPropertyPairsToUpdate = array();
-			foreach ($remoteAddressData as $pName => $value) {
-				if ($pName != 'ExternalKey') {
-					$addressPropertyPairsToUpdate[] = array(
-						'Name' => $pName,
-						'Value' => $value
-					);
-				}
-			}
-
-			return array(
-				'ExternalKey' => $remoteAddressData['ExternalKey'],
-				'PropertiesToUpdate' => $addressPropertyPairsToUpdate
-			);
+			return $this->_remoteDataProvider
+				->updateRemotePartner($remoteData['Code'], 
+					$remoteData);
 		}
 
 		private function _getRemotePartnerByCode($remotePartnerCode) {
-			$client = $this->_getCielClientAndLogon();
-			return $client->getPartnerByCode(
-				$this->_getGetRemotePartnerByCodeRequestParameters(
-					$remotePartnerCode
-				)
-			);
-		}
-
-		private function _getGetRemotePartnerByCodeRequestParameters($remotePartnerCode) {
-			return (new GetPartnerByCodeRequestParameters())
-				->setIncludeAddresses(true)
-				->setCode($remotePartnerCode);
+			return $this->_remoteDataProvider
+				->getRemotePartnerByCode($remotePartnerCode);
 		}
 
 		private function _usePhoneForPartnerMatching() {
 			return $this->_storeBinding
-				->getConfig()
 				->usePhoneForPartnerMatching();
+		}
+
+		private function _useNameForPartnerMatching() {
+			return $this->_storeBinding
+				->useNameForPartnerMatching();
 		}
 	}
 }

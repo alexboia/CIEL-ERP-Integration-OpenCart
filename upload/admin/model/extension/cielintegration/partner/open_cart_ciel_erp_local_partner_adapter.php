@@ -83,18 +83,18 @@ namespace CielIntegration\Integration\Admin\Partner {
 			return $this->_partnerResolver
 				->customerExists($customerId);
 		}
+		
+		private function _setCustomerBindingInformation($customerId, 
+				$remotePartnerData, 
+				$remoteShopBillingAddressData) {
+			$this->_createPartnerMarshaller($customerId)
+				->setCustomerBindingInformation($remotePartnerData, 
+					$remoteShopBillingAddressData);
+		}
 
 		private function _createPartnerMarshaller($customerId) {
 			return $this->_remotePartnerMarshallerFactory
 				->createForCustomer($customerId);
-		}
-
-		private function _setCustomerBindingInformation($customerId, 
-			$remotePartnerData, 
-			$remoteShopBillingAddressData) {
-			$this->_createPartnerMarshaller($customerId)
-				->setCustomerBindingInformation($remotePartnerData, 
-					$remoteShopBillingAddressData);
 		}
 
 		public function connectOrderWithRemotePartner($localOrderId, $remotePartnerData, $remoteShopBillingAddressData) {
@@ -174,26 +174,15 @@ namespace CielIntegration\Integration\Admin\Partner {
 
 			$bindingInformation = $this->_getOrderCustomerRemotePartnerBindingInformation($localOrderId, 
 				$customerId);
-
-			if ($bindingInformation == null) {
-				$bindingInformation = array();
-			}
-
-			$customAddressData = $this->_getOrderCustomerBillingAddressInformation($localOrderId, 
+			$customBillingAddressInformation = $this->_getOrderCustomerBillingAddressInformation($localOrderId, 
 				$customerId);
-
-			if ($customAddressData == null) {
-				$customAddressData = array();
-			}
 
 			$customerData = array(
 				'id' => $customerId,
 				'email' => $order['email'],
-				'first_name' => $order['firstname'],
-				'last_name' => $order['lastname'],
-				'code' => !empty($bindingInformation) 
-					? $bindingInformation['remote_partner_code'] 
-					: null,
+				'first_name' => trim($order['firstname']),
+				'last_name' => trim($order['lastname']),
+				'code' => $this->_getRemotePartnerCodeFromBindingInformation($bindingInformation),
 				'address' => array(
 					'address_lines_1' => $order['payment_address_1'],
 					'address_lines_2' => $order['payment_address_2'],
@@ -205,18 +194,16 @@ namespace CielIntegration\Integration\Admin\Partner {
 					'address_city_id' => null,
 					'address_postal_code' => $order['payment_postcode'],
 					'address_phone' => $order['telephone'],
-					'address_company_name' => $order['payment_company'],
-					'address_first_name' => $order['payment_firstname'],
-					'address_last_name' => $order['payment_lastname'],
+					'address_company_name' => trim($order['payment_company']),
+					'address_first_name' => trim($order['payment_firstname']),
+					'address_last_name' => trim($order['payment_lastname']),
 					'address_email' => $order['email'],
-					'address_partner_worksite_id' => !empty($bindingInformation) 
-						? $bindingInformation['remote_partner_addr_worksite_id'] 
-						: null
+					'address_partner_worksite_id' => $this->_getRemotePartnerAddressWorksiteIdFromBindingInformation($bindingInformation)
 				)
 			);
 
 			$customerData['address'] = array_merge($customerData['address'], 
-				$customAddressData);
+				$customBillingAddressInformation);
 
 			return $customerData;
 		}
@@ -227,15 +214,27 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		private function _getOrderCustomerBillingAddressInformation($orderId, $customerId) {
-			return $this->_orderPartnerResolver
+			$customBillingAddressInformation =  $this->_orderPartnerResolver
 				->getOrderCustomerBillingAddressInformation($orderId, 
 					$customerId);
+
+			if (!is_array($customBillingAddressInformation)) {
+				$customBillingAddressInformation = array();
+			}
+
+			return $customBillingAddressInformation;
 		}
 
 		private function _getOrderCustomerRemotePartnerBindingInformation($orderId, $customerId) {
-			return $this->_orderPartnerResolver
+			$bindingInformation = $this->_orderPartnerResolver
 				->getOrderCustomerRemotePartnerBindingInformation($orderId, 
 					$customerId);
+
+			if (!is_array($bindingInformation)) {
+				$bindingInformation = array();
+			}
+
+			return $bindingInformation;
 		}
 
 		public function getPartnerData($localPartnerId) { 
@@ -249,29 +248,17 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 
 			$bindingInformation = $this->_getRemotePartnerBindingInformation($localPartnerId);
-			if ($bindingInformation == null) {
-				$bindingInformation = array();
-			}
-
-			$customAddressData = $this->_getCustomerBillingAddressInformation($localPartnerId);
-			if ($customAddressData == null) {
-				$customAddressData = array();
-			}
+			$customBillingAddressInformation = $this->_getCustomerBillingAddressInformation($localPartnerId);
 
 			$addressId = intval($customer['address_id']);
 			$address = $this->_getCustomerAddress($addressId);
-			if ($address == null) {
-				$address = array();
-			}
 
 			$customerData = array(
 				'id' => $customer['customer_id'],
 				'email' => $customer['email'],
-				'first_name' => $customer['firstname'],
-				'last_name' => $customer['lastname'],
-				'code' => !empty($bindingInformation) 
-					? $bindingInformation['remote_partner_code'] 
-					: null,
+				'first_name' => trim($customer['firstname']),
+				'last_name' => trim($customer['lastname']),
+				'code' => $this->_getRemotePartnerCodeFromBindingInformation($bindingInformation),
 				'address' => array(
 					'address_lines_1' => !empty($address) 
 						? $address['address_1'] 
@@ -300,18 +287,16 @@ namespace CielIntegration\Integration\Admin\Partner {
 						: '',
 					'address_phone' => $customer['telephone'],
 					'address_company_name' => !empty($address) 
-						? $address['company'] 
+						? trim($address['company']) 
 						: null,
 					'address_first_name' => !empty($address) 
-						? $address['firstname'] 
+						? trim($address['firstname']) 
 						: null,
 					'address_last_name' => !empty($address)
-						? $address['lastname']
+						? trim($address['lastname'])
 						: null,
 					'address_email' => '',
-					'address_partner_worksite_id' => !empty($bindingInformation) 
-						? $bindingInformation['remote_partner_addr_worksite_id'] 
-						: null
+					'address_partner_worksite_id' => $this->_getRemotePartnerBindingInformation($bindingInformation)
 				)
 			);
 
@@ -328,9 +313,9 @@ namespace CielIntegration\Integration\Admin\Partner {
 			}
 
 			$customerData['address'] = array_merge($customerData['address'], 
-				$customAddressData);
+				$customBillingAddressInformation);
 
-			return $customAddressData;
+			return $customBillingAddressInformation;
 		}
 		
 		private function _getCustomerById($customerId) {
@@ -339,18 +324,50 @@ namespace CielIntegration\Integration\Admin\Partner {
 		}
 
 		private function _getCustomerBillingAddressInformation($customerId) {
-			return $this->_partnerResolver
+			$customBillingAddressInformation = $this->_partnerResolver
 				->getCustomerBillingAddressInformation($customerId);
+
+			if (!is_array($customBillingAddressInformation)) {
+				$customBillingAddressInformation = array();
+			}
+
+			return $customBillingAddressInformation;
 		}
 
 		private function _getCustomerAddress($addressId) {
-			return $this->_partnerResolver
+			$customerAddress = $this->_partnerResolver
 				->getCustomerAddress($addressId);
+
+			if (!is_array($customerAddress)) {
+				$customerAddress = array();
+			}
+
+			return $customerAddress;
 		}
 
 		private function _getRemotePartnerBindingInformation($customerId) {
-			return $this->_partnerResolver
+			$bindingInformation = $this->_partnerResolver
 				->getRemotePartnerBindingInformation($customerId);
+
+			if (!is_array($bindingInformation)) {
+				$bindingInformation = array();
+			}
+
+			return $bindingInformation;
+		}
+
+		private function _getRemotePartnerCodeFromBindingInformation($bindingInformation) {
+			return !empty($bindingInformation) 
+					&& !empty($bindingInformation['remote_partner_code'])
+				? $bindingInformation['remote_partner_code'] 
+				: null;			
+		}
+
+		private function _getRemotePartnerAddressWorksiteIdFromBindingInformation($bindingInformation) {
+			return !empty($bindingInformation) 
+					&& !empty($bindingInformation['remote_partner_addr_worksite_id'])
+				? $bindingInformation['remote_partner_addr_worksite_id'] 
+				: null;
 		}
 	}
 }

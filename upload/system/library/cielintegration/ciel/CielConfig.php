@@ -20,5 +20,7 @@ namespace Ciel\Api {
         function isStockUpdateEnabled();
 
         function usePhoneForPartnerMatching();
+
+        function useNameForPartnerMatching();
     }
 }

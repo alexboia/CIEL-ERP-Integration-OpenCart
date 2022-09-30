@@ -5,23 +5,16 @@ namespace Ciel\Api\Integration\Partners {
 	class LocalToRemotePartnerDataMarshaller {
 		const DEFAULT_REMOTE_PARTNER_ADDRESS_NAME = 'Adresa Facturare E-Shop';
 
-		private $_localPartnerData = null;
+		private $_localCustomerData = null;
 
 		private $_marshalAddressAsDefaultRemotePartnerAddress = false;
 
-		private $_usePhoneForPartnerMatching = false;
-
 		public function __construct(array $localCustomerData) {
-			$this->_localPartnerData = $localCustomerData;
+			$this->_localCustomerData = $localCustomerData;
 		}
 
 		public function setMarshalAddressAsDefaultRemotePartnerAddress($value) {
 			$this->_marshalAddressAsDefaultRemotePartnerAddress = $value;
-			return $this;
-		}
-
-		public function setUsePhoneForPartnerMatching($value) {
-			$this->_usePhoneForPartnerMatching = $value;
 			return $this;
 		}
 
@@ -91,26 +84,26 @@ namespace Ciel\Api\Integration\Partners {
 				'Name' => self::DEFAULT_REMOTE_PARTNER_ADDRESS_NAME,
 				'ExternalKey' => $this->_computeExternalAddressKey(),
 				'StreetName' => $this->_composeBillingStreetName($customerAddr),
-				'StreetNumber' => '',
+				'StreetNumber' => '-',
 				'CountryName' => isset($customerAddr['address_country_name']) 
 					? $customerAddr['address_country_name'] 
-					: '',
-				'BuildingNumber' => '',
-				'BuildingEntryNumber' => '',
-				'ApartmentNumber' => '',
-				'FloorNumber' => '',
+					: '-',
+				'BuildingNumber' => null,
+				'BuildingEntryNumber' => null,
+				'ApartmentNumber' => null,
+				'FloorNumber' => null,
 				'CountyName' => isset($customerAddr['address_county_name']) 
 					? $customerAddr['address_county_name'] 
-					: '',
+					: '-',
 				'CityName' => isset($customerAddr['address_city_name']) 
 					? $customerAddr['address_city_name'] 
-					: '',
+					: '-',
 				'PostalCode' => isset($customerAddr['address_postal_code'])
 					? $customerAddr['address_postal_code']
-					: '',
+					: null,
 				'MobilePhone' => isset($customerAddr['address_phone'])
 					? $customerAddr['address_phone']
-					: '',
+					: null,
 				'Email' => $customerAddr['address_email'],
 				'AddressType' => PartnerAddressType::Worksite,
 				'AtHeadOffice' => true,
@@ -121,23 +114,7 @@ namespace Ciel\Api\Integration\Partners {
 		}
 
 		private function _computeExternalAddressKey() {
-			return $this->_usePhoneForPartnerMatching 
-				? $this->_deriveExternalAddressKeyFromBillingAddressPhone()
-				: $this->_deriveExternalAddressKeyFromAccountEmail();
-		}
-
-		private function _deriveExternalAddressKeyFromAccountEmail() {
-			$email = $this->_getLocalPartnerAccountEmail();
-			return !empty($email) 
-				? PartnerAddressUtility::deriveExternalAddressKeyFromEmail($email)
-				: null;
-		}
-
-		private function _deriveExternalAddressKeyFromBillingAddressPhone() {
-			$phone = $this->_getLocalPartnerBillingAddressPhone();
-			return !empty($phone)
-				? PartnerAddressUtility::deriveExternalAddressKeyFromPhone($phone)
-				: null;
+			return PartnerAddressUtility::determineExternalAddressKey($this->_localCustomerData);
 		}
 
 		private function _composeBillingStreetName(array $customerAddr) {
@@ -154,23 +131,14 @@ namespace Ciel\Api\Integration\Partners {
 			return join(', ', $addressLinesJoinedParts);
 		}
 
-		private function _getLocalPartnerAccountEmail() {
-			return $this->_localPartnerData['email'];
-		}
-
-		private function _getLocalPartnerBillingAddressPhone() {
-			$customerAddr = $this->_getLocalCustomerAddressData();
-			return isset($customerAddr['address_phone'])
-				? trim($customerAddr['address_phone'])
-				: '';
-		}
-
 		private function _getLocalCustomerAddressData() {
-			return $this->_localPartnerData['address'];
+			return $this->_localCustomerData['address'];
 		}
 
 		private function _getRemoteCodeFromLocalCustomerData() {
-			return $this->_localPartnerData['code'];
+			return !empty($this->_localCustomerData['code'])
+				? $this->_localCustomerData['code']
+				: null;
 		}
 	}
 }

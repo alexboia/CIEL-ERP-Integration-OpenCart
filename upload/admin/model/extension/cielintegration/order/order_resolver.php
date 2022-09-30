@@ -134,36 +134,53 @@ namespace CielIntegration\Integration\Admin\Order {
 				return null;
 			}
 
-			$remoteOrderModel = $this->_getRemoteOrderModel();
-			$remoteOrderData = $remoteOrderModel->getByOrderId($orderId);
+			$remoteOrderData = $this->_getRemoteOrderByOrderId($orderId);
 			if (empty($remoteOrderData)) {
 				return null;
 			}
 
 			return array(
-				'address_billing_type' 
-					=> $remoteOrderData['billing_type'],
-				'address_tax_attribute' 
-					=> $remoteOrderData['billing_company_tax_attribute'],
-				'address_tax_code' 
-					=> $remoteOrderData['billing_company_tax_code'],
-				'address_bank' 
-					=> $remoteOrderData['billing_company_bank'],
-				'address_iban' 
-					=> $remoteOrderData['billing_company_iban'],
-				'address_trade_reg_number' 
-					=> $remoteOrderData['billing_company_trade_register_number']
+				'address_billing_type' => $remoteOrderData['billing_type'],
+				'address_tax_attribute' => !empty($remoteOrderData['billing_company_tax_attribute'])
+					? $remoteOrderData['billing_company_tax_attribute']
+					: null,
+				'address_tax_code' => !empty($remoteOrderData['billing_company_tax_code'])
+					? $remoteOrderData['billing_company_tax_code']
+					: null,
+				'address_bank' => !empty($remoteOrderData['billing_company_bank'])
+					? $remoteOrderData['billing_company_bank']
+					: null,
+				'address_iban' => !empty($remoteOrderData['billing_company_iban'])
+					? $remoteOrderData['billing_company_iban']
+					: null,
+				'address_trade_reg_number' => !empty($remoteOrderData['billing_company_trade_register_number'])
+					? $remoteOrderData['billing_company_trade_register_number']
+					: null
 			);
+		}
+
+		private function _getRemoteOrderByOrderId($orderId) {
+			$remoteOrderData = $this
+				->_getRemoteOrderModel()
+				->getByOrderId($orderId);
+
+			if (!empty($remoteOrderData)) {
+				foreach ($remoteOrderData as $key => $value) {
+					$remoteOrderData[$key] = trim($value);
+				}
+			}
+
+			return $remoteOrderData;
 		}
 
 		public function getEmptyOrderCustomerBillingAddressInformation() {
 			return array(
 				'address_billing_type' => '',
-				'address_tax_attribute' => '',
-				'address_tax_code' => '',
-				'address_bank' => '',
-				'address_iban' => '',
-				'address_trade_reg_number' => ''
+				'address_tax_attribute' => null,
+				'address_tax_code' => null,
+				'address_bank' => null,
+				'address_iban' => null,
+				'address_trade_reg_number' => null
 			);
 		}
 
@@ -172,15 +189,21 @@ namespace CielIntegration\Integration\Admin\Order {
 				return null;
 			}
 
-			$remoteOrderModel = $this->_getRemoteOrderModel();
-			$remoteOrderData = $remoteOrderModel->getByOrderId($orderId);
+			$remoteOrderData = $this->_getRemoteOrderByOrderId($orderId);
+			if (empty($remoteOrderData)) {
+				return null;
+			}
 
-			return !empty($remoteOrderData) && !empty($remoteOrderData['remote_partner_code'])
+			return $this->_extractRemotePartnerBindingInformation($remoteOrderData);
+		}
+
+		private function _extractRemotePartnerBindingInformation(array $remoteOrderData) {
+			return !empty($remoteOrderData['remote_partner_code'])
 				? array(
-					'remote_partner_code' 
-						=> $remoteOrderData['remote_partner_code'],
-					'remote_partner_addr_worksite_id' 
-						=> $remoteOrderData['remote_partner_addr_worksite_id']
+					'remote_partner_code'  => $remoteOrderData['remote_partner_code'],
+					'remote_partner_addr_worksite_id' => !empty($remoteOrderData['remote_partner_addr_worksite_id'])
+						? $remoteOrderData['remote_partner_addr_worksite_id']
+						: null
 				)
 				: null;
 		}

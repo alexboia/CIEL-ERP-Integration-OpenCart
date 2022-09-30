@@ -77,16 +77,7 @@ namespace Ciel\Api\Integration\Articles {
 			//If this is not an array, convert it to int 
 			//  and see if it corresponds to a remote article
 			if (!is_array($remoteDataOrId)) {
-				$articleId = intval($remoteDataOrId);
-				if ($articleId > 0) {
-					//If remote data not found, quit and throw
-					$remoteData = $this->_getRemoteArticleById($articleId);
-					if (empty($remoteData)) {
-						throw new RemoteArticleNotFoundException('id', $articleId);
-					}
-				} else {
-					throw new InvalidArgumentException('Remote Id must not be empty');
-				}
+				$remoteData = $this->_getRemoteArticleDataByIdOrThrow($remoteDataOrId);
 			} else {
 				$remoteData = $remoteDataOrId;
 			}
@@ -96,14 +87,30 @@ namespace Ciel\Api\Integration\Articles {
 				$remoteData);
 		}
 
+		private function _getRemoteArticleDataByIdOrThrow($remoteId) {
+			$remoteData = null;
+			$articleId = intval($remoteId);
+
+			if ($articleId > 0) {
+				//If remote data not found, quit and throw
+				$remoteData = $this->_getRemoteArticleById($articleId);
+				if (empty($remoteData)) {
+					throw new RemoteArticleNotFoundException('id', $articleId);
+				}
+			} else {
+				throw new InvalidArgumentException('Remote Id must not be empty');
+			}
+
+			return $remoteData;
+		}
+
 		public function tryAutoConnectArticleByLocalCode($localId) {
 			if (empty($localId)) {
 				throw new InvalidArgumentException('Local Id must not be empty');
 			}
 
 			$connectedLocalIds = array();
-			$localCode = $this->_adapter
-				->lookupLocalArticleCode($localId);
+			$localCode = $this->_lookupLocalArticleCode($localId);
 
 			if (empty($localCode)) {
 				throw new LocalArticleNotFoundException('id', $localId);
@@ -167,12 +174,16 @@ namespace Ciel\Api\Integration\Articles {
 		private function _lookupLocalArticlesCodes($localIds) {
 			$localCodes = array(); 
 			foreach ($localIds as $localId) {
-				$localCodesForId = $this->_adapter->lookupLocalArticleCode($localId);
+				$localCodesForId = $this->_lookupLocalArticleCode($localId);
 				foreach ($localCodesForId as $pId => $c) {
 					$localCodes[$pId] = $c;
 				}
 			}
 			return $localCodes;
+		}
+
+		private function _lookupLocalArticleCode($localId) {
+			return $this->_adapter->lookupLocalArticleCode($localId);
 		}
 
 		public function canBeMatchedByLocalCode($localId) {
@@ -182,10 +193,20 @@ namespace Ciel\Api\Integration\Articles {
 
 			//To see if an article can be matched by local code,
 			//  it needs to have one, so see if it, indeed, does
-			$localCode = $this->_adapter
-				->lookupLocalArticleCode($localId);
+			$localCode = $this->_lookupLocalArticleCode($localId);
+			if (empty($localCode)) {
+				return false;
+			}
 
-			return !empty($localCode);
+			if (is_array($localCode)) {
+				foreach ($localCode as $id => $code) {
+					if (empty($code)) {
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 
 		public function updateArticleFromRemoteSource($localId) {
@@ -196,9 +217,7 @@ namespace Ciel\Api\Integration\Articles {
 			//Article must be already connected
 			//  so if it's not, simply do nothing
 			if ($this->isArticleConnected($localId)) {
-				$localCode = $this->_adapter
-					->lookupLocalArticleCode($localId);
-				
+				$localCode = $this->_lookupLocalArticleCode($localId);
 				foreach ($localCode as $pId => $c) {
 					$remoteData = $this->_getRemoteArticleByCode($c);
 					if (empty($remoteData)) {
@@ -215,15 +234,7 @@ namespace Ciel\Api\Integration\Articles {
 			}
 
 			if (!is_array($remoteDataOrId)) {
-				$articleId = intval($remoteDataOrId);
-				if ($articleId > 0) {
-					$remoteData = $this->_getRemoteArticleById($articleId);
-					if (empty($remoteData)) {
-						throw new RemoteArticleNotFoundException('id', $articleId);
-					}
-				} else {
-					throw new InvalidArgumentException('Remote Id must not be empty');
-				}
+				$remoteData = $this->_getRemoteArticleDataByIdOrThrow($remoteDataOrId);
 			} else {
 				$remoteData = $remoteDataOrId;
 			}
@@ -237,8 +248,7 @@ namespace Ciel\Api\Integration\Articles {
 				throw new InvalidArgumentException('Local Id must not be empty');
 			}
 
-			return $this->_adapter
-				->lookupLocalArticleCode($localId);
+			return $this->_lookupLocalArticleCode($localId);
 		}
 
 		public function getDefaultArticleExportParameters() {
@@ -472,9 +482,7 @@ namespace Ciel\Api\Integration\Articles {
 
 			$results = array();
 			if ($this->isArticleConnected($localId)) {
-				$localCode = $this->_adapter
-					->lookupLocalArticleCode($localId);
-				
+				$localCode = $this->_lookupLocalArticleCode($localId);
 				foreach ($localCode as $pId => $c) {
 					$stocks = $this->_getStocksForSingleArticleByCode($c);
 					$results[$c] = $this->_adapter
@@ -570,8 +578,7 @@ namespace Ciel\Api\Integration\Articles {
 			}
 
 			$connected = true;
-			$localCode = $this->_adapter
-				->lookupLocalArticleCode($localId);
+			$localCode = $this->_lookupLocalArticleCode($localId);
 
 			if (!empty($localCode)) {
 				foreach ($localCode as $pId => $c) {
@@ -592,7 +599,13 @@ namespace Ciel\Api\Integration\Articles {
 			if (empty($localId)) {
 				throw new InvalidArgumentException('Local Id must not be empty');
 			}
-			$this->_adapter->disconnectArticle($localId);
+
+			$localCode = $this->_lookupLocalArticleCode($localId);
+			if (!empty($localCode)) {
+				foreach ($localCode as $pId => $c) {
+					$this->_adapter->disconnectArticle($pId);
+				}
+			}
 		}
 
 		private function _getAllRemoteArticles() {
@@ -731,8 +744,7 @@ namespace Ciel\Api\Integration\Articles {
             }
 
 			$result = array();
-			$localCode = $this->_adapter
-				->lookupLocalArticleCode($localId);
+			$localCode = $this->_lookupLocalArticleCode($localId);
 
 			if (!empty($localCode)) {
 				foreach ($localCode as $pId => $c) {

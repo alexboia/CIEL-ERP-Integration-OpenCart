@@ -6,5 +6,11 @@ namespace Ciel\Api\Data {
 		const Variable = 'variable';
 
 		const Variation = 'variation';
+
+		const Pack = 'pack';
+
+		const PackItem = 'pack-item';
+
+		const Unknown = 'unknown';
 	}
 }

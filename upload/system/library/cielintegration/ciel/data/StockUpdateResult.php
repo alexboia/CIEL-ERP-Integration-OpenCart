@@ -34,12 +34,12 @@ namespace Ciel\Api\Data {
 			return new self(true, null);
 		}
 
-		public function offsetExists(mixed $offset): bool { 
+		public function offsetExists($offset) { 
 			return $offset === self::KEY_UPDATED 
 				|| $offset === self::KEY_REASON;
 		}
 
-		public function offsetGet(mixed $offset): mixed { 
+		public function offsetGet($offset) { 
 			if ($offset === self::KEY_UPDATED){
 				return $this->getUpdated();
 			} else if ($offset === self::KEY_REASON) {
@@ -49,7 +49,7 @@ namespace Ciel\Api\Data {
 			}
 		}
 
-		public function offsetSet(mixed $offset, mixed $value): void { 
+		public function offsetSet($offset, $value) { 
 			$this->_throwReadOnly();
 		}
 
@@ -57,7 +57,7 @@ namespace Ciel\Api\Data {
 			throw new Exception('Stock update result is read only!');
 		}
 
-		public function offsetUnset(mixed $offset): void { 
+		public function offsetUnset($offset) { 
 			$this->_throwReadOnly();
 		}
 
@@ -67,6 +67,13 @@ namespace Ciel\Api\Data {
 
 		public function getReason() {
 			return $this->_reason;
+		}
+
+		public function toArray() {
+			return array(
+				self::KEY_REASON => $this->getReason(),
+				self::KEY_UPDATED => $this->getUpdated()
+			);
 		}
 	}
 }

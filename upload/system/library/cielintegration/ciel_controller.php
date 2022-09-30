@@ -11,7 +11,7 @@ namespace CielIntegration {
 	 * @property \Url $url
 	 * @property \Document $document
 	 * */
-	class CielController extends \Controller {
+	abstract class CielController extends \Controller {
 		use WithBootstrapper;
 		use WithLanguage;
 		use WithInputSanitization;

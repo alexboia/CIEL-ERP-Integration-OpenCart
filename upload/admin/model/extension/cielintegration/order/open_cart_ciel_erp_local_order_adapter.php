@@ -78,7 +78,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				$this->_clearRemoteDocumentData($localId);	
 			} else {
 				throw new LocalOrderNotFoundException('id', $localId);
-			}		
+			}
 		}
 
 		private function _orderExists($orderId) {
@@ -105,7 +105,7 @@ namespace CielIntegration\Integration\Admin\Order {
 				return $this->_isRemoteDocumentIssuedForOrder($localId);	
 			} else {
 				return false;
-			}		
+			}
 		}
 
 		private function _isRemoteDocumentIssuedForOrder($orderId) {

@@ -53,27 +53,43 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$remotePartnerData = $this->_getRemotePartnerModel()
-				->getByCustomerId($customerId);
-
+			$remotePartnerData = $this->_getRemotePartnerDataByCustomerId($customerId);
 			if (empty($remotePartnerData)) {
 				return null;
 			}
 
 			return array(
-				'address_billing_type' 
-					=> $remotePartnerData['billing_type'],
-				'address_tax_attribute' 
-					=> $remotePartnerData['billing_company_tax_attribute'],
-				'address_tax_code' 
-					=> $remotePartnerData['billing_company_tax_code'],
-				'address_bank' 
-					=> $remotePartnerData['billing_company_bank'],
-				'address_iban' 
-					=> $remotePartnerData['billing_company_iban'],
-				'address_trade_reg_number' 
-					=> $remotePartnerData['billing_company_trade_register_number']
+				'address_billing_type' => $remotePartnerData['billing_type'],
+				'address_tax_attribute' => !empty($remotePartnerData['billing_company_tax_attribute'])
+					? $remotePartnerData['billing_company_tax_attribute']
+					: null,
+				'address_tax_code' => !empty($remotePartnerData['billing_company_tax_code'])
+					? $remotePartnerData['billing_company_tax_code']
+					: null,
+				'address_bank' => !empty($remotePartnerData['billing_company_bank'])
+					? $remotePartnerData['billing_company_bank']
+					: null,
+				'address_iban' => !empty($remotePartnerData['billing_company_iban'])
+					? $remotePartnerData['billing_company_iban']
+					: null,
+				'address_trade_reg_number' => !empty($remotePartnerData['billing_company_trade_register_number'])
+					? $remotePartnerData['billing_company_trade_register_number']
+					: null
 			);
+		}
+
+		private function _getRemotePartnerDataByCustomerId($customerId) {
+			$remotePartnerData = $this
+				->_getRemotePartnerModel()
+				->getByCustomerId($customerId);
+
+			if (!empty($remotePartnerData)) {
+				foreach ($remotePartnerData as $key => $value) {
+					$remotePartnerData[$key] = trim($value);
+				}				
+			}
+
+			return $remotePartnerData;
 		}
 
 		public function getRemotePartnerBindingInformation($customerId) {
@@ -81,19 +97,21 @@ namespace CielIntegration\Integration\Admin\Partner {
 				return null;
 			}
 
-			$remotePartnerData = $this->_getRemotePartnerModel()
-				->getByCustomerId($customerId);
+			$remotePartnerData = $this->_getRemotePartnerDataByCustomerId($customerId);
+			if (empty($remotePartnerData)) {
+				return null;
+			}
 
 			return $this->_extractRemotePartnerBindingInformation($remotePartnerData);
 		}
 
-		private function _extractRemotePartnerBindingInformation($remotePartnerData) {
-			return !empty($remotePartnerData) && !empty($remotePartnerData['remote_partner_code'])
+		private function _extractRemotePartnerBindingInformation(array $remotePartnerData) {
+			return !empty($remotePartnerData['remote_partner_code'])
 				? array(
-					'remote_partner_code' 
-						=> $remotePartnerData['remote_partner_code'],
-					'remote_partner_addr_worksite_id' 
-						=> $remotePartnerData['remote_partner_addr_worksite_id']
+					'remote_partner_code' => $remotePartnerData['remote_partner_code'],
+					'remote_partner_addr_worksite_id' => !empty($remotePartnerData['remote_partner_addr_worksite_id'])
+						? $remotePartnerData['remote_partner_addr_worksite_id']
+						: null
 				)
 				: null;
 		}
