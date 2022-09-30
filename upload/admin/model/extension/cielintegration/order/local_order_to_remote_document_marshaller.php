@@ -280,7 +280,7 @@ namespace CielIntegration\Integration\Admin\Order {
 
 		private function _isBatchTrackingEnabled($productId) {
 			return $this->_productResolver
-				->getBatchTrackingStatus($productId) == 1;
+				->getRemoteBatchTrackingStatus($productId) == 1;
 		}
 
 		private function _calculateTax($amount, $taxClassId) {
@@ -295,12 +295,12 @@ namespace CielIntegration\Integration\Admin\Order {
 
 		private function _getVatOutOptionName($productId) {
 			return $this->_productResolver
-				->getVatOutOptionName($productId);
+				->getRemoteVatOutOptionName($productId);
 		}
 
 		private function _getVatOutQuotaValue($productId) {
 			return $this->_productResolver
-				->getVatOutQuotaValue($productId);
+				->getRemoteVatOutQuotaValue($productId);
 		}
 
 		private function _computeDiscountPercent($discount, $subtotal) {

@@ -54,6 +54,14 @@ class ControllerExtensionCielMenuEntries extends CielController {
 				'children' => array()
 			);
 		}
+
+		if ($this->user->hasPermission('access', 'extension/ciel_export_for_nextup_import')) {
+			$items[] = array(
+				'name' => $this->_t('ciel_menu_export_for_nextup_import'),
+				'href' => $this->_createRouteUrl('extension/ciel_export_for_nextup_import'),
+				'children' => array()
+			);
+		}
 		
 		if ($this->_isStoreBound()) {
 			if ($this->user->hasPermission('modify', 'extension/ciel_sync_products')) {

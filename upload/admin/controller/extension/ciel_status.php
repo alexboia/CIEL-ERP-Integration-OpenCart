@@ -77,12 +77,19 @@ class ControllerExtensionCielStatus extends CielController {
 		$data['lbl_php_version'] = $this->_t('lbl_php_version');
 		$data['lbl_opencart_version'] = $this->_t('lbl_opencart_version');
 
+		$data['txt_cancel_action'] = $this->_t('button_cancel');
+		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
+
 		$data['html_loading_indicator'] = $this->_renderLoadingIndicator();
-		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
+		$data['html_breadcrumbs'] = $this->_renderBreadcrumbsToIndex();
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/ciel_status', 
 			$data);
+	}
+
+	private function _renderBreadcrumbsToIndex() {
+		return $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
 	}
 
 	private function _getBreadcrumbsData() {

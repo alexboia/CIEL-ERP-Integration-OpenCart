@@ -88,7 +88,7 @@ namespace CielIntegration\Integration\Admin\Order {
 		
 		private function _isBatchTrackingEnabled($productId) {
 			return $this->_productResolver
-				->getBatchTrackingStatus($productId) == 1;
+				->getRemoteBatchTrackingStatus($productId) == 1;
 		}
 
 		private function _cacheOrderDocumentPreRequisitesStatus($orderId, 

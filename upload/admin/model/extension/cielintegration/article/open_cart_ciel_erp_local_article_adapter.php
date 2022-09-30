@@ -279,7 +279,7 @@ namespace CielIntegration\Integration\Admin\Article {
 
 		private function _getProductBatchTrackingStatus($productId) {
 			return $this->_productResolver
-				->getBatchTrackingStatus($productId);
+				->getRemoteBatchTrackingStatus($productId);
 		}
 
 		public function disconnectAllArticles() { 
@@ -311,13 +311,28 @@ namespace CielIntegration\Integration\Admin\Article {
 				'code' => $product['sku'],
 				'type' => 'simple',
 				'name' => $product['name'],
+				'categoryName' => $this->_getCategoryNames($productId),
 				'description' => trim($product['description']),
 				'manageStock' => true,
 				'permalink' => $this->_getProductEditUrl($productId),
-				'remoteId' => $this->_getRemoteArticleId($productId)
+				'remoteId' => $this->_getRemoteArticleId($productId),
+				'catalogPriceIncludesTax' => false,
+				'catalogPrice' => $product['price'],
+				'taxRate' => $this->_getHighestPriorityTaxRate($productId),
+				'variations' => array()
 			);
 			
 			return $data;
+		}
+
+		private function _getHighestPriorityTaxRate($productId) {
+			return $this->_productResolver
+				->getHighestPriorityTaxRate($productId);
+		}
+
+		private function _getCategoryNames($productId) {
+			return $this->_productResolver
+				->getCategoryNames($productId);
 		}
 
 		private function _getRemoteArticleId($productId) {

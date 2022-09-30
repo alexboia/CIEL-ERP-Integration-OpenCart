@@ -5,7 +5,10 @@
 	<div class="page-header">
 		<div class="container-fluid">
 			<div class="pull-right">
-				
+				<a href="<?php echo $url_cancel_action; ?>" 
+					data-toggle="tooltip" 
+					title="<?php echo $txt_cancel_action; ?>" 
+					class="btn btn-default"><i class="fa fa-reply"></i></a>
 			</div>
 			<h1><?php echo $ciel_status_title; ?></h1>
 			<?php echo $html_breadcrumbs; ?>

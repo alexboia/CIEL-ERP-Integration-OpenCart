@@ -66,5 +66,9 @@ namespace CielIntegration\Integration\Admin {
 				? constant('LVDCIELOC_USE_PARTNER_PHONE_MATCHING') === true
 				: false;
 		}
+
+		public function useNameForPartnerMatching() {
+			return false;
+		}
 	}
 }

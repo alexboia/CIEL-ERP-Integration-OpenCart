@@ -85,7 +85,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			$name = $this->_getRemoteArticleName($remoteArticleData);
 
 			return array(
-				'model' => '',
+				'model' => $sku,
 				'sku' => $sku,
 				'upc' => '',
 				'ean' => '',

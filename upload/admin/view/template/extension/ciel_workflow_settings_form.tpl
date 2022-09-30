@@ -16,6 +16,18 @@
 	</div>
 
 	<div class="panel-body">
+		<!-- Document binding -->
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="myc_wf_add_vat_on_payment_to_document">Se aplica TVA la incasare:</label>
+			<div class="col-sm-10">
+				<input type="checkbox" 
+					name="myc_wf_add_vat_on_payment_to_document"
+					id="myc_wf_add_vat_on_payment_to_document"
+					value="yes"
+				/>
+			</div>
+		</div>
+
 		<!-- Shipping bindings -->
 		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_wf_add_shipping_to_document"><?php echo $lbl_add_shipping_to_document_field; ?>:</label>
@@ -156,7 +168,7 @@
 			</div>
 		</div>
 
-		<!-- CIEL-imported products bindings -->
+		<!-- NextUp-imported products bindings -->
 		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_wf_new_tax_rate_geo_zone_id"><?php echo $lbl_new_tax_rate_geo_zone_id_field; ?>:</label>
 			<div class="col-sm-10">

@@ -5,6 +5,8 @@ namespace CielIntegration\Integration\Admin\Article {
     use CielIntegration\Integration\Admin\IntegrationService;
     use CielIntegration\WithRouteUrl;
 
+    use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
+
 	/**
 	 * @property \DB $db
 	 */
@@ -37,7 +39,7 @@ namespace CielIntegration\Integration\Admin\Article {
 			);
 		}
 
-		public function getVatOutOptionName($productId) {
+		public function getRemoteVatOutOptionName($productId) {
 			if (empty($productId)) {
 				return null;
 			}
@@ -46,7 +48,7 @@ namespace CielIntegration\Integration\Admin\Article {
 				->getVatOutOptionName($productId);
 		}
 
-		public function getVatOutQuotaValue($productId) {
+		public function getRemoteVatOutQuotaValue($productId) {
 			if (empty($productId)) {
 				return 0;
 			}
@@ -55,7 +57,7 @@ namespace CielIntegration\Integration\Admin\Article {
 				->getVatOutQuotaValue($productId);
 		}
 
-		public function getBatchTrackingStatus($productId) {
+		public function getRemoteBatchTrackingStatus($productId) {
 			if (empty($productId)) {
 				return false;
 			}
@@ -144,6 +146,39 @@ namespace CielIntegration\Integration\Admin\Article {
 
 			return $this->_getLocalProductModel()
 				->getProduct($productId);
+		}
+
+		public function getHighestPriorityTaxRate($productId) {
+			if (empty($productId)) {
+				return null;
+			}
+
+			$taxRateInfo = $this->_getLocalProductModel()
+				->getHighestPriorityTaxRateInfo($productId);
+
+			if (!empty($taxRateInfo)) {
+				return floatval($taxRateInfo['product_main_tax_rate']);
+			} else {
+				return 0;
+			}
+		}
+
+		public function getCategoryNames($productId) {
+			if (empty($productId)) {
+				return null;
+			}
+
+			$categories = $this->_getLocalProductModel()
+				->getCategories($productId);
+
+			$categoryNames = array();
+			if (!empty($categories)) {
+				foreach ($categories as $c) {
+					$categoryNames[] = $c['category_name'];
+				}
+			}
+
+			return $categoryNames;
 		}
 
 		/**
