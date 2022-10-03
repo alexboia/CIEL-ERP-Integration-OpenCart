@@ -11,6 +11,7 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 
 	public function assets() {
 		if ($this->_isOrderViewPage()) {
+			$this->_includeCommonStylesheet();
 			$this->_includeLoadingIndicatorScript();
 			$this->_includeOperationStatusScript();
 			$this->_includeCommonScript();
@@ -30,9 +31,12 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 
 		$viewData = array();
 		$isCielDocumentIssued = $this->_isDocumentIssuedForOrder($orderId);
+		$isStoreBound = $this->_isStoreBound();
 		
 		//Basic order data
+		$viewData['is_store_bound'] = $isStoreBound;
 		$viewData['is_ciel_document_issued'] = $isCielDocumentIssued;
+
 		if ($isCielDocumentIssued) {
 			$viewData['has_warning'] = false;
 			$viewData['ciel_document_issue_enabled'] = false;
@@ -100,6 +104,8 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			->_t('lbl_order_action_remove_document');
 		$viewData['msg_order_no_actions_available'] = $this
 			->_t('msg_order_no_actions_available');
+		$viewData['msg_order_action_store_not_bound'] = $this
+			->_t('msg_order_action_store_not_bound');
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_order_info_tab_contents', 
@@ -110,6 +116,11 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 
 		return $contentsAppender
 			->rewrite($output);
+	}
+
+	private function _isStoreBound() {
+		return $this->_getStoreBinding()
+			->isBound();
 	}
 
 	private function _isDocumentIssuedForOrder($orderId) {

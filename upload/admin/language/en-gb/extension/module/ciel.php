@@ -125,3 +125,4 @@ $_['lbl_order_actions'] = $_['lbl_product_actions'];
 $_['lbl_order_action_issue_document'] = 'Issue NextUp ERP document';
 $_['lbl_order_action_remove_document'] = 'Remove NextUp ERP document';
 $_['msg_order_no_actions_available'] = 'No actions available at this time';
+$_['msg_order_action_store_not_bound'] = 'Extension configuration required! In order to sync order information, you need to first configure your extension settings.';

@@ -35,7 +35,7 @@ class ControllerExtensionCielStatus extends CielController {
 	public function index () {
 		//Prepare document assets
 		$this->_setDocumentTitleLangKey('ciel_status_title');
-		$this->_addStylesheet('extension/ciel_common.css');
+		$this->_includeCommonStylesheet();
 
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();

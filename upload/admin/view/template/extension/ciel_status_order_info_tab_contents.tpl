@@ -28,65 +28,71 @@
 	<div class="panel-body">
 		<div class="ciel-erp-order-document-container">
 			<div id="myc_order_operation_status_message" style="display: none;"></div>
-			<?php if ($has_warning): ?>
-				<?php if (!$ciel_document_prerequisite_status->areAllItemsConnected): ?>
-					<div class="myc-document-status-warning-item" role="alert">
-						<?php echo $msg_order_cant_issue_not_all_products_connected; ?>
-					</div>
-				<?php endif; ?>
+			<?php if ($is_store_bound): ?>
+				<?php if ($has_warning): ?>
+					<?php if (!$ciel_document_prerequisite_status->areAllItemsConnected): ?>
+						<div class="myc-document-status-warning-item" role="alert">
+							<?php echo $msg_order_cant_issue_not_all_products_connected; ?>
+						</div>
+					<?php endif; ?>
 
-				<?php if ($ciel_document_prerequisite_status->hasItemsWithBatchTracking 
-					&& !$ciel_document_prerequisite_status->isBatchTrackingPossible): ?>
-					<div class="myc-document-status-warning-item" role="alert">
-						<?php echo $msg_order_cant_issue_batch_tracking_not_posssible; ?>
-					</div>
-				<?php endif; ?>
+					<?php if ($ciel_document_prerequisite_status->hasItemsWithBatchTracking 
+						&& !$ciel_document_prerequisite_status->isBatchTrackingPossible): ?>
+						<div class="myc-document-status-warning-item" role="alert">
+							<?php echo $msg_order_cant_issue_batch_tracking_not_posssible; ?>
+						</div>
+					<?php endif; ?>
 
-				<?php if ($ciel_document_prerequisite_status->hasItemsWithBatchTracking 
-					&& !$ciel_document_prerequisite_status->isBatchTrackingSupported): ?>
-					<div class="myc-document-status-warning-item" role="alert">
-						<?php echo $msg_order_cant_issue_batch_tracking_not_available; ?>
-					</div>
+					<?php if ($ciel_document_prerequisite_status->hasItemsWithBatchTracking 
+						&& !$ciel_document_prerequisite_status->isBatchTrackingSupported): ?>
+						<div class="myc-document-status-warning-item" role="alert">
+							<?php echo $msg_order_cant_issue_batch_tracking_not_available; ?>
+						</div>
+					<?php endif; ?>
 				<?php endif; ?>
-			<?php endif; ?>
-			<div class="table-responsive">
-				<table class="table table-striped table-bordered table-hover">
-					<tr>
-						<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_order_ciel_erp_document_issued; ?></th>
-						<td class="text-left" style="width: 70%;">
-							<?php echo $is_ciel_document_issued 
-								? $lbl_txt_yes 
-								: $lbl_txt_no; ?>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_order_ciel_erp_document_type; ?></th>
-						<td class="text-left" style="width: 70%;">
-							<?php echo $is_ciel_document_issued 
-								? $ciel_remote_document_data['type_name'] 
-								: '-'; ?>
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="text-right"><?php echo $lbl_order_actions; ?></th>
-						<td class="text-left">
-							<?php if (!$is_ciel_document_issued): ?>
-								<?php if ($ciel_document_issue_enabled): ?>
-									<button id="myc_connect_issue_ciel_erp_document" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_issue_order_action; ?>">
-										<?php echo $lbl_order_action_issue_document; ?>
-									</button>
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover">
+						<tr>
+							<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_order_ciel_erp_document_issued; ?></th>
+							<td class="text-left" style="width: 70%;">
+								<?php echo $is_ciel_document_issued 
+									? $lbl_txt_yes 
+									: $lbl_txt_no; ?>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" class="text-right" style="width: 30%;"><?php echo $lbl_order_ciel_erp_document_type; ?></th>
+							<td class="text-left" style="width: 70%;">
+								<?php echo $is_ciel_document_issued 
+									? $ciel_remote_document_data['type_name'] 
+									: '-'; ?>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row" class="text-right"><?php echo $lbl_order_actions; ?></th>
+							<td class="text-left">
+								<?php if (!$is_ciel_document_issued): ?>
+									<?php if ($ciel_document_issue_enabled): ?>
+										<button id="myc_connect_issue_ciel_erp_document" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_issue_order_action; ?>">
+											<?php echo $lbl_order_action_issue_document; ?>
+										</button>
+									<?php else: ?>
+										<span><?php echo $msg_order_no_actions_available; ?></span>
+									<?php endif; ?>
 								<?php else: ?>
-									<span><?php echo $msg_order_no_actions_available; ?></span>
+									<button id="myc_connect_remove_ciel_erp_document" type="button" class="btn btn-danger" data-action-url="<?php echo $ciel_erp_remove_order_action; ?>">
+										<?php echo $lbl_order_action_remove_document; ?>
+									</button>
 								<?php endif; ?>
-							<?php else: ?>
-								<button id="myc_connect_remove_ciel_erp_document" type="button" class="btn btn-danger" data-action-url="<?php echo $ciel_erp_remove_order_action; ?>">
-									<?php echo $lbl_order_action_remove_document; ?>
-								</button>
-							<?php endif; ?>
-						</td>
-					</tr>
-				</table>
-			</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			<?php else: ?>
+				<div class="myc-alert myc-alert-danger" role="alert">
+					<?php echo $msg_order_action_store_not_bound; ?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

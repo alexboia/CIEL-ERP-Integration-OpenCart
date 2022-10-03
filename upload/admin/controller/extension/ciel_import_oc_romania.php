@@ -19,7 +19,7 @@ class ControllerExtensionCielImportOcRomania extends CielController {
 	public function index() {
 		//Prepare document assets
 		$this->_setDocumentTitleLangKey('ciel_import_oc_romania_title');
-		$this->_addStylesheet('extension/ciel_common.css');
+		$this->_includeCommonStylesheet();
 		
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();

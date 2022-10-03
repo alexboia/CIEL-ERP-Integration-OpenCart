@@ -21,7 +21,7 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 	public function index() {
 		//Prepare document assets
 		$this->_setDocumentTitleLangKey('ciel_import_new_products_title');
-		$this->_addStylesheet('extension/ciel_common.css');
+		$this->_includeCommonStylesheet();
 
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();

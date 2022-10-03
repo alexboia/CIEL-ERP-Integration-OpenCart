@@ -132,6 +132,10 @@ namespace CielIntegration {
 			$this->_addHeaderScript('extension/ciel_common.js');
 		}
 
+		protected function _includeCommonStylesheet() {
+			$this->_addStylesheet('extension/ciel_common.css');
+		}
+
 		protected function _createAjaxResponse(array $additionalProps = array()) {
 			$response = new \stdClass();
 			$response->success = false;

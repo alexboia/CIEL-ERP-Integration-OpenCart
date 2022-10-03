@@ -19,7 +19,7 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 
 	public function index() {
 		$this->_setDocumentTitleLangKey('ciel_export_for_nextup_import_title');
-		$this->_addStylesheet('extension/ciel_common.css');
+		$this->_includeCommonStylesheet();
 
 		$viewData = $this->_loadAdminLayout();
 

@@ -126,3 +126,4 @@ $_['lbl_order_actions'] = $_['lbl_product_actions'];
 $_['lbl_order_action_issue_document'] = 'Emite document în NextUp';
 $_['lbl_order_action_remove_document'] = 'Șterge document din NextUp';
 $_['msg_order_no_actions_available'] = 'Nicio acțiune disponibilă în acest moment.';
+$_['msg_order_action_store_not_bound'] = 'Este necesară configurarea extensiei! Pentru a putea efectua sincronizarea comenzilor, trebuie mai întâi să configurezi această extensie.';

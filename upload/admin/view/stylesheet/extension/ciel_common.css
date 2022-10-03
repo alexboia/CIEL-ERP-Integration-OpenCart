@@ -13,3 +13,17 @@
 .myc-status-label {
 	text-align: right;
 }
+
+.myc-alert {
+	overflow: auto;
+	padding: 10px;	
+	margin-bottom: 17px;
+	border: 1px solid transparent;
+	border-radius: 3px;
+}
+
+.myc-alert-danger {
+	background-color: #fef1f1;
+	border-color: #fde2e2;
+	color: #f56b6b;
+}
