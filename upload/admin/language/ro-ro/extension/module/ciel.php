@@ -102,6 +102,7 @@ $_['lbl_product_actions'] = 'Acțiuni disponibile';
 $_['lbl_product_action_update_full'] = 'Actualizează toate informațiile din NextUp ERP';
 $_['lbl_product_action_update_stocks'] = 'Actualizează doar stocurile din NextUp ERP';
 $_['lbl_product_action_connect'] = 'Conectează la NextUp ERP folosind codul SKU';
+$_['msg_product_action_store_not_bound'] = 'Este necesară configurarea extensiei! Pentru a putea efectua sincronizarea produselor, trebuie mai întâi să configurezi această extensie.';
 
 //
 // CIEL customer form tab
@@ -110,6 +111,7 @@ $_['lbl_product_action_connect'] = 'Conectează la NextUp ERP folosind codul SKU
 $_['lbl_customer_connected_to_ciel_erp'] = $_['lbl_product_connected_to_ciel_erp'];
 $_['lbl_customer_ciel_erp_partner_code'] = 'Cod partener NextUp';
 $_['lbl_customer_ciel_erp_partner_address_worksite_id'] = 'ID punct de lucru NextUp';
+$_['msg_customer_action_store_not_bound'] = 'Este necesară configurarea extensiei! Pentru a putea efectua sincronizarea clientilor, trebuie mai întâi să configurezi această extensie.';
 
 //
 // CIEL order view panel

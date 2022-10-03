@@ -101,6 +101,7 @@ $_['lbl_product_actions'] = 'Available actions';
 $_['lbl_product_action_update_full'] = 'Update entire information from NextUp ERP';
 $_['lbl_product_action_update_stocks'] = 'Update stock information from NextUp ERP';
 $_['lbl_product_action_connect'] = 'Connect to NextUp ERP by SKU';
+$_['msg_product_action_store_not_bound'] = 'Extension configuration required! In order to sync product information, you need to first configure your extension settings.';
 
 //
 // CIEL customer form tab
@@ -109,6 +110,7 @@ $_['lbl_product_action_connect'] = 'Connect to NextUp ERP by SKU';
 $_['lbl_customer_connected_to_ciel_erp'] = $_['lbl_product_connected_to_ciel_erp'];
 $_['lbl_customer_ciel_erp_partner_code'] = 'NextUp ERP partner code';
 $_['lbl_customer_ciel_erp_partner_address_worksite_id'] = 'NextUp ERP partner address worksite ID';
+$_['msg_customer_action_store_not_bound'] = 'Extension configuration required! In order to sync customer information, you need to first configure your extension settings.';
 
 //
 // CIEL order view panel

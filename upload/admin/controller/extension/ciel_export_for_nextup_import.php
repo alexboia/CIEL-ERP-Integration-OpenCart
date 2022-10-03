@@ -21,23 +21,31 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 		$this->_setDocumentTitleLangKey('ciel_export_for_nextup_import_title');
 		$this->_addStylesheet('extension/ciel_common.css');
 
-		$data = $this->_loadAdminLayout();
+		$viewData = $this->_loadAdminLayout();
 
-		$data['ciel_export_for_nextup_import_title'] = $this->_t('ciel_export_for_nextup_import_title');
-		$data['ciel_export_for_nextup_import_explanation'] = $this->_t('ciel_export_for_nextup_import_explanation');
-		$data['ciel_export_for_nextup_import_info'] = $this->_t('ciel_export_for_nextup_import_info');
+		$viewData['ciel_export_for_nextup_import_title'] = 
+			$this->_t('ciel_export_for_nextup_import_title');
+		$viewData['ciel_export_for_nextup_import_explanation'] = 
+			$this->_t('ciel_export_for_nextup_import_explanation');
+		$viewData['ciel_export_for_nextup_import_info'] = 
+			$this->_t('ciel_export_for_nextup_import_info');
 
-		$data['ciel_export_for_nextup_import_btn_action'] = $this->_createRouteUrl('extension/ciel_export_for_nextup_import/export');
-		$data['ciel_export_for_nextup_import_btn_text'] = $this->_t('ciel_export_for_nextup_import_btn_text');
+		$viewData['ciel_export_for_nextup_import_btn_action'] = 
+			$this->_createRouteUrl('extension/ciel_export_for_nextup_import/export');
+		$viewData['ciel_export_for_nextup_import_btn_text'] = 
+			$this->_t('ciel_export_for_nextup_import_btn_text');
 
-		$data['txt_cancel_action'] = $this->_t('button_cancel');
-		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
+		$viewData['txt_cancel_action'] = 
+			$this->_t('button_cancel');
+		$viewData['url_cancel_action'] = 
+			$this->_createRouteUrl('common/dashboard');
 
-		$data['html_breadcrumbs'] = $this->_renderBreadcrumbsToIndex();
+		$viewData['html_breadcrumbs'] = 
+			$this->_renderBreadcrumbsToIndex();
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/ciel_export_for_nextup_import', 
-			$data);
+			$viewData);
 	}
 
 	private function _renderBreadcrumbsToIndex() {

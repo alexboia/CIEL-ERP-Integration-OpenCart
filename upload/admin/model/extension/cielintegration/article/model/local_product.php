@@ -99,7 +99,11 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			}
 
 			$db = $this->_getDb();
-			$result = $db->query('SELECT COUNT(product_id) as product_count FROM `' . DB_PREFIX . 'product` WHERE product_id = "' . intval($productId) . '"');
+			$result = $db->query(
+				'SELECT COUNT(product_id) as product_count 
+					FROM `' . DB_PREFIX . 'product` 
+					WHERE `product_id` = "' . intval($productId) . '"'
+			);
 			
 			$row = $result->row;
 			return !empty($row) && !empty($row['product_count'])
@@ -113,7 +117,12 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			}
 
 			$db = $this->_getDb();
-			$result = $db->query('SELECT product_id FROM `' . DB_PREFIX . 'product` WHERE sku = "' . $db->escape($sku) . '" LIMIT 1');
+			$result = $db->query(
+				'SELECT product_id 
+					FROM `' . DB_PREFIX . 'product` 
+					WHERE `sku` = "' . $db->escape($sku) . '" 
+					LIMIT 1'
+			);
 
 			$row = $result->row;
 			return !empty($row) && !empty($row['product_id'])
@@ -129,7 +138,7 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			$db = $this->_getDb();
 			$result = $db->query('SELECT sku 
 				FROM `' . DB_PREFIX . 'product` 
-				WHERE product_id = "' . intval($productId) . '"');
+				WHERE `product_id` = "' . intval($productId) . '"');
 
 			$row = $result->row;
 			return !empty($row) && !empty($row['sku'])

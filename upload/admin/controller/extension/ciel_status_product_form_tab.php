@@ -2,9 +2,12 @@
 
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\Article\ProductResolver;
+use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\TabPanelContentsRewriter;
 
 class ControllerExtensionCielStatusProductFormTab extends CielController {
+	use WithCielIntegration;
+
 	public function assets() {
 		if ($this->_isProductEditingPage()) {
 			$this->_includeLoadingIndicatorScript();
@@ -28,6 +31,7 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 		$remoteArticleData = $this->_getProductRemoteArticleData($productId);
 
 		//Basic product data
+		$viewData['is_store_bound'] = $this->_isStoreBound();
 		$viewData['remote_article_data'] = $remoteArticleData;
 		$viewData['is_connected_to_ciel_erp'] = !empty($remoteArticleData['remote_id']);
 
@@ -72,6 +76,8 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 			->_t('lbl_product_action_update_stocks');
 		$viewData['lbl_product_action_connect'] = $this
 			->_t('lbl_product_action_connect');
+		$viewData['msg_product_action_store_not_bound'] = $this
+			->_t('msg_product_action_store_not_bound');
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_product_form_tab_contents', 
@@ -84,6 +90,11 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 
 		return $tabPanelRewriter
 			->rewrite($output);
+	}
+
+	private function _isStoreBound() {
+		return $this->_getStoreBinding()
+			->isBound();
 	}
 
 	private function _getProductRemoteArticleData($productId) {
