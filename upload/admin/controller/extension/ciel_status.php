@@ -2,6 +2,7 @@
 use CielIntegration\CielController;
 use CielIntegration\ExtensionInfo;
 use CielIntegration\Integration\Admin\WithCielIntegration;
+use CielIntegration\LogFileDownloader;
 use CielIntegration\LogFileManager;
 use CielIntegration\WithAdminLayoutLoader;
 use CielIntegration\WithLogging;
@@ -177,8 +178,9 @@ class ControllerExtensionCielStatus extends CielController {
 
 		$logFileManager = $this->_getLogFileManager($logType);
 		if ($logFileManager->exists()) {
-			$this->_sendLogFileDownloadHeaders($logFileManager->getFileName());
-			$this->response->setOutput($logFileManager->getEntireContents());
+			$downloader = $this->_getLogFileDownloader();
+			$downloader->sendLogFile($logFileManager->getFileName(), 
+				$logFileManager->getEntireContents());
 		} else {
 			die;
 		}
@@ -203,22 +205,8 @@ class ControllerExtensionCielStatus extends CielController {
 		}
 	}
 
-	private function _sendLogFileDownloadHeaders($logFileName) {
-		$this->response->addheader('Pragma: public');
-		$this->response->addheader('Expires: 0');
-		$this->response->addheader('Content-Description: File Transfer');
-		$this->response->addheader('Content-Type: application/octet-stream');
-		$this->response->addheader('Content-Disposition: attachment; filename="' . $this->_getLogFileDownloadName($logFileName) . '"');
-		$this->response->addheader('Content-Transfer-Encoding: binary');
-	}
-
-	private function _getLogFileDownloadName($logFileName) {
-		$logFileNameWithoutExtension = str_ireplace('.log', '', 
-			$logFileName);
-
-		return $logFileNameWithoutExtension . '_' 
-			. date('Y-m-d_H-i-s', time()) 
-			. '.log';
+	private function _getLogFileDownloader() {
+		return new LogFileDownloader($this->response);
 	}
 
 	public function clearLog() {

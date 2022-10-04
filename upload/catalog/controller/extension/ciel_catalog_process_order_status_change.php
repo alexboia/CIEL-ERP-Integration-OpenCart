@@ -20,7 +20,7 @@ class ControllerExtensionCielCatalogProcessOrderStatusChange extends CielControl
 				$this->_logDebug('Order id or order status id was empty.');
 			}
 		} else {
-			$this->_logDebug('Unsupported arguments provided: ' . print_r($args));
+			$this->_logDebug('Unsupported arguments provided: ' . print_r($args, true));
 		}
 
 		$this->_logDebug('Done processing order history add.');
