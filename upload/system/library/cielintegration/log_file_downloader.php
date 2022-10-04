@@ -16,12 +16,12 @@ namespace CielIntegration {
 		}
 
 		private function _sendHeaders($fileName) {
-			$this->response->addheader('Pragma: public');
-			$this->response->addheader('Expires: 0');
-			$this->response->addheader('Content-Description: File Transfer');
-			$this->response->addheader('Content-Type: application/octet-stream');
-			$this->response->addheader('Content-Disposition: attachment; filename="' . $this->_buildLogFileDownloadName($fileName) . '"');
-			$this->response->addheader('Content-Transfer-Encoding: binary');
+			$this->_response->addheader('Pragma: public');
+			$this->_response->addheader('Expires: 0');
+			$this->_response->addheader('Content-Description: File Transfer');
+			$this->_response->addheader('Content-Type: application/octet-stream');
+			$this->_response->addheader('Content-Disposition: attachment; filename="' . $this->_buildLogFileDownloadName($fileName) . '"');
+			$this->_response->addheader('Content-Transfer-Encoding: binary');
 		}
 
 		private function _buildLogFileDownloadName($logFileName) {

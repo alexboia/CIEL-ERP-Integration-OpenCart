@@ -178,9 +178,12 @@ class ControllerExtensionCielStatus extends CielController {
 
 		$logFileManager = $this->_getLogFileManager($logType);
 		if ($logFileManager->exists()) {
+			$fileName = $logFileManager->getFileName();
+			$fileContents = $logFileManager->getEntireContents();
+
 			$downloader = $this->_getLogFileDownloader();
-			$downloader->sendLogFile($logFileManager->getFileName(), 
-				$logFileManager->getEntireContents());
+			$downloader->sendLogFile($fileName, 
+				$fileContents);
 		} else {
 			die;
 		}
