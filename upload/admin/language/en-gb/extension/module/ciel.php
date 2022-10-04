@@ -48,6 +48,8 @@ $_['lbl_connection_password_field'] = 'Password';
 $_['txt_placeholder_connection_password_field'] = 'Password used for NextUp webserivce server logon';
 $_['lbl_connection_society_code_field'] = 'Society code';
 $_['txt_placeholder_connection_society_code_field'] = 'Society code bound to this store';
+$_['lbl_connection_timeout_seconds_field'] = 'Timeout';
+$_['txt_placeholder_connection_timeout_seconds_field'] = 'The time, in secunds, after which the connectin is severed if it is not successfully established';
 
 $_['text_runtime_settings_form_heading'] = 'NextUp ERP Integration Options';
 $_['mgs_err_fill_in_valid_warehouse'] = 'Please fill in a valid warehouse.';

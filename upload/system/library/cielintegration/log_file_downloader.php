@@ -1,11 +1,8 @@
 <?php
 namespace CielIntegration {
-
-    use Response;
-
 	class LogFileDownloader {
 		/**
-		 * @var Response
+		 * @var \Response
 		 */
 		private $_response;
 

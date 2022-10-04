@@ -33,7 +33,11 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 			'lbl_connection_password_field'
 				=> $this->_t('lbl_connection_password_field'),
 			'txt_placeholder_connection_password_field'
-				=> $this->_t('txt_placeholder_connection_password_field')
+				=> $this->_t('txt_placeholder_connection_password_field'),
+			'lbl_connection_timeout_seconds_field'
+				=> $this->_t('lbl_connection_timeout_seconds_field'),
+			'txt_placeholder_connection_timeout_seconds_field'
+				=> $this->_t('txt_placeholder_connection_timeout_seconds_field')
 		));
 
 		return $this->_renderView('extension/ciel_connection_settings_form', 
@@ -45,19 +49,22 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 		if ($storeBinding->hasConnectionInfo()) {
 			$endpoint = $storeBinding->getEndpoint();
 			$credentials = $storeBinding->getCredentials();
+			$timeoutSeconds = $storeBinding->getTimeoutSeconds();
 
 			$data = array(
 				'has_connection' => true,
 				'connection_endpoint_url' => $endpoint,
 				'connection_username' => $credentials['username'],
-				'connection_society_code' => $credentials['society']
+				'connection_society_code' => $credentials['society'],
+				'connection_timeout_seconds' => $timeoutSeconds
 			);
 		} else {
 			$data = array(
 				'has_connection' => false,
 				'connection_endpoint_url' => '',
 				'connection_username' => '',
-				'connection_society_code' => ''
+				'connection_society_code' => '',
+				'connection_timeout_seconds' => 10
 			);
 		}
 

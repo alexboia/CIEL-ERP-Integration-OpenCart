@@ -87,14 +87,14 @@ class ControllerExtensionCielMenuEntries extends CielController {
 					'children' => array()
 				);
 			}
+		}
 
-			if ($this->user->hasPermission('access', 'extension/ciel_status')) {
-				$items[] = array(
-					'name' => $this->_t('ciel_menu_status'),
-					'href' => $this->_createRouteUrl('extension/ciel_status'),
-					'children' => array()
-				);
-			}
+		if ($this->user->hasPermission('access', 'extension/ciel_status')) {
+			$items[] = array(
+				'name' => $this->_t('ciel_menu_status'),
+				'href' => $this->_createRouteUrl('extension/ciel_status'),
+				'children' => array()
+			);
 		}
 
 		return $items;

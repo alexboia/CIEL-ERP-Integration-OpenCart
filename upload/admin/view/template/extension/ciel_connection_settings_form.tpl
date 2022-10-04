@@ -53,6 +53,18 @@
 				/>
 			</div>
 		</div>
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="myc_connection_timeout_seconds"><?php echo $lbl_connection_timeout_seconds_field; ?>:</label>
+			<div class="col-sm-10">
+				<input class="form-control" 
+					type="text" 
+					name="myc_connection_timeout_seconds" 
+					id="myc_connection_timeout_seconds" 
+					value="<?php echo $connection_timeout_seconds; ?>" 
+					placeholder="<?php echo $txt_placeholder_connection_timeout_seconds_field; ?>" 
+				/>
+			</div>
+		</div>
 		<div class="form-group">
 			<div class="col-sm-2"></div>
 			<div class="col-sm-10">

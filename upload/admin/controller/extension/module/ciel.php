@@ -1,4 +1,6 @@
 <?php
+
+use Ciel\Api\CielConnectionTestResult;
 use Ciel\Api\Data\DocumentStatusType;
 use Ciel\Api\Data\DocumentType;
 use Ciel\Api\Data\WarehouseType;
@@ -121,6 +123,9 @@ class ControllerExtensionModuleCiel extends CielController {
 			$bindingSociety = isset($this->request->post['myc_connection_society_code'])
 				? $this->_sanitizeTextInput($this->request->post['myc_connection_society_code'])
 				: '';
+			$bindingTimeoutSeconds = isset($this->request->post['myc_connection_timeout_seconds'])
+				? max(0, intval($this->request->post['myc_connection_timeout_seconds']))
+				: 10;
 
 			//Warehouse information
 			$bindingWarehouse = isset($this->request->post['myc_runtime_warehouse'])
@@ -229,6 +234,10 @@ class ControllerExtensionModuleCiel extends CielController {
 				$bindingPassword = $storeBinding->getPassword();
 			}
 
+			if ($bindingTimeoutSeconds <= 0) {
+				$bindingTimeoutSeconds = 10;
+			}
+
 			if (empty($bindingEndpoint) 
 				|| empty($bindingUsername) 
 				|| empty($bindingPassword) 
@@ -243,7 +252,8 @@ class ControllerExtensionModuleCiel extends CielController {
 				$storeBinding->setCredentials($bindingUsername, 
 					$bindingPassword, 
 					$bindingSociety);
-				
+				$storeBinding
+					->setTimeoutSeconds($bindingTimeoutSeconds);				
 				$storeBinding
 					->save();
 
@@ -476,9 +486,16 @@ class ControllerExtensionModuleCiel extends CielController {
 			$bindingSociety = isset($this->request->post['myc_connection_society_code'])
 				? $this->_sanitizeTextInput($this->request->post['myc_connection_society_code'])
 				: '';
+			$bindingTimeoutSeconds = isset($this->request->post['myc_connection_timeout_seconds'])
+				? intval($this->request->post['myc_connection_timeout_seconds'])
+				: 30;
 
 			if (empty($bindingPassword) && $storeBinding->hasConnectionInfo()) {
 				$bindingPassword = $storeBinding->getPassword();
+			}
+
+			if ($bindingTimeoutSeconds <= 0) {
+				$bindingTimeoutSeconds = 10;
 			}
 
 			if (!empty($bindingEndpoint) 
@@ -486,13 +503,27 @@ class ControllerExtensionModuleCiel extends CielController {
 				&& !empty($bindingPassword) 
 				&& !empty($bindingSociety)) {
 				try {
-					$this->_processTestCielWebServiceConnection($bindingEndpoint, 
+					$result = $this->_processTestCielWebServiceConnection($bindingEndpoint, 
 						$bindingUsername, 
 						$bindingPassword, 
-						$bindingSociety);
+						$bindingSociety,
+						$bindingTimeoutSeconds);
+
+					$message = null;
+					$success = false;
+
+					switch ($result) {
+						case CielConnectionTestResult::ERR_CONNECTION_TEST_OK:
+							$message = $this->_t('msg_connection_test_ok');
+							$success = true;
+							break;
+						default:
+							$message = $this->_t('msg_connection_test_failed');
+							break;
+					}
 	
-					$response->message = $this->_t('msg_connection_test_ok');
-					$response->success = true;
+					$response->message = $message;
+					$response->success = $success;
 				} catch (Exception $exc) {
 					$this->_logError($exc);
 					$response->message = $this->_t('msg_connection_test_failed');
@@ -508,18 +539,20 @@ class ControllerExtensionModuleCiel extends CielController {
 	}
 
 	private function _processTestCielWebServiceConnection($endpoint, 
-		$userName, 
-		$password, 
-		$society ) {
-
-		$storeBinding = $this->_getStoreBinding();
-		$client = $storeBinding->createCielClient($endpoint);
-
-		$client->logon($userName, 
+			$userName, 
 			$password, 
-			$society);
-			
-		$client->logout();
+			$society,
+			$timeoutSeconds) {
+		$storeBinding = $this->_getStoreBinding();
+		$testerService = $storeBinding->createConnectionTesterService();
+		
+		$result = $testerService->testConnection($endpoint, 
+			$userName, 
+			$password, 
+			$society, 
+			$timeoutSeconds);
+
+		return $result;
 	}
 
 	private function _getShippingService() {

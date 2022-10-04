@@ -49,6 +49,8 @@ $_['lbl_connection_password_field'] = 'Parola';
 $_['txt_placeholder_connection_password_field'] = 'Parola folosit pentru autentificarea la server-ul NextUp';
 $_['lbl_connection_society_code_field'] = 'Cos societate';
 $_['txt_placeholder_connection_society_code_field'] = 'Codul de societate folosit pentru acest magazin';
+$_['lbl_connection_timeout_seconds_field'] = 'Timeout (secunde)';
+$_['txt_placeholder_connection_timeout_seconds_field'] = 'Timpul, masurat in secunde, dupa care conexiunea este intrerupta daca nu a fost stabilita cu succes';
 
 $_['text_runtime_settings_form_heading'] = 'Opțiuni Integrare NextUp ERP';
 $_['mgs_err_fill_in_valid_warehouse'] = 'Trebuie să competezi un depozit valid.';

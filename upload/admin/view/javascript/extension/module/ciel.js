@@ -49,6 +49,8 @@
 			myc_connection_password: $('#myc_connection_password')
 				.val(),
 			myc_connection_society_code: $('#myc_connection_society_code')
+				.val(),
+			myc_connection_timeout_seconds: $('#myc_connection_timeout_seconds')
 				.val()
 		};
 	}
