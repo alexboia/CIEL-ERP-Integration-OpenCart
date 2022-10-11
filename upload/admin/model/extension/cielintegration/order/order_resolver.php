@@ -221,6 +221,30 @@ namespace CielIntegration\Integration\Admin\Order {
 			);
 		}
 
+		public function getRemoteOrderStats() {
+			$localCount = $this->_countLocalOrders();
+			$remoteCount = $this->_countRemoteOrders();
+			$percentage =  $localCount > 0 && $remoteCount > 0
+				? min(100, ceil(((float)$remoteCount / $localCount) * 100))
+				: 0;
+
+			return array(
+				'localCount' => $localCount,
+				'remoteCount' => $remoteCount,
+				'percentage' => $percentage
+			);
+		}
+
+		private function _countRemoteOrders() {
+			return $this->_getRemoteOrderModel()
+				->countRemoteOrders();
+		}
+
+		private function _countLocalOrders() {
+			return $this->_getLocalOrderModel()
+				->countLocalOrders();
+		}
+
 		/**
 		 * @return \DB
 		 */

@@ -30,6 +30,12 @@ $_['option_txt_document_type_sale_order'] = 'Sale order';
 $_['option_txt_document_type_sale_invoice'] = 'Sale invoice';
 
 //
+// Sidebar widgets
+//
+
+$_['lbl_ciel_document_issued_percentage'] = 'NextUp documents issued';
+
+//
 // Ciel integration settings page
 //
 

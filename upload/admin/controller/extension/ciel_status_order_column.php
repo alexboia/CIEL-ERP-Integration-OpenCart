@@ -10,9 +10,11 @@ class ControllerExtensionCielStatusOrderColumn extends CielController {
 	public function index(&$route, &$data, &$output) {
 		$dataSource = $this->_getColumnDataSource($data);
 
-		$listingRewriter = new ListingContentsRewriter('#form-order', 
+		$listingRewriter = new ListingContentsRewriter(
+			'#form-order', 
 			'td input[name="selected[]"]', 
-			$dataSource);
+			$dataSource
+		);
 
 		$listingRewriter->addColumn(
 			'ciel_document_issued', 

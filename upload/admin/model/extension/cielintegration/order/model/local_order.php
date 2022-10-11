@@ -176,12 +176,35 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 			}
 
 			$db = $this->_getDb();
-			$result = $db->query('SELECT COUNT(order_id) as order_count FROM `' . DB_PREFIX . 'order` WHERE order_id = "' . intval($orderId) . '"');
-			
-			$row = $result->row;
-			return !empty($row) && !empty($row['order_count'])
-				? intval($row['order_count']) > 0
-				: false;
+			$query = 'SELECT COUNT(`order_id`) as order_count 
+				FROM `' . DB_PREFIX . 'order` 
+				WHERE `order_id` = "' . intval($orderId) . '"';
+
+			$result = $db->query($query);
+			if (!empty($result) && !empty($result->row)) {
+				$row = $result->row;
+				return !empty($row) && !empty($row['order_count'])
+					? intval($row['order_count']) > 0
+					: false;
+			} else {
+				return 0;
+			}
+		}
+
+		public function countLocalOrders() {
+			$db = $this->_getDb();
+			$query = 'SELECT COUNT(`order_id`) as order_count 
+				FROM `' . DB_PREFIX . 'order`';
+
+			$result = $db->query($query);
+			if (!empty($result) && !empty($result->row)) {
+				$row = $result->row;
+				return !empty($row) && !empty($row['order_count'])
+					? intval($row['order_count'])
+					: 0;
+			} else {
+				return 0;
+			}			
 		}
 	}
 }

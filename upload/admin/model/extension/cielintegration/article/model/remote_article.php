@@ -66,18 +66,10 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			return $status;
 		}
 
-		protected function _getTableName() {
-			return self::BASE_TABLE_NAME;
-		}
-
-		protected function _getIdColumnKey() {
-			return self::ID_COLUMN_KEY;
-		}
-
 		public function getAllProductIdsBySkus() {
 			$db = $this->_getDb();
 			$query = 'SELECT p.product_id, p.sku
-				FROM `' . DB_PREFIX . 'mycciel_oc_remote_product` rp
+				FROM `' . $this->_getFullTableName() . '` rp
 					LEFT JOIN `' . DB_PREFIX . 'product` p ON p.product_id = rp.mycciel_oc_product_id';
 			
 			$productIds = array();
@@ -120,6 +112,18 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 				&& !empty($record['remote_price_vat_quota_value']) 
 					? floatval($record['remote_price_vat_quota_value']) 
 					: 0;
+		}
+
+		protected function _getFullTableName() {
+			return DB_PREFIX . $this->_getTableName();
+		}
+
+		protected function _getTableName() {
+			return self::BASE_TABLE_NAME;
+		}
+
+		protected function _getIdColumnKey() {
+			return self::ID_COLUMN_KEY;
 		}
 	}
 }

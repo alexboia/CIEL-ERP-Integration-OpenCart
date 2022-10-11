@@ -9,9 +9,11 @@ class ControllerExtensionCielStatusCustomerColumn extends CielController {
 	public function index(&$route, &$data, &$output) {
 		$dataSource = $this->_getColumnDataSource($data);
 
-		$listingRewriter = new ListingContentsRewriter('#form-customer', 
+		$listingRewriter = new ListingContentsRewriter(
+			'#form-customer', 
 			'td input[name="selected[]"]', 
-			$dataSource);
+			$dataSource
+		);
 
 		$listingRewriter->addColumn(
 			'ciel_customer_connected', 

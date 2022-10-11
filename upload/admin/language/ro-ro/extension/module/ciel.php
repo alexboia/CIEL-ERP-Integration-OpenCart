@@ -30,6 +30,12 @@ $_['option_txt_document_type_sale_order'] = 'Comandă de vânzare';
 $_['option_txt_document_type_sale_invoice'] = 'Factura de vânzare';
 
 //
+// Sidebar widgets
+//
+
+$_['lbl_ciel_document_issued_percentage'] = 'Documente emise NextUp';
+
+//
 // Ciel integration settings page
 //
 

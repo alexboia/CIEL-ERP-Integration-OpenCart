@@ -116,6 +116,11 @@ class ModelExtensionModuleCiel extends CielModel {
 				'trigger' => 'admin/view/common/column_left/before',
 				'action' => 'extension/ciel_menu_entries'
 			),
+			array(
+				'code' => 'ciel_integration_stats_entries',
+				'trigger' => 'admin/view/common/column_left/after',
+				'action' => 'extension/ciel_integration_stats_entries'
+			),
 
 			array(
 				'code' => 'ciel_after_customer_add',

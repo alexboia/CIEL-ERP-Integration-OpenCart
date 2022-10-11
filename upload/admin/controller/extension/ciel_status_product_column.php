@@ -9,9 +9,11 @@ class ControllerExtensionCielStatusProductColumn extends CielController {
 	public function index(&$route, &$data, &$output) {
 		$dataSource = $this->_getColumnDataSource($data);
 
-		$listingRewriter = new ListingContentsRewriter('#form-product', 
+		$listingRewriter = new ListingContentsRewriter(
+			'#form-product', 
 			'td input[name="selected[]"]', 
-			$dataSource);
+			$dataSource
+		);
 
 		$listingRewriter->addColumn(
 			'ciel_connected', 
