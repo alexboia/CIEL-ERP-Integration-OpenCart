@@ -1,6 +1,7 @@
 <?php
 namespace CielIntegration\Integration\Admin\Article {
 
+    use Ciel\Api\Data\BulkProductUpdateResult;
     use Ciel\Api\Data\StockUpdateResult;
     use Ciel\Api\Exception\ArticleCodeAlreadyExistsException;
     use Ciel\Api\Exception\LocalArticleNotFoundException;
@@ -206,10 +207,8 @@ namespace CielIntegration\Integration\Admin\Article {
 				}
 			}
 
-			return array(
-				'eligible' => $eligibleProductCount,
-				'updated' => $updatedProductCount
-			);
+			return BulkProductUpdateResult::successful($eligibleProductCount, 
+				$updatedProductCount);
 		}
 
 		private function _getAllConnectedLocalProductIdsBySkus() {
@@ -241,10 +240,8 @@ namespace CielIntegration\Integration\Admin\Article {
 				}
 			}
 
-			return array(
-				'eligible' => $eligibleProductCount,
-				'updated' => $updatedProductCount
-			);
+			return BulkProductUpdateResult::successful($eligibleProductCount, 
+				$updatedProductCount);
 		}
 
 		public function lookupLocalArticleCode($localId) { 

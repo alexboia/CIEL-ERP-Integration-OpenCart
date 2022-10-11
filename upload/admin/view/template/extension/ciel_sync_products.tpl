@@ -58,6 +58,11 @@
 	</div>
 
 	<?php echo $html_loading_indicator; ?>
+
+	<script type="text/javascript">
+		window['ciel_sync_products_success_msg'] = '<?php echo $ciel_sync_products_success_msg; ?>';
+		window['ciel_sync_products_error_msg'] = '<?php echo $ciel_sync_products_error_msg; ?>';
+	</script>
 </div>
 
 <?php echo $html_footer; ?>

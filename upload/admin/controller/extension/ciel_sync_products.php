@@ -39,6 +39,9 @@ class ControllerExtensionCielSyncProducts extends CielController {
 		$data['ciel_sync_products_eligible_count_header'] = $this->_t('ciel_sync_products_eligible_count_header');
 		$data['ciel_sync_products_updated_count_header'] = $this->_t('ciel_sync_products_updated_count_header');
 
+		$data['ciel_sync_products_success_msg'] = $this->_t('ciel_sync_products_success_msg');
+		$data['ciel_sync_products_error_msg'] = $this->_t('ciel_sync_products_error_msg');
+
 		$data['ciel_update_btn_text'] = $this->_t('ciel_update_btn_text');
 		$data['ciel_update_btn_action'] = $this->_createRouteUrl('extension/ciel_sync_products/execute');
 

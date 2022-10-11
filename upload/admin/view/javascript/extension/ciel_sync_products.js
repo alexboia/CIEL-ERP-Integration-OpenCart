@@ -1,8 +1,8 @@
 (function($) {
 	"use strict";
 
-	var DEFAULT_MSG_PRODUCTS_UPDATED = 'Product information successfully updated.';
-	var DEFAULT_MSG_PRODUCTS_UPDATE_ERROR = 'Product information could not be updated.';
+	var DEFAULT_MSG_PRODUCTS_UPDATED = null;
+	var DEFAULT_MSG_PRODUCTS_UPDATE_ERROR = null;
 
 	var $ctlSyncInfoStats = null;
 	var $ctlTotalEligibleCount = null;
@@ -79,7 +79,13 @@
 			_syncInformation);
 	}
 
+	function _initMessages() {
+		DEFAULT_MSG_PRODUCTS_UPDATED = window['ciel_sync_products_success_msg'] || null;
+		DEFAULT_MSG_PRODUCTS_UPDATE_ERROR = window['ciel_sync_products_error_msg'] || null;
+	}
+
 	$(document).ready(function() {
+		_initMessages();
 		_initControls();
 		_initTooltips();
 		_initEvents();
