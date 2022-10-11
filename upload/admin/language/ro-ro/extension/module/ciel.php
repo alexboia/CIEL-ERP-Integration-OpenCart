@@ -29,7 +29,6 @@ $_['option_txt_document_type_none'] = 'Nu emite niciun documents';
 $_['option_txt_document_type_sale_order'] = 'Comandă de vânzare';
 $_['option_txt_document_type_sale_invoice'] = 'Factura de vânzare';
 
-
 //
 // Ciel integration settings page
 //
@@ -77,6 +76,7 @@ $_['lbl_runtime_stock_update_mode_field'] = 'Modalitate actualizare stoc';
 $_['text_workflow_settings_form_heading'] = 'Opțiuni Flux de lucru NextUp ERP - OpenCart';
 $_['msg_err_fill_in_valid_in_stock_status_id'] = 'Te rugăm să completezi o valoare validă pentru statusul produselor care se află-n stoc.';
 $_['msg_err_fill_in_valid_out_of_stock_status_id'] = 'Te rugăm să completezi o valoare validă pentru statusul produselor care nu se află-n stoc.';
+$_['lbl_add_vat_on_payment_to_document_field'] = 'Se aplică TVA la încasare';
 $_['lbl_add_shipping_to_document_field'] = 'Evidențiază transportul pe document';
 $_['lbl_in_stock_status_id_field'] = 'Status stoc pentru produse care se află-n stoc';
 $_['lbl_out_of_stock_status_id_field'] = 'Status stoc pentru produse epuizate din stoc';
@@ -119,6 +119,10 @@ $_['msg_customer_action_store_not_bound'] = 'Este necesară configurarea extensi
 // CIEL order view panel
 //
 
+$_['lbl_subsection_products_not_connected_title'] = 'Produse neconectate la NextUp ERP ';
+$_['lbl_subsection_integration_status_title'] = 'Informații stare integrare NExtUp ERP';
+$_['lbl_missing_product_placeholder'] = 'Produsul cu ID-ul %d lipsește';
+$_['msg_order_cant_issue_not_configured'] = 'Emiterea de documente este deazactivata prin configuratia modulului.';
 $_['msg_order_cant_issue_not_all_products_connected'] = 'Nu poate fi emis documentul deoarece nu toate produsele sunt conectate la NextUp ERP.';
 $_['msg_order_cant_issue_batch_tracking_not_posssible'] = 'Nu poate fi emis documentul deoarece comanda are produse care folosesc urmărire pe loturi, dar depozitul selectat nu este de tip En-Gross.';
 $_['msg_order_cant_issue_batch_tracking_not_available'] = 'Nu poate fi emis documentul deoarece comanda are produse care folosesc urmărire pe loturi, dar licența ta nu permite emiterea de documente cu articole ce au urmărire pe loturi.';

@@ -185,8 +185,11 @@ class ControllerExtensionModuleCiel extends CielController {
 				: '';
 
 			//Workflow settings
+			$wfAddVatOnPaymentToDocument = isset($this->request->post['myc_wf_add_vat_on_payment_to_document'])
+				? $this->request->post['myc_wf_add_vat_on_payment_to_document'] === 'yes'
+				: false;
 			$wfAddShippingToDocument = isset($this->request->post['myc_wf_add_shipping_to_document'])
-				? $this->request->post['myc_wf_add_shipping_to_document'] == 'yes'
+				? $this->request->post['myc_wf_add_shipping_to_document'] === 'yes'
 				: false;
 
 			$wfInStockStatusId = isset($this->request->post['myc_wf_in_stock_status_id'])
@@ -362,6 +365,7 @@ class ControllerExtensionModuleCiel extends CielController {
 					$this->_reconfigureStoreForBindingConfiguration();
 
 					//Save workflow
+					$workflow->saveAdditionalDocumentOptions($wfAddVatOnPaymentToDocument);
 					$workflow->saveShippingSettings($wfAddShippingToDocument);
 					$workflow->saveProductStockStatuses($wfInStockStatusId, 
 						$wfOutOfStockStatusId);

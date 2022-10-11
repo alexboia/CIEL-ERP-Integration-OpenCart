@@ -68,7 +68,7 @@ class ControllerExtensionCielCatalogProcessOrderStatusChange extends CielControl
 	}
 
 	private function _shouldAutoIssueDocumentForOrderStatus($orderStatusId) {
-		return $this->_issueDocumentEnabled() 
+		return $this->_issueDocumentConfigured() 
 			&& in_array($orderStatusId, 
 				$this->_getIssueDocumentWhen());
 	}
@@ -110,7 +110,7 @@ class ControllerExtensionCielCatalogProcessOrderStatusChange extends CielControl
 	}
 
 	private function _shouldAutoRemoveDocumentForOrderStatus($orderStatusId) {
-		return $this->_issueDocumentEnabled() 
+		return $this->_issueDocumentConfigured() 
 			&& in_array($orderStatusId, 
 				$this->_getCancelDocumentWhen());
 	}

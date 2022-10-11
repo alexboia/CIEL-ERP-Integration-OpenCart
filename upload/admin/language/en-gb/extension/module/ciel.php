@@ -76,6 +76,7 @@ $_['lbl_runtime_stock_update_mode_field'] = 'Stock update mode';
 $_['text_workflow_settings_form_heading'] = 'NextUp ERP OpenCart Workflow Options';
 $_['msg_err_fill_in_valid_in_stock_status_id'] = 'Please fill in a valid in-stock status id.';
 $_['msg_err_fill_in_valid_out_of_stock_status_id'] = 'Please fill in a valid out-of-stock status id.';
+$_['lbl_add_vat_on_payment_to_document_field'] = 'VAT applicable on payment';
 $_['lbl_add_shipping_to_document_field'] = 'Add shipping to document';
 $_['lbl_in_stock_status_id_field'] = 'Stock status for in-stock products';
 $_['lbl_out_of_stock_status_id_field'] = 'Stock status for out-of-stock products';
@@ -118,6 +119,10 @@ $_['msg_customer_action_store_not_bound'] = 'Extension configuration required! I
 // CIEL order view panel
 //
 
+$_['lbl_subsection_products_not_connected_title'] = 'Products not connected to NextUp ERP ';
+$_['lbl_subsection_integration_status_title'] = 'NextUp ERP integration status information';
+$_['lbl_missing_product_placeholder'] = 'Product with ID %d is missing';
+$_['msg_order_cant_issue_not_configured'] = 'Documents issue disabled via configuration';
 $_['msg_order_cant_issue_not_all_products_connected'] = 'No document can be issued, because not all order products are connected to NextUp ERP.';
 $_['msg_order_cant_issue_batch_tracking_not_posssible'] = 'No document can be issued, because the order has products that use batch tracking, but the selected warehouse is not of En-Gross type.';
 $_['msg_order_cant_issue_batch_tracking_not_available'] = 'No document can be issued, because the order has products that use batch tracking, but your license does not support issuing documents with batch-tracked articles.';

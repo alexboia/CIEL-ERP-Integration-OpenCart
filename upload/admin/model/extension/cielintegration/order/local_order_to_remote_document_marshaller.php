@@ -102,8 +102,13 @@ namespace CielIntegration\Integration\Admin\Order {
 				'order_shipping' => $this->_shouldAddShippingToDocument() 
 					? $orderShipping 
 					: null,
+
 				'order_product_lines' => $orderProductLines,
-				'order_discount_lines' => $orderDiscountLines
+				'order_discount_lines' => $orderDiscountLines,
+
+				'order_options' => array(
+					'add_vat_on_payment_note' => $this->_shouldAddVatOnPaymentNoteToDocument()
+				)
 			);
 
 			return $orderData;
@@ -397,6 +402,11 @@ namespace CielIntegration\Integration\Admin\Order {
 		private function _shouldAddShippingToDocument() {
 			return $this->_getWorkflow()
 				->getAddShippingToDocument();
+		}
+
+		private function _shouldAddVatOnPaymentNoteToDocument() {
+			return $this->_getWorkflow()
+				->getAddVatOnPaymentToDocument();
 		}
 
 		/**

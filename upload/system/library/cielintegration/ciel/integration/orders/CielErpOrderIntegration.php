@@ -326,6 +326,9 @@ namespace Ciel\Api\Integration\Orders {
 			$document['DocumentLines'] = $documentLines;
 			$discountAggregator->clear();
 
+			$document = $this->_setDocumentOptions($document, 
+				$orderData);
+
 			return $document;
 		}
 
@@ -430,6 +433,24 @@ namespace Ciel\Api\Integration\Orders {
 				'VATOutQuotaValue' => $this->_storeBinding->getShippingVatQuotaValue(),
 				'Discount' => 0
 			);
+		}
+
+		private function _setDocumentOptions(array &$document, array $orderData) {
+			if (!empty($orderData['order_options'])) {
+				$orderOptions = $orderData['order_options'];
+				
+				if (isset($orderOptions['add_vat_on_payment_note']) 
+					&& $orderOptions['add_vat_on_payment_note'] === true) {
+					$orderData['IsVatCollectableOnPayment'] = true;
+				}
+
+				if (isset($orderOptions['is_simplified_invoice'])
+					&& $orderOptions['is_simplified_invoice'] === true) {
+					$orderOptions['IsSimplifiedInvoice'] = true;
+				}
+			}
+
+			return $document;
 		}
 
 		/**

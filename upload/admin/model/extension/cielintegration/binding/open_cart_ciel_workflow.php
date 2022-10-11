@@ -13,6 +13,19 @@ namespace CielIntegration\Integration\Admin\Binding {
 			$this->_bindingSettingsModel = new IntegrationSettings($registry);
 		}
 
+		public function getAddVatOnPaymentToDocument() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['add_vat_on_payment_to_document'])
+				? $wfSettings['add_vat_on_payment_to_document'] == true
+				: false;
+		}
+
+		public function saveAdditionalDocumentOptions($addVatOnPaymentToDocument) {
+			$this->_saveWorkflowSettigs(array(
+				'add_vat_on_payment_to_document' => ($addVatOnPaymentToDocument == true)
+			));
+		}
+
 		public function getAddShippingToDocument() {
 			$wfSettings = $this->_getWorkflowSettings();
 			return isset($wfSettings['add_shipping_to_document']) 

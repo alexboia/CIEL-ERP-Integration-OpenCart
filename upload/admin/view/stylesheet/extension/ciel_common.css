@@ -27,3 +27,13 @@
 	border-color: #fde2e2;
 	color: #f56b6b;
 }
+
+.myc-item-intration-status-subsection {
+	background-color: #1898dd;
+	color: #fff;
+	padding: 10px;
+	border-radius: 3px;
+	display: inline-block;
+	width: auto;
+	font-size: 12px;
+}

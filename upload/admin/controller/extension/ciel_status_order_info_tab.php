@@ -1,6 +1,7 @@
 <?php
 use CielIntegration\CielController;
 use CielIntegration\ContentsAppender;
+use CielIntegration\Integration\Admin\Article\ProductResolver;
 use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\Integration\Admin\WithLookupDataProvider;
 
@@ -46,19 +47,35 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 				->_determineDocumentPrerequisiteStatus($orderId);
 			$canOrderItemsBeAddedToDocument = $preRequisiteStatus
 				->canOrderItemsBeAddedToDocument();
-			
+
 			$viewData['can_order_items_be_added_to_document'] = 
 				$canOrderItemsBeAddedToDocument;
 			$viewData['ciel_document_prerequisite_status'] = $preRequisiteStatus
 				->asPlainObject();
-			$viewData['ciel_document_issue_enabled'] = $this->_issueDocumentEnabled() 
-				&& $canOrderItemsBeAddedToDocument;
-			$viewData['has_warning'] = !$viewData['ciel_document_issue_enabled']
-				|| !$viewData['can_order_items_be_added_to_document'];
+			
+			$viewData['ciel_document_issue_configured'] = 
+				$this ->_issueDocumentConfigured();
+			$viewData['ciel_document_issue_enabled'] = 
+				$viewData['ciel_document_issue_configured']
+					&& $canOrderItemsBeAddedToDocument;		
+			$viewData['ciel_has_warning'] = 
+				!$viewData['ciel_document_issue_enabled'];
+
+			$disconnectedLocalProductsIds = $preRequisiteStatus
+				->getDisconnectedItemsLocalIds();
+
+			if (!empty($disconnectedLocalProductsIds)) {
+				$viewData['ciel_disconnected_local_products'] = 
+					$this->_getLocalProductsInformation($disconnectedLocalProductsIds);
+			} else {
+				$viewData['ciel_disconnected_local_products'] = 
+					array();
+			}
 		}
 
 		//Html fragments
-		$viewData['html_loading_indicator'] = $this->_renderLoadingIndicator();
+		$viewData['html_loading_indicator'] = $this
+			->_renderLoadingIndicator();
 
 		//Order actions data
 		$orderActionsData = array(
@@ -85,6 +102,14 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			->_t('lbl_txt_no');
 		$viewData['lbl_tab_order_label'] = $this
 			->_t('lbl_tab_order_label');
+		$viewData['lbl_subsection_products_not_connected_title'] = $this
+			->_t('lbl_subsection_products_not_connected_title');
+		$viewData['lbl_subsection_integration_status_title'] = $this
+			->_t('lbl_subsection_integration_status_title');
+		$viewData['lbl_missing_product_placeholder'] = $this
+			->_t('lbl_missing_product_placeholder');
+		$viewData['msg_order_cant_issue_not_configured'] = $this
+			->_t('msg_order_cant_issue_not_configured');
 		$viewData['msg_order_cant_issue_not_all_products_connected'] = $this
 			->_t('msg_order_cant_issue_not_all_products_connected');
 		$viewData['msg_order_cant_issue_batch_tracking_not_posssible'] = $this
@@ -147,6 +172,11 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			->determineOrderDocumentPreRequisitesStatus($orderId);
 	}
 
+	private function _getLocalProductsInformation(array $producIds) {
+		return $this->_getProductResolver()
+			->getLocalProductsInformation($producIds);
+	}
+
 	private function _getOrderIdFromUrl() {
 		return isset($this->request->get['order_id'])
 			? intval($this->request->get['order_id'])
@@ -156,5 +186,9 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 	private function _getOrderIntegration() {
 		return $this->_getIntegrationFactory()
 			->getOrderIntegration();
+	}
+
+	private function _getProductResolver() {
+		return new ProductResolver($this->registry);
 	}
 }

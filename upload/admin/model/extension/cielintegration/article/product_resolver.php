@@ -5,8 +5,6 @@ namespace CielIntegration\Integration\Admin\Article {
     use CielIntegration\Integration\Admin\IntegrationService;
     use CielIntegration\WithRouteUrl;
 
-    use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
-
 	/**
 	 * @property \DB $db
 	 */
@@ -179,6 +177,45 @@ namespace CielIntegration\Integration\Admin\Article {
 			}
 
 			return $categoryNames;
+		}
+
+		public function getLocalProductsInformation(array $productIds) {
+			$productIds = array_map('intval', 
+				$productIds);
+			$productIds = array_filter($productIds, function($productId) {
+				return $productId > 0;
+			});
+
+			if (empty($productIds)) {
+				return array();
+			}
+
+			$rawProductsInfos = $this->_getLocalProductModel()
+				->getProductsInformation($productIds);
+
+			$productsInfos = array();
+			foreach ($rawProductsInfos as $rp) {
+				$productId = $rp['product_id'];
+				$productsInfos[$productId] = array_merge($rp, 
+					array(
+						'product_url' => $this->getProductEditUrl($productId)
+					)
+				);
+			}
+
+			foreach ($productIds as $pId) {
+				if (!isset($productsInfos[$pId])) {
+					$productsInfos[$pId] = array(
+						'product_id' => $pId,
+						'product_name' => null,
+						'product_model' => null,
+						'product_url' => null,
+						'product_sku' => null
+					);
+				}
+			}
+
+			return $productsInfos;
 		}
 
 		/**

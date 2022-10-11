@@ -20,7 +20,7 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 		
 		public function getProducts($data = array()) {
 			$db = $this->_getDb();
-			$query = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->_getCurrentLanguageId() . "'";
+			$query = "SELECT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . $this->_getCurrentLanguageId() . "'";
 	
 			if (!empty($data['filter_name'])) {
 				$query .= " AND pd.name LIKE '" . $db->escape($data['filter_name']) . "%'";
@@ -136,7 +136,7 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			}
 
 			$db = $this->_getDb();
-			$result = $db->query('SELECT sku 
+			$result = $db->query('SELECT `sku`
 				FROM `' . DB_PREFIX . 'product` 
 				WHERE `product_id` = "' . intval($productId) . '"');
 
@@ -191,6 +191,28 @@ namespace CielIntegration\Integration\Admin\Article\Model {
 			return !empty($result->rows)
 				? $result->rows
 				: null;
+		}
+
+		public function getProductsInformation(array $productIds) {
+			if (empty($productIds)) {
+				return array();
+			}
+
+			$db = $this->_getDb();
+			$query = "SELECT `p`.`product_id`, 
+					`pd`.`name` AS `product_name`, 
+					`p`.`model` AS `product_model`, 
+					`p`.`sku` AS `product_sku`
+				FROM `" . DB_PREFIX . "product` `p` 
+				LEFT JOIN `" . DB_PREFIX . "product_description` `pd`
+					ON (`p`.`product_id` = `pd`.`product_id`) 
+				WHERE `pd`.`language_id` = '" . $this->_getCurrentLanguageId() . "'
+					AND `p`.`product_id` IN (" . implode(', ', $productIds) . ")";
+
+			$result = $db->query($query);
+			return !empty($result->rows)
+				? $result->rows
+				: array();
 		}
 	}
 }

@@ -18,12 +18,13 @@
 	<div class="panel-body">
 		<!-- Document binding -->
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_wf_add_vat_on_payment_to_document">Se aplica TVA la incasare:</label>
+			<label class="col-sm-2 control-label" for="myc_wf_add_vat_on_payment_to_document"><?php echo $lbl_add_vat_on_payment_to_document_field; ?>:</label>
 			<div class="col-sm-10">
 				<input type="checkbox" 
 					name="myc_wf_add_vat_on_payment_to_document"
 					id="myc_wf_add_vat_on_payment_to_document"
 					value="yes"
+					<?php echo myc_checked_attr($myc_wf_add_vat_on_payment_to_document); ?>
 				/>
 			</div>
 		</div>
@@ -36,7 +37,7 @@
 					name="myc_wf_add_shipping_to_document"
 					id="myc_wf_add_shipping_to_document"
 					value="yes"
-					<?php echo $myc_wf_add_shipping_to_document ? 'checked="checked"' : ''; ?>
+					<?php echo myc_checked_attr($myc_wf_add_shipping_to_document); ?>
 				/>
 			</div>
 		</div>

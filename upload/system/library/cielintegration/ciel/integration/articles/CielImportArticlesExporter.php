@@ -87,7 +87,7 @@ class CielImportArticlesExporter {
 				$this->_parameters->getMeasurementUnitName(),
 				$this->_getEanIfUniqueOrEmpty($localProductData),
 				$this->_parameters->getIsBlocked(),
-				isset($localProductData['categoryName']) 
+				!empty($localProductData['categoryName']) 
 					? $this->_formatCategoryNameForExport($localProductData['categoryName'], 
 						$this->_parameters->getArticleCategoryNameSeparator(), 
 						$this->_parameters->getArticleCategoryPartCount())

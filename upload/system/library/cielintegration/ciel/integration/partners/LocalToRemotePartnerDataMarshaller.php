@@ -88,6 +88,7 @@ namespace Ciel\Api\Integration\Partners {
 				'CountryName' => isset($customerAddr['address_country_name']) 
 					? $customerAddr['address_country_name'] 
 					: '-',
+				'RezidenceName' => $this->_determineResidenceName($customerAddr),
 				'BuildingNumber' => null,
 				'BuildingEntryNumber' => null,
 				'ApartmentNumber' => null,
@@ -117,6 +118,19 @@ namespace Ciel\Api\Integration\Partners {
 			return PartnerAddressUtility::determineExternalAddressKey($this->_localCustomerData);
 		}
 
+		private function _determineResidenceName(array $customerAddr) {
+			$residenceName = 'Romania';
+			if (!empty($customerAddr['address_country_name'])) {
+				$testCountryName = strtoupper(trim($customerAddr['address_country_name']));
+				if ($testCountryName != 'ROMANIA' 
+						&& $testCountryName != 'ROMÂNIA' 
+						&& $testCountryName != 'RO') {
+					$residenceName = 'UE';
+				}
+			}
+			return $residenceName;
+		}
+
 		private function _composeBillingStreetName(array $customerAddr) {
 			$addressLinesJoinedParts = array();
 
@@ -137,7 +151,7 @@ namespace Ciel\Api\Integration\Partners {
 
 		private function _getRemoteCodeFromLocalCustomerData() {
 			return !empty($this->_localCustomerData['code'])
-				? $this->_localCustomerData['code']
+				? trim($this->_localCustomerData['code'])
 				: null;
 		}
 	}

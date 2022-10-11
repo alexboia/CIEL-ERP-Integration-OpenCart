@@ -29,7 +29,13 @@
 		<div class="ciel-erp-order-document-container">
 			<div id="myc_order_operation_status_message" style="display: none;"></div>
 			<?php if ($is_store_bound): ?>
-				<?php if ($has_warning): ?>
+				<?php if ($ciel_has_warning): ?>
+					<?php if (!$ciel_document_issue_configured): ?>
+						<div class="myc-document-status-warning-item" role="alert">
+							<?php echo $msg_order_cant_issue_not_configured; ?>
+						</div>
+					<?php endif; ?>
+
 					<?php if (!$ciel_document_prerequisite_status->areAllItemsConnected): ?>
 						<div class="myc-document-status-warning-item" role="alert">
 							<?php echo $msg_order_cant_issue_not_all_products_connected; ?>
@@ -49,7 +55,37 @@
 							<?php echo $msg_order_cant_issue_batch_tracking_not_available; ?>
 						</div>
 					<?php endif; ?>
+
+					<?php if (!empty($ciel_disconnected_local_products)): ?>
+						<h4 class="myc-item-intration-status-subsection"><?php echo $lbl_subsection_products_not_connected_title; ?></h4>
+						<div id="myc-disconnected-local-products-table" class="table-responsive myc-disconnected-local-products-table">
+							<table class="table table-striped table-bordered table-hover">		
+								<thead>
+									<th class="text-center">SKU</th>
+									<th>Name</th>
+									<th>Model</th>
+								</thead>
+								<tbody>
+									<?php foreach ($ciel_disconnected_local_products as $dp): ?>
+										<tr>
+											<td class="text-center"><?php echo !empty($dp['product_sku']) 
+												? $dp['product_sku'] 
+												: 'N/A'; ?></td>
+											<td><?php echo !empty($dp['product_name']) 
+												? ('<a href="' . $dp['product_url'] . '" target="_blank">' . $dp['product_name'] . '</a>')
+												: ('<i>' . sprintf($lbl_missing_product_placeholder, $dp['product_id']) . '</i>'); ?></td>
+											<td><?php echo !empty($dp['product_model']) 
+												? $dp['product_model'] 
+												: 'N/A'; ?></td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>		
+					<?php endif; ?>
 				<?php endif; ?>
+
+				<h4 class="myc-item-intration-status-subsection"><?php echo $lbl_subsection_integration_status_title; ?></h4>
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover">
 						<tr>

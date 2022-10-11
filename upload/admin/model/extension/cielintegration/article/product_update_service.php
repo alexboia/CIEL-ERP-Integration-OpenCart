@@ -110,7 +110,7 @@ namespace CielIntegration\Integration\Admin\Article {
 				'length_class_id' => $this->_getNewProductLengthClassId(),
 				'subtract' => 1,
 				'minimum' => 1,
-				'status' => 0,
+				'status' => 1,
 				'viewed' => 0,
 				'keyword' => null,
 				'sort_order' => 0,

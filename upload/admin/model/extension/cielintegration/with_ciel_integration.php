@@ -46,7 +46,7 @@ namespace CielIntegration\Integration\Admin {
 				->getArticleIntegration();
 		}
 
-		protected function _issueDocumentEnabled() {
+		protected function _issueDocumentConfigured() {
 			return $this->_getOrderIntegration()
 				->issueDocumentEnabled();
 		}

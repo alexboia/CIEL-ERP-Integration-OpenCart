@@ -8,7 +8,7 @@ class ControllerExtensionCielOrderActions extends CielController {
 	public function checkDocumentIssued() {
 		$response = $this->_createEmptyCheckDocumentIssuedResponse();
 
-		if ($this->_isHttpGet() && $this->_issueDocumentEnabled()) {
+		if ($this->_isHttpGet() && $this->_issueDocumentConfigured()) {
 			$orderId = $this->_getOrderIdFromUrl();
 			if (!empty($orderId)) {
 				try {
@@ -32,7 +32,7 @@ class ControllerExtensionCielOrderActions extends CielController {
 	public function issueDocument() {
 		$response = $this->_createAjaxResponse();
 
-		if ($this->_isHttpPost() && $this->_issueDocumentEnabled()) {
+		if ($this->_isHttpPost() && $this->_issueDocumentConfigured()) {
 			$orderId = $this->_getOrderIdFromUrl();
 			if (!empty($orderId)) {
 				if ($this->_shouldAddDocumentIssuedOrderNoteOnOrderAction()) {

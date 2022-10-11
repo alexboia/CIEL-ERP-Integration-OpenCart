@@ -70,7 +70,7 @@ namespace Ciel\Api\Integration\Articles {
 		}
 
 		public function setNonTaxableVatOptionName($nonTaxableVatOptionName) {
-			return $this->_nonTaxableVatOptionName;
+			$this->_nonTaxableVatOptionName = $nonTaxableVatOptionName;
 			return $this;
 		}
 

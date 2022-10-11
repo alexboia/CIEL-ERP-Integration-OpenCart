@@ -17,6 +17,8 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 					=> $this->_t('text_workflow_settings_form_heading'),
 				'lbl_txt_none' 
 					=> $this->_t('lbl_txt_none'),
+				'lbl_add_vat_on_payment_to_document_field'
+					=> $this->_t('lbl_add_vat_on_payment_to_document_field'),
 				'lbl_add_shipping_to_document_field' 
 					=> $this->_t('lbl_add_shipping_to_document_field'),
 				'lbl_in_stock_status_id_field' 
@@ -58,6 +60,7 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 			'has_connection' => false,
 
 			'myc_wf_add_shipping_to_document' => false,
+			'myc_wf_add_vat_on_payment_to_document' => false,
 
 			'wf_in_stock_status_id' => 0,
 			'wf_out_of_stock_status_id' => 0,
@@ -88,6 +91,7 @@ class ControllerExtensionCielWorkflowSettings extends CielController {
 				'has_connection' => true,
 
 				'myc_wf_add_shipping_to_document' => $workflow->getAddShippingToDocument(),
+				'myc_wf_add_vat_on_payment_to_document' => $workflow->getAddVatOnPaymentToDocument(),
 
 				'wf_in_stock_status_id' => $workflow->getInStockStatusId(),
 				'wf_out_of_stock_status_id' => $workflow->getOutOfStockStatusId(),
