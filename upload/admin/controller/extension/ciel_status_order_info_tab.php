@@ -38,7 +38,7 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 		$viewData['is_ciel_document_issued'] = $isCielDocumentIssued;
 
 		if ($isCielDocumentIssued) {
-			$viewData['has_warning'] = false;
+			$viewData['ciel_has_warning'] = false;
 			$viewData['ciel_document_issue_enabled'] = false;
 			$viewData['ciel_remote_document_data'] = $this
 				->_getOrderRemoteDocumentData($orderId);			

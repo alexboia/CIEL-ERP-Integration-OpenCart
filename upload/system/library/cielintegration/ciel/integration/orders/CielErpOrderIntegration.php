@@ -441,12 +441,12 @@ namespace Ciel\Api\Integration\Orders {
 				
 				if (isset($orderOptions['add_vat_on_payment_note']) 
 					&& $orderOptions['add_vat_on_payment_note'] === true) {
-					$orderData['IsVatCollectableOnPayment'] = true;
+					$document['IsVatCollectableOnPayment'] = true;
 				}
 
 				if (isset($orderOptions['is_simplified_invoice'])
 					&& $orderOptions['is_simplified_invoice'] === true) {
-					$orderOptions['IsSimplifiedInvoice'] = true;
+					$document['IsSimplifiedInvoice'] = true;
 				}
 			}
 
@@ -535,7 +535,7 @@ namespace Ciel\Api\Integration\Orders {
 		}
 
 		private function _isSaleInvoice($remoteDocumentData) {
-			return $remoteDocumentData['type'] == DocumentType::SaleInvoice;
+			return DocumentType::isSaleInvoice($remoteDocumentData['type']);
 		}
 
 		private function _formatDueDate($dueDays) {

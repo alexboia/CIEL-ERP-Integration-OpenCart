@@ -21,5 +21,13 @@ namespace Ciel\Api\Data {
         public static function isTypeIdSupported($typeId) {
             return in_array($typeId, self::getSupportedTypeIds());
         }
+
+        public static function isSaleInvoice($typeId) {
+            return $typeId === self::SaleInvoice;
+        }
+
+        public static function isSaleOrder($typeId) {
+            return $typeId === self::SaleOrder;
+        }
     }
 }

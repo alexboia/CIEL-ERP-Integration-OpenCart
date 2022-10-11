@@ -132,6 +132,10 @@ namespace CielIntegration\Integration\Admin\Article {
 				->lookupProductSku($productId);
 		}
 
+		public function productHasSku($productId) {
+			return !empty($this->lookupProductSku($productId));
+		}
+
 		public function getAllProducts() {
 			return $this->_getLocalProductModel()
 				->getProducts();

@@ -37,3 +37,13 @@
 	width: auto;
 	font-size: 12px;
 }
+
+.myc-document-status-warning-item,
+.myc-product-status-warning-item {
+	height: auto;
+	margin-bottom: 10px;
+	color: #856404;
+	background-color: #fff3cd;
+	border: 1px solid #ffeeba;
+	padding: 12px;
+}

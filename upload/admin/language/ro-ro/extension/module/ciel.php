@@ -104,7 +104,9 @@ $_['lbl_product_actions'] = 'Acțiuni disponibile';
 $_['lbl_product_action_update_full'] = 'Actualizează toate informațiile din NextUp ERP';
 $_['lbl_product_action_update_stocks'] = 'Actualizează doar stocurile din NextUp ERP';
 $_['lbl_product_action_connect'] = 'Conectează la NextUp ERP folosind codul SKU';
+$_['msg_product_no_actions_available'] = 'Nicio acțiune disponibilă în acest moment.';
 $_['msg_product_action_store_not_bound'] = 'Este necesară configurarea extensiei! Pentru a putea efectua sincronizarea produselor, trebuie mai întâi să configurezi această extensie.';
+$_['msg_product_no_sku'] = 'Produsul nu are un SKU asociat, deci nu poate fi conectat de un articol corespunzător din NextUp ERP pe baza codului.';
 
 //
 // CIEL customer form tab

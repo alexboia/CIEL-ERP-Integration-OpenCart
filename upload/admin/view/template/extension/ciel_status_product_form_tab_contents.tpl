@@ -9,6 +9,12 @@
 <div class="ciel-erp-form-status-container">
 	<div id="myc_product_operation_status_message" style="display: none;"></div>
 	<?php if ($is_store_bound): ?>
+		<?php if (!$is_connected_to_ciel_erp && !$can_be_connected_to_ciel_erp): ?>
+			<div class="myc-product-status-warning-item" role="alert">
+				<?php echo $msg_product_no_sku; ?>
+			</div>
+		<?php endif; ?>
+
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>				
@@ -59,9 +65,13 @@
 									<?php echo $lbl_product_action_update_stocks; ?>
 								</button>
 							<?php else: ?>
-								<button id="myc_connect_product_to_ciel_erp" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_connect_action_url; ?>">
-									<?php echo $lbl_product_action_connect; ?>
-								</button>
+								<?php if ($can_be_connected_to_ciel_erp): ?>
+									<button id="myc_connect_product_to_ciel_erp" type="button" class="btn btn-info" data-action-url="<?php echo $ciel_erp_connect_action_url; ?>">
+										<?php echo $lbl_product_action_connect; ?>
+									</button>
+								<?php else: ?>
+									<?php echo $msg_product_no_actions_available; ?>
+								<?php endif; ?>
 							<?php endif; ?>
 						</td>
 					</tr>

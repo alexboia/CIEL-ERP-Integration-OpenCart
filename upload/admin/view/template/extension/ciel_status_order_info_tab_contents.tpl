@@ -1,13 +1,4 @@
 <style type="text/css">
-	.myc-document-status-warning-item {
-		height: auto;
-		margin-bottom: 10px;
-		color: #856404;
-		background-color: #fff3cd;
-		border: 1px solid #ffeeba;
-		padding: 12px;
-	}
-
 	.ciel-erp-order-document-container table tr th,
 	.ciel-erp-order-document-container table tr td {
 		height: 34px;

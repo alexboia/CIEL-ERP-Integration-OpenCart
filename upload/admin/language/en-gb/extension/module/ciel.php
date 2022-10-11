@@ -104,7 +104,9 @@ $_['lbl_product_actions'] = 'Available actions';
 $_['lbl_product_action_update_full'] = 'Update entire information from NextUp ERP';
 $_['lbl_product_action_update_stocks'] = 'Update stock information from NextUp ERP';
 $_['lbl_product_action_connect'] = 'Connect to NextUp ERP by SKU';
+$_['msg_product_no_actions_available'] = 'No actions available at this time';
 $_['msg_product_action_store_not_bound'] = 'Extension configuration required! In order to sync product information, you need to first configure your extension settings.';
+$_['msg_product_no_sku'] = 'The product does not have any SKU, so it cannot be connected to a corresponding NextUp ERP article by code.';
 
 //
 // CIEL customer form tab

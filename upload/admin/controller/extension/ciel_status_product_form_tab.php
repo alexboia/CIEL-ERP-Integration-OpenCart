@@ -10,6 +10,7 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 
 	public function assets() {
 		if ($this->_isProductEditingPage()) {
+			$this->_includeCommonStylesheet();
 			$this->_includeLoadingIndicatorScript();
 			$this->_includeOperationStatusScript();
 			$this->_includeCommonScript();
@@ -34,6 +35,12 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 		$viewData['is_store_bound'] = $this->_isStoreBound();
 		$viewData['remote_article_data'] = $remoteArticleData;
 		$viewData['is_connected_to_ciel_erp'] = !empty($remoteArticleData['remote_id']);
+
+		if (!$viewData['is_connected_to_ciel_erp']) {
+			$viewData['can_be_connected_to_ciel_erp'] = $this->_productHasSku($productId);
+		} else {
+			$viewData['can_be_connected_to_ciel_erp'] = true;
+		}
 
 		//Html fragments
 		$viewData['html_loading_indicator'] = $this->_renderLoadingIndicator();
@@ -76,6 +83,10 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 			->_t('lbl_product_action_update_stocks');
 		$viewData['lbl_product_action_connect'] = $this
 			->_t('lbl_product_action_connect');
+		$viewData['msg_product_no_sku'] = $this
+			->_t('msg_product_no_sku');
+		$viewData['msg_product_no_actions_available'] = $this
+			->_t('msg_product_no_actions_available');
 		$viewData['msg_product_action_store_not_bound'] = $this
 			->_t('msg_product_action_store_not_bound');
 
@@ -107,6 +118,11 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 		}
 
 		return $remoteArticleData;
+	}
+
+	private function _productHasSku($productId) {
+		return $this->_getProductResolver()
+			->productHasSku($productId);
 	}
 
 	private function _getProductIdFromUrl() {
