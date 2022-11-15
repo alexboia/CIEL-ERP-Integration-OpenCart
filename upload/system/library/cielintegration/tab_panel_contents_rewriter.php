@@ -2,9 +2,12 @@
 namespace CielIntegration {
 
     use CielIntegration\TabPanelContentsRewriter\AfterLastTabPanelContentsPlacement;
+    use Exception;
     use voku\helper\HtmlDomParser;
 
 	class TabPanelContentsRewriter {
+		use WithLogging;
+
 		private $_tabs = array();
 
 		private $_selectorPrefix;
@@ -34,6 +37,15 @@ namespace CielIntegration {
 				return $tabPanelContents;
 			}
 
+			try {
+				return $this->_rewrite($tabPanelContents);
+			} catch (Exception $exc) {
+				$this->_logError($exc, 'Error rewriting tab panel contents.');
+				return $tabPanelContents;
+			}
+		}
+
+		private function _rewrite($tabPanelContents) {
 			/** @var HtmlDomParser $dom */
 			$dom = HtmlDomParser::str_get_html($tabPanelContents);
 			$tabPanelPlacement = new AfterLastTabPanelContentsPlacement();

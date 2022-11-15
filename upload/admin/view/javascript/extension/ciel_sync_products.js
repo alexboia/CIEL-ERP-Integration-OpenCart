@@ -7,6 +7,7 @@
 	var $ctlSyncInfoStats = null;
 	var $ctlTotalEligibleCount = null;
 	var $ctlTotalUpdatedCount = null;
+	var $ctlProductSyncModeSelector = null;
 
 	function _getSyncInformationUrl($target) {
 		return $.getCielActionUrl($target);
@@ -43,7 +44,9 @@
 			type: 'POST',
 			dataType: 'json',
 			cache: false,
-			data: {}
+			data: {
+				ciel_product_sync_mode: _getProductSyncMode()
+			}
 		}).done(function(data, status, xhr) {
 			$.hideCielLoading();
 			if (data && data.success) {
@@ -60,6 +63,10 @@
 		});
 	}
 
+	function _getProductSyncMode() {
+		return $ctlProductSyncModeSelector.val();
+	}
+
 	function _initTooltips() {
 		$('[data-toggle=\'tooltip\']').tooltip({
 			container: 'body',
@@ -71,6 +78,7 @@
 		$ctlSyncInfoStats = $('#myc-sync-info-stats');
 		$ctlTotalEligibleCount = $('#myc-total-eligible');
 		$ctlTotalUpdatedCount = $('#myc-total-updated');
+		$ctlProductSyncModeSelector = $('#myc-ciel-product-sync-mode');
 	}
 
 	function _initEvents() {

@@ -29,6 +29,9 @@ $_['option_txt_document_type_none'] = 'Nu emite niciun documents';
 $_['option_txt_document_type_sale_order'] = 'Comandă de vânzare';
 $_['option_txt_document_type_sale_invoice'] = 'Factura de vânzare';
 
+$_['option_txt_product_sync_mode_all_info'] = 'Toate informatiile';
+$_['option_txt_product_sync_mode_stocks_only'] = 'Doar stocurile';
+
 //
 // Sidebar widgets
 //

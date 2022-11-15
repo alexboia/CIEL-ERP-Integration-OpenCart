@@ -62,6 +62,11 @@ namespace CielIntegration\Integration\Admin {
 					$location);
 		}
 
+		protected function _getSupportedProductSyncModes() {
+			return $this->_getLookupDataProvider()
+				->getSupportedProductSyncModes();
+		}
+
 		private function _getLookupDataProvider() {
 			if ($this->_lookupDataProvider === null) {
 				$this->_lookupDataProvider = new LookupDataProvider($this->registry);

@@ -1,9 +1,13 @@
 <?php
 namespace CielIntegration {
-	use voku\helper\HtmlDomParser;
+
+    use Exception;
+    use voku\helper\HtmlDomParser;
     use voku\helper\SimpleHtmlDomNodeInterface;
 
 	class ContentsRewriter {
+		use WithLogging;
+
 		private $_rewrites = array();
 
 		public function addRewriteRule($selector, $callback) {
@@ -14,7 +18,16 @@ namespace CielIntegration {
 			if (empty($this->_rewrites)) {
 				return $contents;
 			}
+			
+			try {
+				return $this->_rewrite($contents);
+			} catch (Exception $exc) {
+				$this->_logError($exc, 'Error rewriting contents');
+				return $contents;
+			}
+		}
 
+		private function _rewrite($contents) {
 			/** @var HtmlDomParser $dom */
 			$dom = HtmlDomParser::str_get_html($contents);
 

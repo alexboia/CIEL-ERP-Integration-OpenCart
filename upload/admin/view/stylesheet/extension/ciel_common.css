@@ -47,3 +47,9 @@
 	border: 1px solid #ffeeba;
 	padding: 12px;
 }
+
+.form-control.myc-ciel-product-sync-mode {
+	display: inline-block;
+	width: 300px !important;
+	margin-right: 15px;
+}

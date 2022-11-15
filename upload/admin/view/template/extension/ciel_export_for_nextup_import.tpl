@@ -19,8 +19,16 @@
 				<span class="myc-tooltip" data-toggle="tooltip" title="<?php echo $ciel_export_for_nextup_import_explanation; ?>"><?php echo $ciel_export_for_nextup_import_info; ?></span>
 			</div>
 
-			<div id="myc-export-actions" class="sync-info-actions">
-				<a id="myc-exportt-start" type="button" class="btn btn-primary" href="<?php echo $ciel_export_for_nextup_import_btn_action; ?>"><?php echo $ciel_export_for_nextup_import_btn_text; ?></a>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-info"></i> <?php echo $ciel_export_for_nextup_import_title; ?></h3>
+				</div>
+
+				<div class="panel-body">
+					<div id="myc-export-actions" class="sync-info-actions">
+						<a id="myc-exportt-start" type="button" class="btn btn-primary" href="<?php echo $ciel_export_for_nextup_import_btn_action; ?>"><?php echo $ciel_export_for_nextup_import_btn_text; ?></a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

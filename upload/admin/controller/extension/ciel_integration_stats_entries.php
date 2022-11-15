@@ -9,9 +9,11 @@ class ControllerExtensionCielIntegrationStatsEntries extends CielController {
 			->_getDocumentIssuedPercentage();
 		
 		$rewriter = new SidebarStatsRewriter('#stats ul');
-		$rewriter->addStatsItem('ciel_document_issued_percentage', 
+		$rewriter->addStatsItem(
+			'ciel_document_issued_percentage', 
 			$this->_t('lbl_ciel_document_issued_percentage'), 
-			$documentIssuedPercentage);
+			$documentIssuedPercentage
+		);
 
 		return $rewriter->rewrite($output);
 	}

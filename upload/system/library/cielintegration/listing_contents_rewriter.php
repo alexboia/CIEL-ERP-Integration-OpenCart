@@ -2,10 +2,13 @@
 namespace CielIntegration {
 
     use CielIntegration\ListingContentsRewriter\BeforeLastColumnContentsPlacement;
+    use Exception;
     use voku\helper\HtmlDomParser;
     use voku\helper\SimpleHtmlDomInterface;
 
 	class ListingContentsRewriter {
+		use WithLogging;
+
 		/**
 		 * @var GenericDataSource
 		 */
@@ -45,6 +48,15 @@ namespace CielIntegration {
 				return $listingContents;
 			}
 
+			try {
+				$this->_rewrite($listingContents);
+			} catch (Exception $exc) {
+				$this->_logError($exc, 'Error rewriting listing contents.');
+				return $listingContents;
+			}
+		}
+
+		private function _rewrite($listingContents) {
 			/** @var HtmlDomParser $dom */
 			$dom = HtmlDomParser::str_get_html($listingContents);
 			$columnPlacement = new BeforeLastColumnContentsPlacement();

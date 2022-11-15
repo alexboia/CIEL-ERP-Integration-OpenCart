@@ -148,9 +148,9 @@ namespace CielIntegration\Integration\Admin\Order\Model {
 		public function countRemoteOrders() {
 			$db = $this->_getDb();
 			$query = 'SELECT COUNT(1) AS `remote_order_count`
-				FROM `' . $this->_getFullTableName() . '` ro 
-				WHERE ro.mycciel_oc_remote_document_id IS NOT NULL
-					AND ro.mycciel_oc_remote_document_id > 0';
+				FROM `' . $this->_getFullTableName() . '` `ro`
+				WHERE `ro`.`mycciel_oc_remote_document_id` IS NOT NULL
+					AND `ro`.`mycciel_oc_remote_document_id` > 0';
 			
 			$result = $db->query($query);
 			if (!empty($result) && !empty($result->row)) {

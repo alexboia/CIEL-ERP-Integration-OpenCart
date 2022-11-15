@@ -1,17 +1,18 @@
 <?php
 namespace CielIntegration\Integration\Admin {
 
-    use Ciel\Api\Data\DocumentStatusType;
-    use Ciel\Api\Data\DocumentType;
+	use Ciel\Api\Data\DocumentStatusType;
+	use Ciel\Api\Data\DocumentType;
+    use Ciel\Api\Data\ProductSyncMode;
     use CielIntegration\Integration\Admin\StockUpdateMode;
-    use CielIntegration\WithLanguage;
-    use Exception;
-    use ModelCustomerCustomerGroup;
-    use ModelLocalisationGeoZone;
-    use ModelLocalisationLengthClass;
-    use ModelLocalisationOrderStatus;
-    use ModelLocalisationStockStatus;
-    use ModelLocalisationWeightClass;
+	use CielIntegration\WithLanguage;
+	use Exception;
+	use ModelCustomerCustomerGroup;
+	use ModelLocalisationGeoZone;
+	use ModelLocalisationLengthClass;
+	use ModelLocalisationOrderStatus;
+	use ModelLocalisationStockStatus;
+	use ModelLocalisationWeightClass;
 
 	/**
 	 * @property \Loader $load
@@ -47,31 +48,38 @@ namespace CielIntegration\Integration\Admin {
 
 		public function getSupportedDocumentStatusTypes() {
 			return array(
-                DocumentStatusType::Valid => $this->_t('option_txt_document_status_type_valid'),
-                DocumentStatusType::Temporary => $this->_t('option_txt_document_status_type_temporary')
-            );
+				DocumentStatusType::Valid => $this->_t('option_txt_document_status_type_valid'),
+				DocumentStatusType::Temporary => $this->_t('option_txt_document_status_type_temporary')
+			);
 		}
 
 		public function getSupportedStockUpdateModes() {
 			return array(
-                StockUpdateMode::Manual => $this->_t('option_txt_stock_update_manual'),
-                StockUpdateMode::SystemCron => $this->_t('option_txt_stock_update_system_cron')
-            );
+				StockUpdateMode::Manual => $this->_t('option_txt_stock_update_manual'),
+				StockUpdateMode::SystemCron => $this->_t('option_txt_stock_update_system_cron')
+			);
 		}
 
 		public function getSupportedDocumentTypes() {
  			return array(
-                DocumentType::None => $this->_t('option_txt_document_type_none'),
-                DocumentType::SaleOrder => $this->_t('option_txt_document_type_sale_order'),
-                DocumentType::SaleInvoice => $this->_t('option_txt_document_type_sale_invoice')
-            );
+				DocumentType::None => $this->_t('option_txt_document_type_none'),
+				DocumentType::SaleOrder => $this->_t('option_txt_document_type_sale_order'),
+				DocumentType::SaleInvoice => $this->_t('option_txt_document_type_sale_invoice')
+			);
+		}
+
+		public function getSupportedProductSyncModes() {
+			return array(
+				ProductSyncMode::AllInformation => $this->_t('option_txt_product_sync_mode_all_info'),
+				ProductSyncMode::StockOnly => $this->_t('option_txt_product_sync_mode_stocks_only')
+			);
 		}
 
 		public function getDocumentTypeName($typeId) {
 			$types = $this->getSupportedDocumentTypes();
-            return isset($types[$typeId]) 
-                ? $types[$typeId] 
-                : null;
+			return isset($types[$typeId]) 
+				? $types[$typeId] 
+				: null;
 		}
 
 		public function getOpenCartStockStatuses() {

@@ -34,7 +34,7 @@ namespace Ciel\Api\Data {
 			return new self(true, null);
 		}
 
-		public function offsetExists($offset) { 
+		public function offsetExists($offset): bool { 
 			return $offset === self::KEY_UPDATED 
 				|| $offset === self::KEY_REASON;
 		}
@@ -49,7 +49,7 @@ namespace Ciel\Api\Data {
 			}
 		}
 
-		public function offsetSet($offset, $value) { 
+		public function offsetSet($offset, $value): void { 
 			$this->_throwReadOnly();
 		}
 
@@ -57,7 +57,7 @@ namespace Ciel\Api\Data {
 			throw new Exception('Stock update result is read only!');
 		}
 
-		public function offsetUnset($offset) { 
+		public function offsetUnset($offset): void { 
 			$this->_throwReadOnly();
 		}
 
