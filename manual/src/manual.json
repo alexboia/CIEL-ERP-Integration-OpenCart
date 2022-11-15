@@ -1,0 +1,18 @@
+{
+	"input": {
+		"index": "index.md",
+		"installation": "installation.md",
+		"configure": "configure.md",
+		"limitations": "limitations.md",
+		"pages": [
+			{
+				"file": "configure.md",
+				"title": "Configure extension"
+			}
+		]
+	},
+	"output": {
+		"pdf": true,
+		"html": true
+	}
+}

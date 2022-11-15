@@ -165,7 +165,7 @@ class ControllerExtensionModuleCiel extends CielController {
 			//Customer options
 			$bindingUseExtendedCompanyBillingFields = isset($this->request->post['myc_runtime_use_company_billing_fields'])
 				? $this->request->post['myc_runtime_use_company_billing_fields'] == '1'
-				: false;
+				: true;
 
 			//Shipping configuration
 			$bindingShippingVatQuotaName = isset($this->request->post['myc_runtime_shipping_vat_quota_name']) 

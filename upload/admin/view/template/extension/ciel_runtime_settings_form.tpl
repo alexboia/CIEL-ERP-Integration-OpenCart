@@ -111,21 +111,6 @@
 			</div>
 		</div>
 		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_use_company_billing_fields"><?php echo $lbl_runtime_use_company_billing_fields_field; ?>:</label>
-			<div class="col-sm-10">
-				<div class="checkbox">
-					<label>
-						<input type="checkbox" 
-							id="myc_runtime_use_company_billing_fields"
-							name="myc_runtime_use_company_billing_fields"
-							value="1"
-							<?php echo $runtime_use_company_billing_fields ? ' checked="checked"' : ''; ?>
-						/>
-					</label>
-				</div>
-			</div>
-		</div>
-		<div class="form-group required">
 			<label class="col-sm-2 control-label" for="myc_runtime_shipping_vat_quota_name"><?php echo $lbl_runtime_shipping_vat_quota_field; ?></label>
 			<div class="col-sm-10">
 				<select 

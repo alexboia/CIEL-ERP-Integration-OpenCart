@@ -49,7 +49,7 @@ namespace CielIntegration {
 			}
 
 			try {
-				$this->_rewrite($listingContents);
+				return $this->_rewrite($listingContents);
 			} catch (Exception $exc) {
 				$this->_logError($exc, 'Error rewriting listing contents.');
 				return $listingContents;
