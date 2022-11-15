@@ -6,3 +6,4 @@ See below for more details.
 ## Menu description
 
 ## Sidebar widgets
+Sidebar widget showing the NextUp ERP order export progress.

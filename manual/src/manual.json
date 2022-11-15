@@ -1,18 +1,35 @@
 {
 	"input": {
-		"index": "index.md",
-		"installation": "installation.md",
-		"configure": "configure.md",
-		"limitations": "limitations.md",
 		"pages": [
 			{
+				"file": "index.md",
+				"title": "Index",
+				"order": 0
+			},
+			{
+				"file": "requirements.md",
+				"title": "Requirements",
+				"order": 1
+			},
+			{
+				"file": "installation.md",
+				"title": "Installation",
+				"order": 2
+			},
+			{
+				"file": "limitations.md",
+				"title": "Limitations",
+				"order": 3
+			},
+			{
 				"file": "configure.md",
-				"title": "Configure extension"
+				"title": "Configure extension",
+				"order": 4
 			}
 		]
 	},
 	"output": {
 		"pdf": true,
-		"html": true
+		"online": true
 	}
 }
