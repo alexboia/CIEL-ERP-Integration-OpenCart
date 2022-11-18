@@ -7,6 +7,7 @@ namespace CielIntegration {
 
 	class TabPanelContentsRewriter {
 		use WithLogging;
+		use WithContentCleaning;
 
 		private $_tabs = array();
 
@@ -30,6 +31,7 @@ namespace CielIntegration {
 				'header' => $header,
 				'content' => $content
 			);
+			return $this;
 		}
 
 		public function rewrite($tabPanelContents) {
@@ -38,11 +40,16 @@ namespace CielIntegration {
 			}
 
 			try {
+				$tabPanelContents = $this->_prepare($tabPanelContents);
 				return $this->_rewrite($tabPanelContents);
 			} catch (Exception $exc) {
 				$this->_logError($exc, 'Error rewriting tab panel contents.');
 				return $tabPanelContents;
 			}
+		}
+
+		private function _prepare($tabPanelContents) {
+			return $this->_cleanRepairContents($tabPanelContents);
 		}
 
 		private function _rewrite($tabPanelContents) {

@@ -7,11 +7,13 @@ namespace CielIntegration {
 
 	class ContentsRewriter {
 		use WithLogging;
+		use WithContentCleaning;
 
 		private $_rewrites = array();
 
 		public function addRewriteRule($selector, $callback) {
 			$this->_rewrites[$selector] = $callback;
+			return $this;
 		}
 
 		public function rewrite($contents) {
@@ -20,11 +22,16 @@ namespace CielIntegration {
 			}
 			
 			try {
+				$contents = $this->_prepare($contents);
 				return $this->_rewrite($contents);
 			} catch (Exception $exc) {
 				$this->_logError($exc, 'Error rewriting contents');
 				return $contents;
 			}
+		}
+
+		private function _prepare($contents) {
+			return $this->_cleanRepairContents($contents);
 		}
 
 		private function _rewrite($contents) {

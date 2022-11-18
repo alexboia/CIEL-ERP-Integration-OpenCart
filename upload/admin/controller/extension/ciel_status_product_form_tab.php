@@ -95,9 +95,11 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 			$viewData);
 
 		$tabPanelRewriter = new TabPanelContentsRewriter('#form-product');
-		$tabPanelRewriter->addTab('tab-ciel-status', 
-			$this->_t('lbl_tab_product_label'), 
-			$viewContents);
+		$tabPanelRewriter
+			->enableCleanRepair()
+			->addTab('tab-ciel-status', 
+				$this->_t('lbl_tab_product_label'), 
+				$viewContents);
 
 		return $tabPanelRewriter
 			->rewrite($output);

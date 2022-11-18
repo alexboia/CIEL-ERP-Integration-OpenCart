@@ -136,7 +136,9 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			$viewData);
 
 		$contentsAppender = new ContentsAppender('#content > div.container-fluid');
-		$contentsAppender->addContent($viewContents);
+		$contentsAppender 
+			->enableCleanRepair()
+			->addContent($viewContents);
 
 		return $contentsAppender
 			->rewrite($output);

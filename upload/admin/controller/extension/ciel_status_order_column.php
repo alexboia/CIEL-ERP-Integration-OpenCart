@@ -16,10 +16,12 @@ class ControllerExtensionCielStatusOrderColumn extends CielController {
 			$dataSource
 		);
 
-		$listingRewriter->addColumn(
-			'ciel_document_issued', 
-			$this->_t('lbl_column_order_connected_to_ciel_erp_header')
-		);
+		$listingRewriter
+			->enableCleanRepair()
+			->addColumn(
+				'ciel_document_issued', 
+				$this->_t('lbl_column_order_connected_to_ciel_erp_header')
+			);
 
 		return $listingRewriter
 			->rewrite($output);

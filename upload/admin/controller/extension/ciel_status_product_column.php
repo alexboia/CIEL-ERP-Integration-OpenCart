@@ -15,10 +15,12 @@ class ControllerExtensionCielStatusProductColumn extends CielController {
 			$dataSource
 		);
 
-		$listingRewriter->addColumn(
-			'ciel_connected', 
-			$this->_t('lbl_column_product_connected_to_ciel_erp_header')
-		);
+		$listingRewriter
+			->enableCleanRepair()
+			->addColumn(
+				'ciel_connected', 
+				$this->_t('lbl_column_product_connected_to_ciel_erp_header')
+			);
 
 		return $listingRewriter
 			->rewrite($output);

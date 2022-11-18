@@ -6,6 +6,7 @@ namespace CielIntegration {
 
 	class ContentsAppender {
 		use WithLogging;
+		use WithContentCleaning;
 
 		private $_parentSelector;
 
@@ -17,6 +18,7 @@ namespace CielIntegration {
 
 		public function addContent($contents) {
 			$this->_contentElements[] = $contents;
+			return $this;
 		}
 
 		public function rewrite($htmlContents) {
@@ -25,11 +27,16 @@ namespace CielIntegration {
 			}
 
 			try {
+				$htmlContents = $this->_prepare($htmlContents);
 				return $this->_rewrite($htmlContents);
 			} catch (Exception $exc) {
 				$this->_logError($exc, 'Error appending content.');
 				return $htmlContents;
-			}			
+			}
+		}
+
+		private function _prepare($htmlContents) {
+			return $this->_cleanRepairContents($htmlContents);
 		}
 
 		private function _rewrite($htmlContents) {

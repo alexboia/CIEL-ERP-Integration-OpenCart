@@ -8,6 +8,7 @@ namespace CielIntegration {
 
 	class ListingContentsRewriter {
 		use WithLogging;
+		use WithContentCleaning;
 
 		/**
 		 * @var GenericDataSource
@@ -49,11 +50,16 @@ namespace CielIntegration {
 			}
 
 			try {
+				$listingContents = $this->_prepare($listingContents);
 				return $this->_rewrite($listingContents);
 			} catch (Exception $exc) {
 				$this->_logError($exc, 'Error rewriting listing contents.');
 				return $listingContents;
 			}
+		}
+
+		private function _prepare($listingContents) {
+			return $this->_cleanRepairContents($listingContents);
 		}
 
 		private function _rewrite($listingContents) {

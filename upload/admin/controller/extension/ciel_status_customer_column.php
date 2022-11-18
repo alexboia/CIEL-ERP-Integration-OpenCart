@@ -15,10 +15,12 @@ class ControllerExtensionCielStatusCustomerColumn extends CielController {
 			$dataSource
 		);
 
-		$listingRewriter->addColumn(
-			'ciel_customer_connected', 
-			$this->_t('lbl_column_customer_connected_to_ciel_erp_header')
-		);
+		$listingRewriter
+			->enableCleanRepair()
+			->addColumn(
+				'ciel_customer_connected', 
+				$this->_t('lbl_column_customer_connected_to_ciel_erp_header')
+			);
 
 		return $listingRewriter
 			->rewrite($output);
