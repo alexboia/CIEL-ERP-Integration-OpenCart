@@ -1,8 +1,8 @@
 (function($) {
 	"use strict";
 
-	var DEFAULT_MSG_CONNECT_PRODUCT_SUCCESS = 'The product has been successfully connected to CIEL ERP. This page will automatically reload in 5 seconds.';
-	var DEFAULT_MSG_CONNECT_PRODUCT_ERROR = 'The product could not be connected to CIEL ERP.';
+	var DEFAULT_MSG_CONNECT_PRODUCT_SUCCESS = 'The product has been successfully connected to NextUp ERP. This page will automatically reload in 5 seconds.';
+	var DEFAULT_MSG_CONNECT_PRODUCT_ERROR = 'The product could not be connected to NextUp ERP.';
 
 	var DEFAULT_MSG_UPDATE_PRODUCT_SUCCESS = 'The product has been successfully updated. This page will automatically reload in 5 seconds.';
 	var DEFAULT_MSG_UPDATE_PRODUCT_ERROR = 'The product could not be updated.';

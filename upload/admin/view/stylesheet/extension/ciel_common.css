@@ -53,3 +53,7 @@
 	width: 300px !important;
 	margin-right: 15px;
 }
+
+.ciel-bulk-connect-result-container .alert {
+	margin-bottom: 0px;
+}
