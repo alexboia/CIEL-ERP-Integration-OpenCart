@@ -16,8 +16,19 @@ namespace CielIntegration {
 			$this->_parentSelector = $parentSelector;	
 		}
 
+		public function setContents($contents) {
+			return $this
+				->resetContents()
+				->addContent($contents);
+		}
+
 		public function addContent($contents) {
 			$this->_contentElements[] = $contents;
+			return $this;
+		}
+
+		public function resetContents() {
+			$this->_contentElements = array();
 			return $this;
 		}
 

@@ -75,6 +75,16 @@ class ModelExtensionModuleCiel extends CielModel {
 				'action' => 'extension/ciel_status_product_column',
 			),
 			array(
+				'code' => 'ciel_bulk_conn_products_btn',
+				'trigger' => 'admin/view/catalog/product_list/after',
+				'action' => 'extension/ciel_bulk_connect_products'
+			),
+			array(
+				'code' => 'ciel_bulk_conn_products_assets',
+				'trigger' => 'admin/controller/common/header/before',
+				'action' => 'extension/ciel_bulk_connect_products/assets'
+			),
+			array(
 				'code' => 'ciel_product_editor_tab_assets',
 				'trigger' => 'admin/controller/common/header/before',
 				'action' => 'extension/ciel_status_product_form_tab/assets'

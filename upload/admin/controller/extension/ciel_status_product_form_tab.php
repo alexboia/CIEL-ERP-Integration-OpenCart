@@ -1,5 +1,4 @@
 <?php
-
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\Article\ProductResolver;
 use CielIntegration\Integration\Admin\WithCielIntegration;
