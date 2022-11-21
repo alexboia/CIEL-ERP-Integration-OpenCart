@@ -8,32 +8,38 @@ namespace MyClar\ManualBuilder {
 		/**
 		 * @var string
 		 */
-		private $_directory = null;
+		private $_inputDirectory = null;
+
+		/**
+		 * @var string
+		 */
+		private $_outputDirectory;
 
 		/**
 		 * @var array|null
 		 */
 		private $_contents = null;
 
-		public function __construct($directory) {
-			$this->_directory = $directory;
+		public function __construct(string $inputDirectory, string $outputDirectory) {
+			$this->_inputDirectory = $inputDirectory;
+			$this->_outputDirectory = $outputDirectory;
 		}
 
 		private function _readIfNeeded(): void {
 			if ($this->_contents === null) {
 				$filePath = $this->_getManifestFilePath();
 				if (!$filePath) {
-					throw new Exception('No manifest found in directory "' . $this->_directory . '"');
+					throw new Exception('No manifest found in directory "' . $this->_inputDirectory . '"');
 				}
 
 				$jsonContents = file_get_contents($filePath);
 				if (empty($jsonContents)) {
-					throw new Exception('Empty manifest found in directory "' . $this->_directory . '"');
+					throw new Exception('Empty manifest found in directory "' . $this->_inputDirectory . '"');
 				}
 
 				$contents = json_decode($jsonContents, true);
 				if (empty($contents)) {
-					throw new Exception('Invalid manifest found in directory "' . $this->_directory . '"');
+					throw new Exception('Invalid manifest found in directory "' . $this->_inputDirectory . '"');
 				}
 
 				$this->_contents = $contents;
@@ -41,7 +47,7 @@ namespace MyClar\ManualBuilder {
 		}
 
 		private function _getManifestFilePath(): string {
-			return realpath($this->_directory 
+			return realpath($this->_inputDirectory 
 				. DIRECTORY_SEPARATOR 
 				. 'manifest.json');
 		}
@@ -59,7 +65,7 @@ namespace MyClar\ManualBuilder {
 				throw new InvalidArgumentException('Page descriptor cannot be empty');
 			}
 
-			$path = realpath($this->_directory 
+			$path = realpath($this->_inputDirectory 
 				. DIRECTORY_SEPARATOR 
 				. $pageDescriptor['file']);
 
@@ -91,7 +97,7 @@ namespace MyClar\ManualBuilder {
 				$type = null;
 			}
 
-			$basePath = realpath($this->_directory 
+			$basePath = realpath($this->_inputDirectory 
 				. DIRECTORY_SEPARATOR 
 				. 'template');
 
