@@ -22,7 +22,9 @@ class ControllerExtensionCielProductActions extends CielController {
 			if (!empty($productId)) {
 				try {
 					$response->success = $this->_doConnectToCielErp($productId);
-					$response->message = $this->_t('ciel_product_connect_product_success_msg');
+					$response->message = $response->success 
+						? $this->_t('ciel_product_connect_product_success_msg')
+						: $this->_t('msg_product_no_sku');
 				} catch (RemoteArticleNotFoundException $exc) {
 					$response->message = $this->_t('ciel_product_connect_product_not_found_error_msg');
 					$this->_logRemoteArticleNotFoundError($exc);
@@ -45,9 +47,11 @@ class ControllerExtensionCielProductActions extends CielController {
 	private function _doConnectToCielErp($productId) {
 		$articleIntegration = $this->_getArticleIntegration();
 		if ($articleIntegration->canBeMatchedByLocalCode($productId)) {
+			$this->_logProductCanBeConnected($productId);
 			$articleIntegration->tryAutoConnectArticleByLocalCode($productId);
 			return true;
 		} else {
+			$this->_logProductCannotBeConnected($productId);
 			return false;
 		}
 	}
@@ -58,6 +62,16 @@ class ControllerExtensionCielProductActions extends CielController {
 
 	private function _logGenericProductActionError(Exception $exc) {
 		$this->_logError($exc, 'Could not execute product action.');
+	}
+	
+	private function _logProductCanBeConnected($productId) {
+		$this->_logDebug(sprintf('Product with id <%s> CAN be connected to NextUpERP. Will proceed...', 
+			$productId));
+	}
+
+	private function _logProductCannotBeConnected($productId) {
+		$this->_logDebug(sprintf('Product with id <%s> CANNOT be connected to NextUpERP.', 
+			$productId));
 	}
 
 	public function updateAll() {

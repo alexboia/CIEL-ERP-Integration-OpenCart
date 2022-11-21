@@ -8,7 +8,6 @@ class ControllerExtensionCielBulkConnectProducts extends CielController {
 		if ($this->_isProductListingPage()) {
 			$this->_includeCommonStylesheet();
 			$this->_includeLoadingIndicatorScript();
-			$this->_includeOperationStatusScript();
 			$this->_includeCommonScript();
 			$this->_addHeaderScript('extension/ciel_bulk_connect_products.js');
 		}

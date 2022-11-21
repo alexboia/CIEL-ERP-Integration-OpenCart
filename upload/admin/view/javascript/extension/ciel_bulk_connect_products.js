@@ -50,6 +50,11 @@
 		return selection;
 	}
 
+	function _clearSelectedProducts() {
+		$('#form-product input[name="selected[]"]')
+			.removeAttr('checked');
+	}
+
 	function _initBulkConnectBtn() {
 		_disableBulkConnectBtn();
 		$(document).on('click', 
@@ -67,17 +72,21 @@
 
 	function _processSelectedProducts(selection) {
 		$.showCielLoading();
-		_processNextSelectedProduct(selection);
+		_processNextSelectedProduct(selection, true);
 	}
 
-	function _processNextSelectedProduct(selection) {
+	function _processNextSelectedProduct(selection, allFailed) {
 		var processItem = selection.shift();
 		_processSelectedProduct(processItem, function(success) {
 			if (selection.length > 0) {
-				_processNextSelectedProduct(selection);
+				_processNextSelectedProduct(selection, allFailed || success);
 			} else {
 				$.hideCielLoading();
-				_delayedReloadPage(5);
+				if (!allFailed) {
+					_delayedReloadPage(5);
+				} else {
+					_clearSelectedProducts();
+				}
 			}
 		});
 	}
