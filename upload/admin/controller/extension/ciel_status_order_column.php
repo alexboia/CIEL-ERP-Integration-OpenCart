@@ -23,7 +23,7 @@ class ControllerExtensionCielStatusOrderColumn extends CielController {
 				$this->_t('lbl_column_order_connected_to_ciel_erp_header')
 			);
 
-		return $listingRewriter
+		$output = $listingRewriter
 			->rewrite($output);
 	}
 

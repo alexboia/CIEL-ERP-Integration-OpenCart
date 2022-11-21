@@ -125,7 +125,7 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 			->enableCleanRepair()
 			->addContent($viewContents);
 
-		return $contentsAppender
+		$output = $contentsAppender
 			->rewrite($output);
 	}
 

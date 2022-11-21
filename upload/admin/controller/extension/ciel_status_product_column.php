@@ -22,7 +22,7 @@ class ControllerExtensionCielStatusProductColumn extends CielController {
 				$this->_t('lbl_column_product_connected_to_ciel_erp_header')
 			);
 
-		return $listingRewriter
+		$output = $listingRewriter
 			->rewrite($output);
 	}
 

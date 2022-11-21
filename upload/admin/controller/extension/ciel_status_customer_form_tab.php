@@ -47,7 +47,7 @@ class ControllerExtensionCielStatusCustomerFormTab extends CielController {
 				$this->_t('lbl_tab_customer_label'), 
 				$viewContents);
 
-		return $tabPanelRewriter
+		$output = $tabPanelRewriter
 			->rewrite($output);
 	}
 

@@ -23,7 +23,7 @@ class ControllerExtensionCielBulkConnectProducts extends CielController {
 			->enableCleanRepair()
 			->addButton('ciel-connect-selected', 'fa-plug', 'btn-primary');
 
-		return $buttonsAppender
+		$output = $buttonsAppender
 			->rewrite($output);
 	}
 }
