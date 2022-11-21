@@ -5,8 +5,14 @@ namespace MyClar\ManualBuilder {
     use InvalidArgumentException;
 
 	class Manifest {
+		/**
+		 * @var string
+		 */
 		private $_directory = null;
 
+		/**
+		 * @var array|null
+		 */
 		private $_contents = null;
 
 		public function __construct($directory) {
@@ -35,7 +41,9 @@ namespace MyClar\ManualBuilder {
 		}
 
 		private function _getManifestFilePath(): string {
-			return realpath($this->_directory . '/manifest.json');
+			return realpath($this->_directory 
+				. DIRECTORY_SEPARATOR 
+				. 'manifest.json');
 		}
 
 		public function getPageDescriptors(): array {
@@ -46,18 +54,25 @@ namespace MyClar\ManualBuilder {
 					: array();
 		}
 
-		public function locatePage(array $pageDescriptor) {
+		public function locatePage(array $pageDescriptor): string {
 			if (empty($pageDescriptor) || empty($pageDescriptor['file'])) {
 				throw new InvalidArgumentException('Page descriptor cannot be empty');
 			}
-			return realpath($this->_directory . '/' . $pageDescriptor['file']);
+
+			$path = realpath($this->_directory 
+				. DIRECTORY_SEPARATOR 
+				. $pageDescriptor['file']);
+
+			return $path 
+				? $path 
+				: null;
 		}
 
-		public function shouldOutputPdf() {
+		public function shouldOutputPdf(): bool {
 			return $this->_isOutputTypeEnabled('pdf');
 		}
 
-		private function _isOutputTypeEnabled($type) {
+		private function _isOutputTypeEnabled(string $type): bool {
 			$this->_readIfNeeded();
 			return !empty($this->_contents['output'])
 				&& !empty($this->_contents['output'][$type])
@@ -65,12 +80,32 @@ namespace MyClar\ManualBuilder {
 					: true;
 		}
 
-		public function shouldOutputOnline() {
+		public function shouldOutputOnline(): bool {
 			return $this->_isOutputTypeEnabled('online');
 		}
 
-		public function locateTemplateDirectory() {
-			
+		public function locateTemplateDirectory(): string {
+			if (func_num_args() == 1) {
+				$type = func_get_arg(0);
+			} else {
+				$type = null;
+			}
+
+			$basePath = realpath($this->_directory 
+				. DIRECTORY_SEPARATOR 
+				. 'template');
+
+			if (!empty($type) && !empty($basePath)) {
+				$path = realpath($basePath 
+					. DIRECTORY_SEPARATOR 
+					. $type);
+			} else {
+				$path = $basePath;
+			}
+
+			return $path 
+				? $path 
+				: null;
 		}
 	}
 }

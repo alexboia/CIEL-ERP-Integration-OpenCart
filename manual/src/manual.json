@@ -3,28 +3,23 @@
 		"pages": [
 			{
 				"file": "index.md",
-				"title": "Index",
-				"order": 0
+				"title": "Index"
 			},
 			{
 				"file": "requirements.md",
-				"title": "Requirements",
-				"order": 1
+				"title": "Requirements"
 			},
 			{
 				"file": "installation.md",
-				"title": "Installation",
-				"order": 2
+				"title": "Installation"
 			},
 			{
 				"file": "limitations.md",
-				"title": "Limitations",
-				"order": 3
+				"title": "Limitations"
 			},
 			{
 				"file": "configure.md",
-				"title": "Configure extension",
-				"order": 4
+				"title": "Configure extension"
 			}
 		]
 	},
