@@ -49,11 +49,18 @@ class ControllerExtensionCielStatus extends CielController {
 
 		$data = $this->_loadAdminLayout();
 
-		$data['ciel_status_title'] = $this->_t('ciel_status_title');
-		$data['ciel_status_box_heading'] = $this->_t('ciel_status_box_heading');
-		$data['ciel_status_box_debug_log'] = $this->_t('ciel_status_box_debug_log');
-		$data['ciel_status_box_error_log'] = $this->_t('ciel_status_box_error_log');
-		
+		$data = $this->_loadTexts($data, array(
+			'ciel_status_title',
+			'ciel_status_box_heading',
+			'ciel_status_box_debug_log',
+			'ciel_status_box_error_log',
+
+			'lbl_module_version',
+			'lbl_module_configured',
+			'lbl_php_version',
+			'lbl_opencart_version'
+		));
+
 		$data['download_log_btn_text'] = $this->_t('download_log_btn_text');
 		$data['download_debug_log_btn_action'] = $this->_createRouteUrl('extension/ciel_status/downloadLog', 
 			$debugLogActionsParams);
@@ -72,11 +79,6 @@ class ControllerExtensionCielStatus extends CielController {
 		$data['status'] = $this->_getStatus();
 		$data['debug_log_status'] = $this->_getDebugLogStatus();
 		$data['error_log_status'] = $this->_getErrorLogStatus();
-
-		$data['lbl_module_version'] = $this->_t('lbl_module_version');
-		$data['lbl_module_configured'] = $this->_t('lbl_module_configured');
-		$data['lbl_php_version'] = $this->_t('lbl_php_version');
-		$data['lbl_opencart_version'] = $this->_t('lbl_opencart_version');
 
 		$data['txt_cancel_action'] = $this->_t('button_cancel');
 		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');

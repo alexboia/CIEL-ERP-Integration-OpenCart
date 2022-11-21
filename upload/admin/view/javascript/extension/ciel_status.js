@@ -8,32 +8,20 @@
 		return $.getCielActionUrl($target);
 	}
 
-	function _showDebugLogOperationError(message) {
-		$('#myc_debug_log_operation_status_message')
-			.cielOperationStatus('show', 
-				false, 
-				message);
+	function _hideLogOperationMessage($logStatusControl) {
+		$logStatusControl.cielOperationStatus('hide');
 	}
 
-	function _showDebugLogOperationSuccess(message) {
-		$('#myc_debug_log_operation_status_message')
-			.cielOperationStatus('show', 
-				true, 
-				message);
+	function _showSuccess($logStatusControl, message) {
+		$logStatusControl.cielOperationStatus('show', 
+			true, 
+			message);
 	}
 
-	function _showErrorLogOperationError(message) {
-		$('#myc_error_log_operation_status_message')
-			.cielOperationStatus('show', 
-				false, 
-				message);
-	}
-
-	function _showErrorLogOperationSuccess(message) {
-		$('#myc_error_log_operation_status_message')
-			.cielOperationStatus('show', 
-				true, 
-				message);
+	function _showError($logStatusControl, message) {
+		$logStatusControl.cielOperationStatus('show', 
+			false, 
+			message);
 	}
 
 	function _clearLog(actionUrl, onReady) {
@@ -60,7 +48,8 @@
 		var $me = $(this);
 		_handleClearLogButtonClicked($me, 
 			$('#myc-download-debug-log-btn'), 
-			$('#myc-debug-log-display')
+			$('#myc-debug-log-display'),
+			$('#myc_debug_log_operation_status_message')
 		);
 	}
 
@@ -68,12 +57,15 @@
 		var $me = $(this);
 		_handleClearLogButtonClicked($me, 
 			$('#myc-download-error-log-btn'), 
-			$('#myc-error-log-display')
+			$('#myc-error-log-display'),
+			$('#myc_error_log_operation_status_message')
 		);
 	}
 	
-	function _handleClearLogButtonClicked($logClearBtn, $logDownloadBtn, $logDisplayControl) {
+	function _handleClearLogButtonClicked($logClearBtn, $logDownloadBtn, $logDisplayControl, $logStatusControl) {
 		var actionUrl = _getClearLogActionUrl($logClearBtn);
+
+		_hideLogOperationMessage($logStatusControl);
 		_clearLog(actionUrl, function(success, message) {
 			if (success) {
 				_markLogCleared($logClearBtn, 
@@ -81,11 +73,11 @@
 					$logDisplayControl
 				);
 
-				_showSuccess(message 
-					|| DEFAULT_MSG_LOG_CLEARED_SUCCESS);
+				_showSuccess($logStatusControl, 
+					message || DEFAULT_MSG_LOG_CLEARED_SUCCESS);
 			} else {
-				_showError(message 
-					|| DEFAULT_MSG_LOG_CLEARED_ERROR);
+				_showError($logStatusControl, 
+					message || DEFAULT_MSG_LOG_CLEARED_ERROR);
 			}
 		});
 	}

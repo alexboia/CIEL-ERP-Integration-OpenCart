@@ -96,40 +96,25 @@ class ControllerExtensionCielStatusOrderInfoTab extends CielController {
 				$orderActionsData);
 
 		//Labels and messages
-		$viewData['lbl_txt_yes'] = $this
-			->_t('lbl_txt_yes');
-		$viewData['lbl_txt_no'] = $this
-			->_t('lbl_txt_no');
-		$viewData['lbl_tab_order_label'] = $this
-			->_t('lbl_tab_order_label');
-		$viewData['lbl_subsection_products_not_connected_title'] = $this
-			->_t('lbl_subsection_products_not_connected_title');
-		$viewData['lbl_subsection_integration_status_title'] = $this
-			->_t('lbl_subsection_integration_status_title');
-		$viewData['lbl_missing_product_placeholder'] = $this
-			->_t('lbl_missing_product_placeholder');
-		$viewData['msg_order_cant_issue_not_configured'] = $this
-			->_t('msg_order_cant_issue_not_configured');
-		$viewData['msg_order_cant_issue_not_all_products_connected'] = $this
-			->_t('msg_order_cant_issue_not_all_products_connected');
-		$viewData['msg_order_cant_issue_batch_tracking_not_posssible'] = $this
-			->_t('msg_order_cant_issue_batch_tracking_not_posssible');
-		$viewData['msg_order_cant_issue_batch_tracking_not_available'] = $this
-			->_t('msg_order_cant_issue_batch_tracking_not_available');
-		$viewData['lbl_order_ciel_erp_document_issued'] = $this
-			->_t('lbl_order_ciel_erp_document_issued');
-		$viewData['lbl_order_ciel_erp_document_type'] = $this
-			->_t('lbl_order_ciel_erp_document_type');
-		$viewData['lbl_order_actions'] = $this
-			->_t('lbl_order_actions');
-		$viewData['lbl_order_action_issue_document'] = $this
-			->_t('lbl_order_action_issue_document');
-		$viewData['lbl_order_action_remove_document'] = $this
-			->_t('lbl_order_action_remove_document');
-		$viewData['msg_order_no_actions_available'] = $this
-			->_t('msg_order_no_actions_available');
-		$viewData['msg_order_action_store_not_bound'] = $this
-			->_t('msg_order_action_store_not_bound');
+		$viewData = $this->_loadTexts($viewData, array(
+			'lbl_txt_yes',
+			'lbl_txt_no',
+			'lbl_tab_order_label',
+			'lbl_subsection_products_not_connected_title',
+			'lbl_subsection_integration_status_title',
+			'lbl_missing_product_placeholder',
+			'msg_order_cant_issue_not_configured',
+			'msg_order_cant_issue_not_all_products_connected',
+			'msg_order_cant_issue_batch_tracking_not_posssible',
+			'msg_order_cant_issue_batch_tracking_not_available',
+			'lbl_order_ciel_erp_document_issued',
+			'lbl_order_ciel_erp_document_type',
+			'lbl_order_actions',
+			'lbl_order_action_issue_document',
+			'lbl_order_action_remove_document',
+			'msg_order_no_actions_available',
+			'msg_order_action_store_not_bound'
+		));
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_order_info_tab_contents', 

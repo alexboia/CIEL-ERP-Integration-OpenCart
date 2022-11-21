@@ -31,30 +31,20 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 		//Prepare data
 		$data = $this->_loadAdminLayout();
 
-		$data['ciel_import_new_products_title'] = 
-			$this->_t('ciel_import_new_products_title');
-		$data['ciel_import_new_products_info'] = 
-			$this->_t('ciel_import_new_products_info');
-		$data['ciel_err_import_new_products_store_not_bound'] = 
-			$this->_t('ciel_err_import_new_products_store_not_bound');
-		$data['ciel_err_import_new_products_error_computing_products'] = 
-			$this->_t('ciel_err_import_new_products_error_computing_products');
-		$data['ciel_err_import_new_products_none_found'] = 
-			$this->_t('ciel_err_import_new_products_none_found');
-
-		$data['ciel_import_new_products_global_success_msg'] = 
-			$this->_t('ciel_import_new_products_global_success_msg');
-		$data['ciel_import_new_products_global_error_msg'] = 
-			$this->_t('ciel_import_new_products_global_error_msg');
-
-		$data['ciel_import_new_products_product_id_header'] = 
-			$this->_t('ciel_import_new_products_product_id_header');
-		$data['ciel_import_new_products_product_code_header'] = 
-			$this->_t('ciel_import_new_products_product_code_header');
-		$data['ciel_import_new_products_product_remote_name_header'] = 
-			$this->_t('ciel_import_new_products_product_remote_name_header');
-		$data['ciel_import_new_products_product_remote_category_header'] = 
-			$this->_t('ciel_import_new_products_product_remote_category_header');
+		//Load translated texts
+		$data = $this->_loadTexts($data, array(
+			'ciel_import_new_products_title',
+			'ciel_import_new_products_info',
+			'ciel_err_import_new_products_store_not_bound',
+			'ciel_err_import_new_products_error_computing_products',
+			'ciel_err_import_new_products_none_found',
+			'ciel_import_new_products_global_success_msg',
+			'ciel_import_new_products_global_error_msg',
+			'ciel_import_new_products_product_id_header',
+			'ciel_import_new_products_product_code_header',
+			'ciel_import_new_products_product_remote_name_header',
+			'ciel_import_new_products_product_remote_category_header'
+		));
 
 		$data['is_bound'] = $this->_isStoreBound();
 		if ($data['is_bound']) {
@@ -94,13 +84,15 @@ class ControllerExtensionCielImportNewProducts extends CielController {
 	}
 
 	private function _getBreadcrumbsData() {
-		$breadcrumbs = $this->_getBaseBreadcrumbs();
-		$breadcrumbs[] = array(
-			'text' => $this->_t('ciel_import_new_products_title'),
-			'href' => $this->_createRouteUrl('extension/ciel_import_new_products_title')
+		$breadcrumbs = array(
+			array(
+				'text' => $this->_t('ciel_import_new_products_title'),
+				'href' => $this->_createRouteUrl('extension/ciel_import_new_products_title')
+			)
 		);
 
 		return array(
+			'add_base' => true,
 			'breadcrumbs' => $breadcrumbs
 		);
 	}

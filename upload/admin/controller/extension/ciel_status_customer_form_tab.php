@@ -27,18 +27,14 @@ class ControllerExtensionCielStatusCustomerFormTab extends CielController {
 		$viewData['is_connected_to_ciel_erp'] = !empty($remotePartnerData['remote_partner_code']);
 
 		//Labels
-		$viewData['lbl_txt_yes'] = $this
-			->_t('lbl_txt_yes');
-		$viewData['lbl_txt_no'] = $this
-			->_t('lbl_txt_no');
-		$viewData['lbl_customer_connected_to_ciel_erp'] = $this
-			->_t('lbl_customer_connected_to_ciel_erp');
-		$viewData['lbl_customer_ciel_erp_partner_code'] = $this
-			->_t('lbl_customer_ciel_erp_partner_code');
-		$viewData['lbl_customer_ciel_erp_partner_address_worksite_id'] = $this
-			->_t('lbl_customer_ciel_erp_partner_address_worksite_id');
-		$viewData['msg_customer_action_store_not_bound'] = $this
-			->_t('msg_customer_action_store_not_bound');
+		$viewData = $this->_loadTexts($viewData, array(
+			'lbl_txt_yes',
+			'lbl_txt_no',
+			'lbl_customer_connected_to_ciel_erp',
+			'lbl_customer_ciel_erp_partner_code',
+			'lbl_customer_ciel_erp_partner_address_worksite_id',
+			'msg_customer_action_store_not_bound'
+		));
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_customer_form_tab_contents', 

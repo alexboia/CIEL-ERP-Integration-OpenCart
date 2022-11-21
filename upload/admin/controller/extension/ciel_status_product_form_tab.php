@@ -61,34 +61,22 @@ class ControllerExtensionCielStatusProductFormTab extends CielController {
 				$productActionParams);
 
 		//Labels
-		$viewData['lbl_txt_yes'] = $this
-			->_t('lbl_txt_yes');
-		$viewData['lbl_txt_no'] = $this
-			->_t('lbl_txt_no');
-		$viewData['lbl_product_connected_to_ciel_erp'] = $this
-			->_t('lbl_product_connected_to_ciel_erp');
-		$viewData['lbl_product_ciel_erp_article_id'] = $this
-			->_t('lbl_product_ciel_erp_article_id');
-		$viewData['lbl_product_ciel_erp_vat_option_name'] = $this
-			->_t('lbl_product_ciel_erp_vat_option_name');
-		$viewData['lbl_product_ciel_erp_vat_quota_value'] = $this
-			->_t('lbl_product_ciel_erp_vat_quota_value');
-		$viewData['lbl_product_ciel_erp_batch_tracking_enabled'] = $this
-			->_t('lbl_product_ciel_erp_batch_tracking_enabled');
-		$viewData['lbl_product_actions'] = $this
-			->_t('lbl_product_actions');
-		$viewData['lbl_product_action_update_full'] = $this
-			->_t('lbl_product_action_update_full');
-		$viewData['lbl_product_action_update_stocks'] = $this
-			->_t('lbl_product_action_update_stocks');
-		$viewData['lbl_product_action_connect'] = $this
-			->_t('lbl_product_action_connect');
-		$viewData['msg_product_no_sku'] = $this
-			->_t('msg_product_no_sku');
-		$viewData['msg_product_no_actions_available'] = $this
-			->_t('msg_product_no_actions_available');
-		$viewData['msg_product_action_store_not_bound'] = $this
-			->_t('msg_product_action_store_not_bound');
+		$viewData = $this->_loadTexts($viewData, array(
+			'lbl_txt_yes',
+			'lbl_txt_no',
+			'lbl_product_connected_to_ciel_erp',
+			'lbl_product_ciel_erp_article_id',
+			'lbl_product_ciel_erp_vat_option_name',
+			'lbl_product_ciel_erp_vat_quota_value',
+			'lbl_product_ciel_erp_batch_tracking_enabled',
+			'lbl_product_actions',
+			'lbl_product_action_update_full',
+			'lbl_product_action_update_stocks',
+			'lbl_product_action_connect',
+			'msg_product_no_sku',
+			'msg_product_no_actions_available',
+			'msg_product_action_store_not_bound'
+		));
 
 		//Add our contents to the view
 		$viewContents = $this->_renderView('extension/ciel_status_product_form_tab_contents', 

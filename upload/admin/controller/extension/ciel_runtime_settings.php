@@ -11,37 +11,22 @@ class ControllerExtensionCielRuntimeSettings extends CielController {
 		$data = array_merge($data, 
 			$this->_getRuntimeSettingsFormData());
 
-		$data = array_merge($data, array(
-			'text_runtime_settings_form_heading' 
-				=> $this->_t('text_runtime_settings_form_heading'),
-			'lbl_runtime_warehouse_field'
-				=> $this->_t('lbl_runtime_warehouse_field'),
-			'txt_placeholder_runtime_warehouse_field'
-				=> $this->_t('txt_placeholder_runtime_warehouse_field'),
-			'lbl_runtime_issue_doctype_field'
-				=> $this->_t('lbl_runtime_issue_doctype_field'),
-			'txt_placeholder_runtime_issue_doctype_field'
-				=> $this->_t('txt_placeholder_runtime_issue_doctype_field'),
-			'lbl_runtime_issue_auto_order_status_field'
-				=> $this->_t('lbl_runtime_issue_auto_order_status_field'),
-			'lbl_runtime_remove_auto_order_status_field'
-				=> $this->_t('lbl_runtime_remove_auto_order_status_field'),
-			'lbl_runtime_issue_doc_status_field'
-				=> $this->_t('lbl_runtime_issue_doc_status_field'),
-			'txt_placeholder_runtime_issue_doc_status_field'
-				=> $this->_t('txt_placeholder_runtime_issue_doc_status_field'),
-			'lbl_runtime_issue_doc_due_days_field'
-				=> $this->_t('lbl_runtime_issue_doc_due_days_field'),
-			'txt_placeholder_runtime_issue_doc_due_days_field'
-				=> $this->_t('txt_placeholder_runtime_issue_doc_due_days_field'),
-			'lbl_runtime_use_company_billing_fields_field'
-				=> $this->_t('lbl_runtime_use_company_billing_fields_field'),
-			'lbl_runtime_shipping_vat_quota_field'
-				=> $this->_t('lbl_runtime_shipping_vat_quota_field'),
-			'txt_placeholder_runtime_shipping_vat_quota_field'
-				=> $this->_t('txt_placeholder_runtime_shipping_vat_quota_field'),
+		$data = $this->_loadTexts($data, array(
+			'text_runtime_settings_form_heading',
+			'lbl_runtime_warehouse_field',
+			'txt_placeholder_runtime_warehouse_field',
+			'lbl_runtime_issue_doctype_field',
+			'txt_placeholder_runtime_issue_doctype_field',
+			'lbl_runtime_issue_auto_order_status_field',
+			'lbl_runtime_remove_auto_order_status_field',
+			'lbl_runtime_issue_doc_status_field',
+			'txt_placeholder_runtime_issue_doc_status_field',
+			'lbl_runtime_issue_doc_due_days_field',
+			'txt_placeholder_runtime_issue_doc_due_days_field',
+			'lbl_runtime_use_company_billing_fields_field',
+			'lbl_runtime_shipping_vat_quota_field',
+			'txt_placeholder_runtime_shipping_vat_quota_field',
 			'lbl_runtime_stock_update_mode_field'
-				=> $this->_t('lbl_runtime_stock_update_mode_field')
 		));
 
 		return $this->_renderView('extension/ciel_runtime_settings_form', 

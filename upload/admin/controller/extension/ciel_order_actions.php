@@ -5,6 +5,11 @@ use CielIntegration\Integration\Admin\WithCielOrderIntegration;
 class ControllerExtensionCielOrderActions extends CielController {
 	use WithCielOrderIntegration;
 
+	public function __construct(\Registry $registry) {
+		parent::__construct($registry);
+		$this->_setTextDomain('extension/ciel_order_actions');
+	}
+
 	public function checkDocumentIssued() {
 		$response = $this->_createEmptyCheckDocumentIssuedResponse();
 
@@ -13,6 +18,8 @@ class ControllerExtensionCielOrderActions extends CielController {
 			if (!empty($orderId)) {
 				try {
 					$response->isCielDocumentIssued = $this->_isDocumentIssuedForOrder($orderId);
+					$response->issuedMessage = $this->_t('ciel_order_document_issue_success');
+					$response->removedMessage = $this->_t('ciel_order_document_remove_success');
 					$response->success = true;
 				} catch (Exception $exc) {
 					$this->_logError($exc);
@@ -25,7 +32,9 @@ class ControllerExtensionCielOrderActions extends CielController {
 
 	private function _createEmptyCheckDocumentIssuedResponse() {
 		return $this->_createAjaxResponse(array(
-			'isCielDocumentIssued' => null
+			'isCielDocumentIssued' => null,
+			'issuedMessage' => null,
+			'removedMessage' => null
 		));
 	}
 
@@ -43,6 +52,12 @@ class ControllerExtensionCielOrderActions extends CielController {
 
 				$response->wasIssued = $result->wasIssued;
 				$response->success = $result->success;
+
+				if ($result->wasIssued) {
+					$response->message = $result->success
+						? $this->_t('ciel_order_document_issue_success')
+						: $this->_t('ciel_order_document_issue_failed');
+				}
 			}
 		}
 
@@ -69,6 +84,12 @@ class ControllerExtensionCielOrderActions extends CielController {
 
 				$response->wasRemoved = $result->wasRemoved;
 				$response->success = $result->success;
+
+				if ($result->wasRemoved) {
+					$response->message = $result->success
+						? $this->_t('ciel_order_document_remove_success')
+						: $this->_t('ciel_order_document_remove_failed');
+				}
 			}
 		}
 

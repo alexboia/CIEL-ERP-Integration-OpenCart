@@ -23,7 +23,7 @@
 					<tr>
 						<th scope="row" class="text-right"><?php echo $lbl_customer_ciel_erp_partner_code; ?></th>
 						<td class="text-left">
-							<?php echo $is_connected_to_ciel_erp 
+							<?php echo $is_connected_to_ciel_erp && !empty($remote_partner_data['remote_partner_code'] )
 								? $remote_partner_data['remote_partner_code'] 
 								: '-'; ?>
 						</td>
@@ -31,7 +31,7 @@
 					<tr>
 						<th scope="row" class="text-right"><?php echo $lbl_customer_ciel_erp_partner_address_worksite_id; ?></th>
 						<td class="text-left">
-							<?php echo $is_connected_to_ciel_erp 
+							<?php echo $is_connected_to_ciel_erp && !empty($remote_partner_data['remote_partner_addr_worksite_id'])
 								? $remote_partner_data['remote_partner_addr_worksite_id'] 
 								: '-'; ?>
 						</td>

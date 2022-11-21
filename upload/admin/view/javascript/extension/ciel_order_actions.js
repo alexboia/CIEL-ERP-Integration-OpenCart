@@ -1,6 +1,12 @@
 (function($) {
 	"use strict";
 
+	var DEFAULT_MSG_ORDER_DOCUMENT_ISSUED = 'The document has been successfully issued. This page will reload in 5 seconds...';
+	var DEfAULT_MSG_ORDER_DOCUMENT_ISSUE_FAILED = 'The document could not be issued.';
+
+	var DEFAULT_MSG_ORDER_DOCUMENT_REMOVED = 'The document has been successfully removed. This page will reload in 5 seconds...';
+	var DEFAULT_MSG_ORDER_DOCUMENT_REMOVE_FAILED = 'The document could not be issued.';
+
 	var _isCielDocumentIssued = false;
 	var _cielErpCheckDocumentIssuedAction = null;
 
@@ -58,16 +64,16 @@
 		var $me = $(this);
 		var actionUrl = _getActionUrl($me);
 		_doAction(actionUrl,
-			'Documentul a fost emis cu succes. Pagina se va reincarca in 5 secunde.',
-			'Document nu a putut fi emis.');
+			DEFAULT_MSG_ORDER_DOCUMENT_ISSUED,
+			DEfAULT_MSG_ORDER_DOCUMENT_ISSUE_FAILED);
 	}
 
 	function _deleteCielErpDocument() {
 		var $me = $(this);
 		var actionUrl = _getActionUrl($me);
 		_doAction(actionUrl,
-			'Documentul a fost sters cu succes. Pagina se va reincarca in 5 secunde.',
-			'Document nu a putut fi sters.');
+			DEFAULT_MSG_ORDER_DOCUMENT_REMOVED,
+			DEFAULT_MSG_ORDER_DOCUMENT_REMOVE_FAILED);
 	}
 
 	function _isOrderHistoryAjaxRequest(opts) {
@@ -97,9 +103,11 @@
 				if (isCielDocumentIssued != _isCielDocumentIssued) {
 					_isCielDocumentIssued = isCielDocumentIssued;
 					if (_isCielDocumentIssued) {
-						successMessage = 'Documentul a fost emis cu succes. Pagina se va reincarca in 5 secunde.';
+						successMessage = data.issuedMessage 
+							|| DEFAULT_MSG_ORDER_DOCUMENT_ISSUED;
 					} else {
-						successMessage = 'Documentul a fost sters cu succes. Pagina se va reincarca in 5 secunde.';
+						successMessage = data.removedMessage 
+							|| DEFAULT_MSG_ORDER_DOCUMENT_REMOVED;
 					}
 
 					_showSuccess(successMessage);

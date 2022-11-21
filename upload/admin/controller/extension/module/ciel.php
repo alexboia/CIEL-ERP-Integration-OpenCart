@@ -506,6 +506,8 @@ class ControllerExtensionModuleCiel extends CielController {
 				&& !empty($bindingUsername) 
 				&& !empty($bindingPassword) 
 				&& !empty($bindingSociety)) {
+				$this->_logDebug('Begin testing NextUp ERP connection...');
+
 				try {
 					$result = $this->_processTestCielWebServiceConnection($bindingEndpoint, 
 						$bindingUsername, 
@@ -525,6 +527,9 @@ class ControllerExtensionModuleCiel extends CielController {
 							$message = $this->_t('msg_connection_test_failed');
 							break;
 					}
+
+					$this->_logDebug(sprintf('NextUp ERP connection test result: %s.', 
+						$message));
 	
 					$response->message = $message;
 					$response->success = $success;
@@ -536,6 +541,7 @@ class ControllerExtensionModuleCiel extends CielController {
 				$response->message = $this->_t('msg_err_fill_in_connection_properties');
 			}
 
+			$this->_logDebug('Done testing NextUp ERP connection.');
 			$this->_renderJsonToResponseOutput($response);
 		} else {
 			die;

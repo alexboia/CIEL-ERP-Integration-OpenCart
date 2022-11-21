@@ -111,7 +111,15 @@ namespace CielIntegration {
 			$this->response->setOutput(json_encode($result));
 		}
 
-		protected function _renderBreadcrumbs($data) {
+		protected function _renderBreadcrumbs(array $data) {
+			if (isset($data['add_base']) && $data['add_base'] === true) {
+				$breadcrumbsWithBase = $this->_getBaseBreadcrumbs();
+				foreach ($data['breadcrumbs'] as $b) {
+					$breadcrumbsWithBase[] = $b;
+				}
+				$data['breadcrumbs'] = $breadcrumbsWithBase;
+			}
+
 			return $this->load->controller('extension/ciel_heading_breadcrumbs', 
 				$data);
 		}

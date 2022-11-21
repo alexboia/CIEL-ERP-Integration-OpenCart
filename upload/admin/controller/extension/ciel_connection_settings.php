@@ -9,36 +9,22 @@ class ControllerExtensionCielConnectionSettings extends CielController {
 		$data = array_merge($data, 
 			$this->_getConnectionSettingsFormData());
 
-		$data = array_merge($data, array(
-			'text_connection_settings_form_heading' 
-				=> $this->_t('text_connection_settings_form_heading'),
-			
-			'txt_test_connection_action' 
-				=> $this->_t('button_test_connection'),
-			'url_test_connection_action' 
-				=> $this->_createRouteUrl('extension/module/ciel/testConnection'),
-
-			'lbl_connection_endpoint_url_field' 
-				=> $this->_t('lbl_connection_endpoint_url_field'),
-			'txt_placeholder_connection_endpoint_url_field'
-				=> $this->_t('txt_placeholder_connection_endpoint_url_field'),
-			'lbl_connection_username_field'
-				=> $this->_t('lbl_connection_username_field'),
-			'txt_placeholder_connection_username_field'
-				=> $this->_t('txt_placeholder_connection_username_field'),
-			'lbl_connection_society_code_field'
-				=> $this->_t('lbl_connection_society_code_field'),
-			'txt_placeholder_connection_society_code_field'
-				=> $this->_t('txt_placeholder_connection_society_code_field'),
-			'lbl_connection_password_field'
-				=> $this->_t('lbl_connection_password_field'),
-			'txt_placeholder_connection_password_field'
-				=> $this->_t('txt_placeholder_connection_password_field'),
-			'lbl_connection_timeout_seconds_field'
-				=> $this->_t('lbl_connection_timeout_seconds_field'),
+		$data = $this->_loadTexts($data, array(
+			'text_connection_settings_form_heading',
+			'lbl_connection_endpoint_url_field',
+			'txt_placeholder_connection_endpoint_url_field',
+			'lbl_connection_username_field',
+			'txt_placeholder_connection_username_field',
+			'lbl_connection_society_code_field',
+			'txt_placeholder_connection_society_code_field',
+			'lbl_connection_password_field',
+			'txt_placeholder_connection_password_field',
+			'lbl_connection_timeout_seconds_field',
 			'txt_placeholder_connection_timeout_seconds_field'
-				=> $this->_t('txt_placeholder_connection_timeout_seconds_field')
 		));
+
+		$data['url_test_connection_action'] = $this->_createRouteUrl('extension/module/ciel/testConnection');
+		$data['txt_test_connection_action'] = $this->_t('button_test_connection');
 
 		return $this->_renderView('extension/ciel_connection_settings_form', 
 			$data);

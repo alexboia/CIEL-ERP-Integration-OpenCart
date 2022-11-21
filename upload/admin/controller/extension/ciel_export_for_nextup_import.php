@@ -21,31 +21,26 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 		$this->_setDocumentTitleLangKey('ciel_export_for_nextup_import_title');
 		$this->_includeCommonStylesheet();
 
-		$viewData = $this->_loadAdminLayout();
+		$data = $this->_loadAdminLayout();
 
-		$viewData['ciel_export_for_nextup_import_title'] = 
-			$this->_t('ciel_export_for_nextup_import_title');
-		$viewData['ciel_export_for_nextup_import_explanation'] = 
-			$this->_t('ciel_export_for_nextup_import_explanation');
-		$viewData['ciel_export_for_nextup_import_info'] = 
-			$this->_t('ciel_export_for_nextup_import_info');
+		$data = $this->_loadTexts($data, array(
+			'ciel_export_for_nextup_import_title',
+			'ciel_export_for_nextup_import_explanation',
+			'ciel_export_for_nextup_import_info'
+		));
 
-		$viewData['ciel_export_for_nextup_import_btn_action'] = 
-			$this->_createRouteUrl('extension/ciel_export_for_nextup_import/export');
-		$viewData['ciel_export_for_nextup_import_btn_text'] = 
-			$this->_t('ciel_export_for_nextup_import_btn_text');
+		$data['ciel_export_for_nextup_import_btn_action'] = $this->_createRouteUrl('extension/ciel_export_for_nextup_import/export');
+		$data['ciel_export_for_nextup_import_btn_text'] = $this->_t('ciel_export_for_nextup_import_btn_text');
 
-		$viewData['txt_cancel_action'] = 
-			$this->_t('button_cancel');
-		$viewData['url_cancel_action'] = 
-			$this->_createRouteUrl('common/dashboard');
+		$data['url_cancel_action'] = $this->_createRouteUrl('common/dashboard');
+		$data['txt_cancel_action'] = $this->_t('button_cancel');
 
-		$viewData['html_breadcrumbs'] = 
+		$data['html_breadcrumbs'] = 
 			$this->_renderBreadcrumbsToIndex();
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/ciel_export_for_nextup_import', 
-			$viewData);
+			$data);
 	}
 
 	private function _renderBreadcrumbsToIndex() {
@@ -53,13 +48,15 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 	}
 
 	private function _getBreadcrumbsData() {
-		$breadcrumbs = $this->_getBaseBreadcrumbs();
-		$breadcrumbs[] = array(
-			'text' => $this->_t('ciel_export_for_nextup_import_title'),
-			'href' => $this->_createRouteUrl('extension/ciel_export_for_nextup_import')
+		$breadcrumbs = array(
+			array(
+				'text' => $this->_t('ciel_export_for_nextup_import_title'),
+				'href' => $this->_createRouteUrl('extension/ciel_export_for_nextup_import')
+			)
 		);
 
 		return array(
+			'add_base' => true,
 			'breadcrumbs' => $breadcrumbs
 		);
 	}
