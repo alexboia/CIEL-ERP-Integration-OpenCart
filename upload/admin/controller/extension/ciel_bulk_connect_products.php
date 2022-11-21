@@ -35,16 +35,27 @@ class ControllerExtensionCielBulkConnectProducts extends CielController {
 		$viewContents = $this->_renderView('extension/ciel_bulk_connect_products', 
 			$viewData);
 
-		//Add buttons
+		$output = $this->_appendButtons($output);
+		$output = $this->_appendViewContents($viewContents,
+			$output);
+	}
+
+	private function _appendButtons(&$output) {
 		$buttonsAppender = new PageButtonsAppender();
 		$buttonsAppender
 			->enableCleanRepair()
-			->addButton('ciel-connect-selected', 'fa-plug', 'btn-primary');
+			->addButton('ciel-connect-selected', 
+				'fa-plug', 
+				'btn-primary', 
+				$this->_t('btn_bulk_connect_products'));
 
 		$output = $buttonsAppender
 			->rewrite($output);
-			
-		//Add view contents
+
+		return $output;
+	}
+
+	private function _appendViewContents(&$viewContents, &$output) {
 		$contentsAppender = new ContentsAppender('#form-product');
 		$contentsAppender
 			->enableCleanRepair()
@@ -52,5 +63,7 @@ class ControllerExtensionCielBulkConnectProducts extends CielController {
 
 		$output = $contentsAppender
 			->rewrite($output);
+
+		return $output;
 	}
 }

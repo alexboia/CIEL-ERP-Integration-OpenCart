@@ -104,6 +104,7 @@ $_['lbl_new_product_length_class_id_field'] = 'Clasa de lungime folosită pentru
 // CIEL product form tab
 // 
 
+$_['btn_bulk_connect_products'] = 'Conecteaza toate produsele selectate';
 $_['lbl_product_connected_to_ciel_erp'] = 'Conectat la NextUp ERP';
 $_['lbl_product_ciel_erp_article_id'] = 'ID articol NextUp ERP';
 $_['lbl_product_ciel_erp_vat_option_name'] = 'Opțiune TVA NextUp';

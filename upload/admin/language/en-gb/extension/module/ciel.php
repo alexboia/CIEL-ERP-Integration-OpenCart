@@ -104,6 +104,7 @@ $_['lbl_new_product_length_class_id_field'] = 'Length class used for NextUp-impo
 // CIEL product form tab
 // 
 
+$_['btn_bulk_connect_products'] = 'Bulk connect selected products';
 $_['lbl_product_connected_to_ciel_erp'] = 'Connected to NextUp ERP';
 $_['lbl_product_ciel_erp_article_id'] = 'NextUp ERP article ID';
 $_['lbl_product_ciel_erp_vat_option_name'] = 'NextUp ERP VAT option name';

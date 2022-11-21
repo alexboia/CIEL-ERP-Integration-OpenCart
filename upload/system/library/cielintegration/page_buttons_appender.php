@@ -25,11 +25,12 @@ namespace CielIntegration {
 			return $this;
 		}
 
-		public function addButton($id, $icon, $class = null, $url = null) {
+		public function addButton($id, $icon, $class = null, $title = null, $url = null) {
 			$this->_buttons[] = array(
 				'id' => $id,
 				'icon' => $icon,
 				'class' => $class,
+				'title' => $title,
 				'url' => $url
 			);
 
@@ -60,10 +61,11 @@ namespace CielIntegration {
 					? $b['url']
 					: 'javascript:void(0)';
 
-				$bHtml = sprintf('<a id="%s" class="%s" href="%s" style="margin-left: 4px;"><i class="fa %s"></i></a>', 
+				$bHtml = sprintf('<a id="%s" class="%s" href="%s" style="margin-left: 4px;" data-toggle="tooltip" title="%s"><i class="fa %s"></i></a>', 
 					$b['id'], 
 					$class, 
 					$url, 
+					$b['title'],
 					$b['icon']);
 
 				$contents .= $bHtml;
