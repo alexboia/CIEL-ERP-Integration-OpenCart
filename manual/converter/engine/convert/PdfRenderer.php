@@ -50,35 +50,27 @@ namespace MyClar\ManualBuilder\Convert {
 		private function _renderCover(): string {
 			return $this->_template->render(OutputType::Pdf, 
 				'cover', 
-				$this->_manifest->getViewVariablesToSet());
+				array());
 		}
 
 		private function _renderPageHeader(): string {
 			return $this->_template->render(OutputType::Pdf, 
 				'header', 
-				$this->_manifest->getViewVariablesToSet());
+				array());
 		}
 
 		private function _renderPage(ManualPage $page): string {
-			$pageData = array_merge(
-				$this->_manifest->getViewVariablesToSet(), 
-				$page->getRenderData()
-			);
-
 			return $this->_template->render(OutputType::Pdf, 
 				$page->getName(), 
-				$pageData);
+				$page->getRenderData());
 		}
 
 		private function _renderDocument(string $cover, string $pageHeader, string $contents): string {
-			$documentData = array_merge(
-				$this->_manifest->getViewVariablesToSet(), 
-				array(
-					'cover' => $cover,
-					'page_header' => $pageHeader,
-					'title' => $this->_manifest->getDocumentTitle(),
-					'contents' => $contents
-				)
+			$documentData = array(
+				'cover' => $cover,
+				'page_header' => $pageHeader,
+				'title' => $this->_manifest->getDocumentTitle(),
+				'contents' => $contents
 			);
 
 			return $this->_template->render(OutputType::Pdf, 
@@ -90,6 +82,8 @@ namespace MyClar\ManualBuilder\Convert {
 			$dompdf = new \Dompdf\Dompdf();
 			$dompdf->loadHtml($htmlDocContents);
 			$dompdf->setPaper('A4', 'portrait');
+			$dompdf->getOptions()->setIsRemoteEnabled(true);
+			$dompdf->getOptions()->setChroot($this->_manifest->getInputImagesDirectory());
 			$dompdf->render();
 			
 			$output = $dompdf->output(array(

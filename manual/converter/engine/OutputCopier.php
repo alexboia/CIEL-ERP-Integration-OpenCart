@@ -41,7 +41,6 @@ namespace MyClar\ManualBuilder {
 				foreach ($imageFiles as $srcImgFile) {
 					$imgFileName = basename($srcImgFile);
 					$copyImgFilePath = $this->_determineCopyDestinationOutputImageFilePath($outputType, $imgFileName);
-					var_dump($copyImgFilePath);
 					if (file_exists($copyImgFilePath)) {
 						unlink($copyImgFilePath);
 					}
@@ -53,7 +52,6 @@ namespace MyClar\ManualBuilder {
 
 		private function _ensureCopyDestinationOutputImageDir(string $outputType) {
 			$dirPath = $this->_determineCopyDestinationOutputImageDirPath($outputType);
-			var_dump($dirPath);
 			if (!is_dir($dirPath)) {
 				mkdir($dirPath);
 			}

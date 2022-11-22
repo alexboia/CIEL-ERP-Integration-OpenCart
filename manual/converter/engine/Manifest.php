@@ -246,5 +246,22 @@ namespace MyClar\ManualBuilder {
 		public function imagesRequiredForOutputType(string $outputType): bool {
 			return $outputType == OutputType::Html;
 		}
+
+		public function getInputImagesDirectory() {
+			return $this->_inputDirectory . DIRECTORY_SEPARATOR . 'images';
+		}
+
+		public function getInputImagesDirectoryUrl() {
+			$directory = $this->getInputImagesDirectory();
+			return 'file:///' . str_replace(DIRECTORY_SEPARATOR, '/', $directory);
+		}
+
+		public function getInputDirectory() {
+			return $this->_inputDirectory;
+		}
+
+		public function getOutputDirectory() {
+			return $this->_outputDirectory;
+		}
 	}
 }

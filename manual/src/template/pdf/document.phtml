@@ -9,7 +9,7 @@
 
 		<style type="text/css">
 			/* Reset */
-			html, body, div, span, iframe, applet, object, h1, h2, h3, h4, h5, h6, p, blockquote, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ul, li, fieldset, form, label, legend, table, caption, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, tbody, tfoot, thead, tr, th, td {
+			html, body, div, span, iframe, applet, object, h1, h2, h3, h4, h5, h6, p, blockquote, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, tbody, tfoot, thead, tr, th, td {
 				margin: 0;
 				padding: 0;
 				border: 0;
@@ -62,9 +62,9 @@
                 height: 45px;
 				line-height: 45px;
 				
-				margin-top: 30px;
-				padding-right: 45px;
-				padding-left: 45px;
+				margin-top: 40px;
+				padding-right: 55px;
+				padding-left: 55px;
 				
 				display: block;
 				text-align: left;
@@ -107,13 +107,13 @@
 
 			/* Generic document setup */
 			@page { 
-				margin: 45px; 
+				margin: 55px; 
 				font-family: DejaVu Sans; 
 			}
 			body {
 				font-family: DejaVu Sans; 
-				margin: 45px; 
-				margin-top: 85px;
+				margin: 55px; 
+				margin-top: 95px;
 			}
 
 			/* Cover page setup */
@@ -137,6 +137,14 @@
 			}
 
 			/* Generic page block setup */
+			.mp-page-break  {
+				page-break-after: always;
+			}
+
+			.mp-help-document-cover {
+				page-break-after: always;
+			}
+
 			.mp-page-contents-block {
 				page-break-after: always;
 			}
@@ -169,11 +177,30 @@
 
 			.mp-page-contents-block ul { 
 				list-style-type: circle;
-				margin-left: 15px;
+				margin-left: 25px;
 			}
 
-			.mp-help-document-cover {
-				page-break-after: always;
+			.mp-page-contents-block ol { 
+				margin-left: 25px;
+			}
+
+			.mp-page-contents-block code {
+				font-family: 'Courier New', Courier, monospace;
+				font-weight: bold;
+			}
+
+			.mp-page-contents-block img {
+				width: 90%;
+				padding-top: 25px;
+				box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3);
+				border-radius: 5px;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+
+			.mp-page-contents-block li img {
+				width: 85%;
+				margin-left: -10px;
 			}
 		</style>
     </head>

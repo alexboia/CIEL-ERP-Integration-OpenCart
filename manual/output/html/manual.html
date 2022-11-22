@@ -36,7 +36,7 @@ to bring those products quickly in your OpenCart store.</li>
 <ul>
 <li>Sidebar widget showing the NextUp ERP order export progress.</li>
 </ul></div><div class="mp-page-contents-block mp-page-requirements">
-	<h1>NextUp Integration Extension Requirements</h1>
+	<h1>Requirements</h1>
 <h2>OpenCart Compatibility</h2>
 <p>Tested with versions 2.3.0.0 to 2.3.0.2.</p>
 <h2>General requirements</h2>
@@ -85,5 +85,43 @@ in turn, will lead to web service method calls for that all token failing.</p>
 there are no hard guarantees for correctness or that it will work at all.</li>
 <li>Compatibility with other OpenCart modules is not guaranteed,<br />
 although this extension does not rely on any 3rd party module.</li>
-</ul></div><div class="mp-page-contents-block mp-page-installation">
-	<h1>Installation</h1></div></div>
+</ul></div><div class="mp-page-contents-block mp-page-limitations">
+	<h1>Limitations</h1>
+<ol>
+<li>There is no automatic stock update feature;</li>
+<li>Migrating connected products from OpenCart Romania's extension is done on a best-effort basis: if the expected structure differs from the actual one, results may differ;</li>
+<li>Due to the way OpenCart stores order and order item costs and prices, this extension needs to deduce some costs and prices that NextUp ERP expects, the result being that there may be differences between the OpenCart order costs and prices and NextUp ERP document costs and prices;</li>
+<li>Since OpenCart product options don't have reference/SKU codes, they cannot be mapped to NextUp ERP articles/products.</li>
+</ol></div><div class="mp-page-contents-block mp-page-installation">
+	<h1>Installation</h1>
+<h2>Install using the OpenCart interface</h2>
+<ol>
+<li>Navigate to OpenCart's extension installer via <code>Extensions - Installer</code> menu entry:<br />
+<img src="./system/storage/manual/html/images/install-step1.png" alt="Installation Step 1" title="Installation Step 1" /></li>
+<li>Click the <code>Upload</code> button;</li>
+<li>Choose the extension archive file (<code>nextup-opencart-integration.ocmod.zip</code>);</li>
+<li>After installation, navigate to <code>Extensions - Modifications</code> and click refresh to fully enable the extension's features:<br />
+<img src="./system/storage/manual/html/images/install-step4.png" alt="Installation Step 4" title="Installation Step 4" /></li>
+<li>Navigate to <code>Extensions - Extensions</code> and chose <code>Modules</code> in the <code>Choose extension type</code> drop-down selector:<br />
+<img src="./system/storage/manual/html/images/install-step5.png" alt="Installation Step 5" title="Installation Step 5" /></li>
+<li>Scroll down to the extension's entry - <code>NextUp ERP Integration</code> - and click the <code>Install</code> button.</li>
+</ol></div><div class="mp-page-contents-block mp-page-configure">
+	<h1>Configure Extension</h1>
+<p>To configure the extension, navigate to <code>NextUp ERP - Configure</code>. There are three sections:</p>
+<ul>
+<li>NextUp ERP Connection Options - specify the NextUp ERP server address and credentials;</li>
+<li>NextUp ERP Integration Options - specify integration options;</li>
+<li>NextUp ERP OpenCart Workflow Options - specify workflow options.</li>
+</ul>
+<h2>NextUp ERP Connection Options</h2>
+<p>In this section, you specify the NextUp ERP server address and credentials. The following fields are available:<br />
+<img src="./system/storage/manual/html/images/configure-connection.png" alt="Configure Connection" title="Configure Connection" /></p>
+<div class="mp-page-break"></div>
+<h2>NextUp ERP Integration Options</h2>
+<p>In this section, you specify the main integration options, such as what warehouse to use. The following fields are available:<br />
+<img src="./system/storage/manual/html/images/configure-integration.png" alt="Configure Integreation" title="Configure Integration" /></p>
+<div class="mp-page-break"></div>
+<h2>NextUp ERP OpenCart Workflow Options</h2>
+<p>In this section, you specify additional workflow integration options, mostly OpenCart-specific. The following fields are available:<br />
+<img src="./system/storage/manual/html/images/configure-workflow.png" alt="Configure Workflow" title="Configure Workflow" /></p>
+<div class="mp-page-break"></div></div></div>

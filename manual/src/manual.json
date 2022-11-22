@@ -9,15 +9,15 @@
 		}, {
 			"file": "requirements.md",
 			"title": "Requirements"
+		},{
+			"file": "limitations.md",
+			"title": "Limitations"
 		}, {
 			"file": "installation.md",
 			"title": "Installation"
 		}, {
-			"file": "limitations.md",
-			"title": "Limitations"
-		}, {
 			"file": "configure.md",
-			"title": "Configure extension"
+			"title": "Configure Extension"
 		}]
 	},
 	"output": {

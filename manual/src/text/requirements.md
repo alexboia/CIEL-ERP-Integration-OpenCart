@@ -1,4 +1,4 @@
-# NextUp Integration Extension Requirements
+# Requirements
 
 ## OpenCart Compatibility
 Tested with versions 2.3.0.0 to 2.3.0.2.
