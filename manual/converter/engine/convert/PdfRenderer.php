@@ -34,31 +34,51 @@ namespace MyClar\ManualBuilder\Convert {
 		}
 
 		private function _getHtmlDocumentContents(ManualPageCollection $pages) : string {
-			$contents = $this->_renderCover();
+			$contents = '';
+			$cover = $this->_renderCover();
+			$pageHeader = $this->_renderPageHeader();
 
 			foreach ($pages->getPages() as $page) {
 				$contents .= $this->_renderPage($page);
 			}
 
-			return $this->_renderDocument($contents);
+			return $this->_renderDocument($cover, 
+				$pageHeader, 
+				$contents);
 		}
 
 		private function _renderCover(): string {
 			return $this->_template->render(OutputType::Pdf, 
 				'cover', 
-				array());
+				$this->_manifest->getViewVariablesToSet());
+		}
+
+		private function _renderPageHeader(): string {
+			return $this->_template->render(OutputType::Pdf, 
+				'header', 
+				$this->_manifest->getViewVariablesToSet());
 		}
 
 		private function _renderPage(ManualPage $page): string {
+			$pageData = array_merge(
+				$this->_manifest->getViewVariablesToSet(), 
+				$page->getRenderData()
+			);
+
 			return $this->_template->render(OutputType::Pdf, 
 				$page->getName(), 
-				$page->getRenderData());
+				$pageData);
 		}
 
-		private function _renderDocument(string $contents): string {
-			$documentData = array(
-				'title' => $this->_manifest->getDocumentTitle(),
-				'contents' => $contents
+		private function _renderDocument(string $cover, string $pageHeader, string $contents): string {
+			$documentData = array_merge(
+				$this->_manifest->getViewVariablesToSet(), 
+				array(
+					'cover' => $cover,
+					'page_header' => $pageHeader,
+					'title' => $this->_manifest->getDocumentTitle(),
+					'contents' => $contents
+				)
 			);
 
 			return $this->_template->render(OutputType::Pdf, 

@@ -1,4 +1,4 @@
-# NextUp Integration for OpenCart 2.3.0.x
+# Introduction
 This extension is built for merchants using NextUp ERP for stock-keeping and accounting,
 who also wish to integrate the features provided by NextUp ERP with their online OpenCart store.
 

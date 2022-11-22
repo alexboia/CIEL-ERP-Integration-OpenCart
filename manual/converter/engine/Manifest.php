@@ -20,6 +20,11 @@ namespace MyClar\ManualBuilder {
 		 */
 		private $_contents = null;
 
+		/**
+		 * @var array|null
+		 */
+		private $_sourceImageFiles = null;
+
 		public function __construct(string $inputDirectory, string $outputDirectory) {
 			$this->_inputDirectory = $this->_ensureNoTrailingDirSep($inputDirectory);
 			$this->_outputDirectory = $this->_ensureNoTrailingDirSep($outputDirectory);
@@ -155,25 +160,31 @@ namespace MyClar\ManualBuilder {
 
 		public function locateCopyOutputDirectory($outputType) {
 			$this->_readIfNeeded();
-			if (!empty($this->_contents['copy']) 
-				&& !empty($this->_contents['copy'][$outputType])) {
+			if (!empty($this->_contents['output']['copy']) 
+				&& !empty($this->_contents['output']['copy'][$outputType])) {
 
-				$basePath = !empty($this->_contents['copy']) 
-						&& !!empty($this->_contents['copy']['base'])
-					? $this->_contents['copy']['base']
+				$basePath = !empty($this->_contents['output']['copy']) 
+						&& !empty($this->_contents['output']['copy']['base'])
+					? $this->_contents['output']['copy']['base']
 					: '';
 
-				$copyOutputPath = $this->_contents['copy'][$outputType];
+				$copyOutputPath = $this->_contents['output']['copy'][$outputType];
 
-				if (!$basePath) {
+				if (!empty($basePath)) {
 					$copyOutputPath = $this->_ensureNoTrailingDirSep($basePath) 
 						. DIRECTORY_SEPARATOR 
 						. $copyOutputPath;
 				}
 
-				return realpath($this->_inputDirectory 
-					. DIRECTORY_SEPARATOR 
-					. $copyOutputPath);
+				if (!empty($copyOutputPath) 
+					&& (stripos($copyOutputPath, '../') === 0 
+						|| stripos($copyOutputPath, './') === 0)) {
+					$copyOutputPath = realpath($this->_inputDirectory 
+						. DIRECTORY_SEPARATOR 
+						. $copyOutputPath);
+				}
+
+				return $copyOutputPath;
 			} else {
 				return null;
 			}
@@ -192,6 +203,48 @@ namespace MyClar\ManualBuilder {
 			}
 
 			return $copyDestinationFile;
+		}
+
+		public function getViewVariablesToSet() {
+			if (!empty($this->_contents['set']) && is_array($this->_contents['set'])) {
+				return $this->_contents['set'];
+			} else {
+				return array();
+			}
+		}
+
+		public function getSourceImageFiles() {
+			if ($this->_sourceImageFiles === null) {
+				$this->_sourceImageFiles = array();
+
+				$imgDir = $this->_locateImagesDirectory();
+				$imgDirHandle = dir($imgDir);
+
+				if ($imgDirHandle) {
+					while (($entry = $imgDirHandle->read()) !== false) {
+						if ($entry === '.' || $entry === '..') {
+							continue;
+						}
+
+						$imgFile = $imgDir . DIRECTORY_SEPARATOR . $entry;
+						if (is_file($imgFile)) {
+							$this->_sourceImageFiles[] = $imgFile;
+						}
+					}
+				}
+			}
+
+			return $this->_sourceImageFiles;
+		}
+
+		private function _locateImagesDirectory() {
+			return realpath($this->_inputDirectory 
+				. DIRECTORY_SEPARATOR 
+				. 'images');
+		}
+
+		public function imagesRequiredForOutputType(string $outputType): bool {
+			return $outputType == OutputType::Html;
 		}
 	}
 }

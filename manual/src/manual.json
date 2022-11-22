@@ -24,9 +24,13 @@
 		"pdf": true,
 		"html": true,
 		"copy": {
-			"base": "../upload/storage/manual",
+			"base": "../../upload/system/storage/manual",
 			"html": "html",
 			"pdf": "pdf"
 		}
+	},
+	"set": {
+		"ext_version": "1.0.0",
+		"img_base_url": "./system/storage/manual/html/images"
 	}
 }
