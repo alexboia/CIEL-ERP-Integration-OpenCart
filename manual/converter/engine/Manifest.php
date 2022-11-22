@@ -21,8 +21,12 @@ namespace MyClar\ManualBuilder {
 		private $_contents = null;
 
 		public function __construct(string $inputDirectory, string $outputDirectory) {
-			$this->_inputDirectory = $inputDirectory;
-			$this->_outputDirectory = $outputDirectory;
+			$this->_inputDirectory = $this->_ensureNoTrailingDirSep($inputDirectory);
+			$this->_outputDirectory = $this->_ensureNoTrailingDirSep($outputDirectory);
+		}
+
+		private function _ensureNoTrailingDirSep(string $dirPath): string {
+			return rtrim(rtrim($dirPath, '/'), DIRECTORY_SEPARATOR);
 		}
 
 		private function _readIfNeeded(): void {
@@ -49,24 +53,26 @@ namespace MyClar\ManualBuilder {
 		private function _getManifestFilePath(): string {
 			return realpath($this->_inputDirectory 
 				. DIRECTORY_SEPARATOR 
-				. 'manifest.json');
+				. 'manual.json');
 		}
 
 		public function getPageDescriptors(): array {
 			$this->_readIfNeeded();
-			return !empty($this->_contents['pages'])
-				&& is_array($this->_contents['pages'])
-					? $this->_contents['pages']
+			return !empty($this->_contents['input']) && !empty($this->_contents['input']['pages'])
+				&& is_array($this->_contents['input']['pages'])
+					? $this->_contents['input']['pages']
 					: array();
 		}
 
-		public function locatePage(array $pageDescriptor): string {
+		public function locatePage(array $pageDescriptor) {
 			if (empty($pageDescriptor) || empty($pageDescriptor['file'])) {
 				throw new InvalidArgumentException('Page descriptor cannot be empty');
 			}
 
 			$path = realpath($this->_inputDirectory 
 				. DIRECTORY_SEPARATOR 
+				. 'text'
+				. DIRECTORY_SEPARATOR
 				. $pageDescriptor['file']);
 
 			return $path 
@@ -75,22 +81,26 @@ namespace MyClar\ManualBuilder {
 		}
 
 		public function shouldOutputPdf(): bool {
-			return $this->_isOutputTypeEnabled('pdf');
+			return $this->_isOutputTypeEnabled(OutputType::Pdf);
 		}
 
-		private function _isOutputTypeEnabled(string $type): bool {
+		private function _isOutputTypeEnabled(string $outputType): bool {
 			$this->_readIfNeeded();
 			return !empty($this->_contents['output'])
-				&& !empty($this->_contents['output'][$type])
-					? $this->_contents['output'][$type] === true
+				&& !empty($this->_contents['output'][$outputType])
+					? $this->_contents['output'][$outputType] === true
 					: true;
 		}
 
-		public function shouldOutputOnline(): bool {
-			return $this->_isOutputTypeEnabled('online');
+		public function shouldOutputType(string $outputType) {
+			return $this->_isOutputTypeEnabled($outputType);
 		}
 
-		public function locateTemplateDirectory(): string {
+		public function shouldOutputHtml(): bool {
+			return $this->_isOutputTypeEnabled(OutputType::Html);
+		}
+
+		public function locateTemplateDirectory() {
 			if (func_num_args() == 1) {
 				$type = func_get_arg(0);
 			} else {
@@ -112,6 +122,76 @@ namespace MyClar\ManualBuilder {
 			return $path 
 				? $path 
 				: null;
+		}
+
+		public function getDocumentTitle() {
+			$this->_readIfNeeded();
+			return !empty($this->_contents['document'])
+				&& !empty($this->_contents['document']['title'])
+					? !empty($this->_contents['document']['title'])
+					: null;
+		}
+
+		public function locateOutputDirectory($outputType): string {
+			return realpath($this->_outputDirectory 
+				. DIRECTORY_SEPARATOR 
+				. $outputType);
+		}
+
+		public function determineOutputFilePath(string $outputType) {
+			$outputDir = $this->locateOutputDirectory($outputType);
+
+			if (!empty($outputDir)) {
+				$outputFilePath = $outputDir 
+					. DIRECTORY_SEPARATOR 
+					. 'manual.' 
+					. $outputType;
+			} else {
+				$outputFilePath = null;
+			}
+
+			return $outputFilePath;
+		}
+
+		public function locateCopyOutputDirectory($outputType) {
+			$this->_readIfNeeded();
+			if (!empty($this->_contents['copy']) 
+				&& !empty($this->_contents['copy'][$outputType])) {
+
+				$basePath = !empty($this->_contents['copy']) 
+						&& !!empty($this->_contents['copy']['base'])
+					? $this->_contents['copy']['base']
+					: '';
+
+				$copyOutputPath = $this->_contents['copy'][$outputType];
+
+				if (!$basePath) {
+					$copyOutputPath = $this->_ensureNoTrailingDirSep($basePath) 
+						. DIRECTORY_SEPARATOR 
+						. $copyOutputPath;
+				}
+
+				return realpath($this->_inputDirectory 
+					. DIRECTORY_SEPARATOR 
+					. $copyOutputPath);
+			} else {
+				return null;
+			}
+		}
+
+		public function determineCopyOutputFilePath(string $outputType) {
+			$copyDestinationOutput = $this->locateCopyOutputDirectory($outputType);
+
+			if (!empty($copyDestinationOutput)) {
+				$copyDestinationFile = $copyDestinationOutput 
+					. DIRECTORY_SEPARATOR 
+					. 'manual.' 
+					. $outputType;
+			} else {
+				$copyDestinationFile = null;
+			}
+
+			return $copyDestinationFile;
 		}
 	}
 }

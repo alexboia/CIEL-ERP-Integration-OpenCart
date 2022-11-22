@@ -1,0 +1,52 @@
+<div class="mp-help-document-contents"><div class="mp-page-contents-block mp-page-requirements">
+	<h1>NextUp Integration Extension Requirements</h1>
+<h2>OpenCart Compatibility</h2>
+<p>Tested with versions 2.3.0.0 to 2.3.0.2.</p>
+<h2>General requirements</h2>
+<ul>
+<li>PHP 7.4.0 or newer;</li>
+<li>NextUp ERP with Server component activated (8.38.0 or newer suggested);</li>
+<li>Required PHP extensions:
+<ul>
+<li>Reflection</li>
+<li>Curl</li>
+<li>Json</li>
+<li>MbString</li>
+<li>Mysqli</li>
+<li>Pcre</li>
+<li>Spl</li>
+<li>Zlib</li>
+</ul></li>
+</ul>
+<h2>Required NextUp ERP Server methods</h2>
+<ul>
+<li>AddPartner;</li>
+<li>AddSaleInvoice;</li>
+<li>AddSaleOrder;</li>
+<li>DeleteDocument;</li>
+<li>GetAllArticles;</li>
+<li>GetAllPartners;</li>
+<li>GetAllStocksForArticles;</li>
+<li>GetAllWarehouses;</li>
+<li>GetArticleByCode;</li>
+<li>GetArticleById;</li>
+<li>GetPartnerByCode;</li>
+<li>GetPartnerById;</li>
+<li>SelectFromView;</li>
+<li>UpdatePartner.</li>
+</ul>
+<h2>NextUp Server Authentication Notes</h2>
+<p>If you are accessing the web services exposed by the NextUp ERP server you need to understand<br />
+that, regardless of what application you are using to consume them (this extension included),<br />
+you need to use a separate NextUp ERP user account for each application.</p>
+<p>This is not a strict technical requirement but, if you share a user account between applications,<br />
+you will end up with one authentication token overriding a previous one for that account, which,<br />
+in turn, will lead to web service method calls for that all token failing.</p>
+<h2>Other Notes</h2>
+<ul>
+<li>Integration with OpenCart Romania's extension is provided as a best-effort implementation:<br />
+there are no hard guarantees for correctness or that it will work at all.</li>
+<li>Compatibility with other OpenCart modules is not guaranteed,<br />
+although this extension does not rely on any 3rd party module.</li>
+</ul></div><div class="mp-page-contents-block mp-page-installation">
+	<h1>Installation</h1></div></div>

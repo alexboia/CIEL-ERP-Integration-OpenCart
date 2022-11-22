@@ -25,7 +25,7 @@ namespace MyClar\ManualBuilder {
 
 			ob_start();
 
-			extract($data, EXTR_PREFIX_ALL, 'mp_');
+			extract($data, EXTR_PREFIX_ALL, 'mp');
 			require $filePath;
 
 			return ob_get_clean();

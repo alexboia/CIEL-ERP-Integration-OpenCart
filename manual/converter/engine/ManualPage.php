@@ -1,6 +1,6 @@
 <?php
 namespace MyClar\ManualBuilder {
-	class Page {
+	class ManualPage {
 		private $_name;
 
 		/**
@@ -18,11 +18,21 @@ namespace MyClar\ManualBuilder {
 		 */
 		private $_content;
 
-		public function __construct(string $name, string $title, int $order, string $content) {
+		public function __construct(string $name, 
+				string $title, 
+				int $order, 
+				string $content) {
 			$this->_name = $name;
 			$this->_title = $title;
 			$this->_order = $order;
 			$this->_content = $content;
+		}
+
+		public function getRenderData(): array {
+			return array(
+				'page_name' => $this->getName(),
+				'page_contents' => $this->getContent()
+			);
 		}
 
 		public function getName(): string {

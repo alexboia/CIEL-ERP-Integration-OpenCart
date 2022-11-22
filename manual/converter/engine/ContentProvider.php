@@ -4,6 +4,8 @@ namespace MyClar\ManualBuilder {
     use ParsedownExtra;
 
 	class ContentProvider {
+		const DEFAULT_ENCODING = 'UTF-8';
+
 		/**
 		 * @var Manifest
 		 */
@@ -26,8 +28,8 @@ namespace MyClar\ManualBuilder {
 			return $parser;
 		}
 
-		public function readPages(): PageCollection {
-			$pages = new PageCollection();
+		public function readPages(): ManualPageCollection {
+			$pages = new ManualPageCollection();
 			$pageDescriptors = $this->_manifest
 				->getPageDescriptors();
 
@@ -48,7 +50,7 @@ namespace MyClar\ManualBuilder {
 				$pageContent = $this->_getHtmlPageContent($filePath);
 
 				if (!empty($pageContent)) {
-					$page = new Page(
+					$page = new ManualPage(
 						$pageName,
 						$pageTitle, 
 						$pageOrder, 
@@ -67,7 +69,8 @@ namespace MyClar\ManualBuilder {
 		}
 
 		private function _getHtmlPageContent($filePath): string {
-			$pageContent = mb_convert_encoding(file_get_contents($filePath), 'UTF-8');
+			$pageContent = file_get_contents($filePath);
+			$pageContent = mb_convert_encoding($pageContent, self::DEFAULT_ENCODING);
 			return $this->_parser->parse($pageContent);
 		}
 	}

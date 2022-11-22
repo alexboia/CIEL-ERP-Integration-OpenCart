@@ -1,7 +1,7 @@
 <?php
 function myc_manual_builder_autoloader($className) {
 	static $prefix = 'MyClar\\ManualBuilder\\';
-	static $searchDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'lib';
+	static $searchDirectory = __DIR__ . DIRECTORY_SEPARATOR . 'engine';
 
 	if (strpos($className, $prefix) === 0) {
 		$actualClassName = str_replace($prefix, '', $className);
@@ -17,7 +17,9 @@ function myc_manual_builder_autoloader($className) {
 		}
 
 		$classPath[] = $className;
-		return implode(DIRECTORY_SEPARATOR, $classPath);
+		$requireClassPath = implode(DIRECTORY_SEPARATOR, $classPath) . '.php';
+		
+		require_once $requireClassPath;
 	}
 }
 
