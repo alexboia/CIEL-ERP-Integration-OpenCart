@@ -135,19 +135,5 @@
 				/>
 			</div>
 		</div>
-		<div class="form-group required">
-			<label class="col-sm-2 control-label" for="myc_runtime_stock_update_mode"><?php echo $lbl_runtime_stock_update_mode_field; ?>:</label>
-			<div class="col-sm-10">
-				<select 
-					type="text"
-					class="form-control" 
-					name="myc_runtime_stock_update_mode" 
-					id="myc_runtime_stock_update_mode">
-					<?php foreach ($data_available_stock_update_modes as $id => $label): ?>
-						<option value="<?php echo $id; ?>" <?php echo $id == $runtime_stock_update_mode ? ' selected="selected"' : '' ?>><?php echo $label; ?></option>
-					<?php endforeach; ?>
-				</select>
-			</div>
-		</div>
 	</div>
 </div>

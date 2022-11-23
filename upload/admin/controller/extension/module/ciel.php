@@ -182,7 +182,7 @@ class ControllerExtensionModuleCiel extends CielController {
 
 			$bindingStockUpdateMode = isset($this->request->post['myc_runtime_stock_update_mode'])
 				? $this->_sanitizeTextInput($this->request->post['myc_runtime_stock_update_mode'])
-				: '';
+				: StockUpdateMode::Manual;
 
 			//Workflow settings
 			$wfAddVatOnPaymentToDocument = isset($this->request->post['myc_wf_add_vat_on_payment_to_document'])

@@ -92,7 +92,31 @@ although this extension does not rely on any 3rd party module.</li>
 <li>Migrating connected products from OpenCart Romania's extension is done on a best-effort basis: if the expected structure differs from the actual one, results may differ;</li>
 <li>Due to the way OpenCart stores order and order item costs and prices, this extension needs to deduce some costs and prices that NextUp ERP expects, the result being that there may be differences between the OpenCart order costs and prices and NextUp ERP document costs and prices;</li>
 <li>Since OpenCart product options don't have reference/SKU codes, they cannot be mapped to NextUp ERP articles/products.</li>
-</ol></div><div class="mp-page-contents-block mp-page-installation">
+</ol></div><div class="mp-page-contents-block mp-page-sidebar">
+	<h1>Sidebar artefacts</h1>
+<p>This extension adds a new top level menu item to OpenCart's sidebar, as well as a new widget to OpenCart's existing sidebar progress widget.<br />
+See below for more details.</p>
+<h2>Menu description</h2>
+<p>The top level menu entry for this extension is <code>NextUp ERP</code>, which has the following items:</p>
+<ul>
+<li><code>Configure</code> - navigate to extension configuration panel;</li>
+<li><code>Export products for NextUp Import</code> - navigate to the tool that allows you to export your store products in a format that understood by the NextUp ERP importer tool;</li>
+<li><code>Sync products</code> - navigate to the tool that allows you to sync all your product information from NextUp ERP;</li>
+<li><code>Import new products</code> - navigate to the tool that allows you to import products that you have recently added to NextUp ERP but not in your store;</li>
+<li><code>Migrate from OC Romania</code> - navigate to the tool that allows you to import product connections from OpenCart Romania's NextUp integration module;</li>
+<li><code>Status</code> - navigate to the tool that allows you to view the extensions status: basic information, error log and debug log.</li>
+</ul>
+<h3>Screenshots</h3>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/sidebar-menu.png" alt="Menu entries" title="Menu entries" /></p>
+</div>
+<div class="mp-page-break"></div>
+<h2>Sidebar widgets</h2>
+<p>Sidebar widget showing the NextUp ERP order export progress: what is the percentage of your OpenCart orders that have been exported to NextUp.</p>
+<h3>Screenshots</h3>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/sidebar-widgets.png" alt="Sidebar widgets" title="Sidebar widgets" /></p>
+</div></div><div class="mp-page-contents-block mp-page-installation">
 	<h1>Installation</h1>
 <h2>Install using the OpenCart interface</h2>
 <ol>
@@ -184,11 +208,37 @@ although this extension does not rely on any 3rd party module.</li>
 <td>Option</td>
 <td>What document to issue for each OpenCart order</td>
 </tr>
+<tr>
+<td>Automatically issue document for these order statuses</td>
+<td>Multiple Option</td>
+<td>When an OpenCart order transitions into one of the selected statuses, a document will be automatically issued in NextUp ERP</td>
+</tr>
+<tr>
+<td>Automatically remove document for these order statuses</td>
+<td>Multiple Option</td>
+<td>When an OpenCart order transitions into one of the selected statuses, the document will be automatically removed from NextUp ERP, if previously issued</td>
+</tr>
+<tr>
+<td>Issue document with status</td>
+<td>Option</td>
+<td>When a document is issued in NextUp ERP from the store, use this status</td>
+</tr>
+<tr>
+<td>Document due days</td>
+<td>Number</td>
+<td>When a document is issued in NextUp ERP from the store, use this number of days for calculating the due date, starting from the moment the document is issued</td>
+</tr>
+<tr>
+<td>Shipping VAT Quota</td>
+<td>Option</td>
+<td>Use this VAT quota for ALL shipping methods in your store. When saved, the extension will attempt to reconfigure all your shipping methods to use this VAT quota. This is necessary to match NextUp ERP vat quotas when adding shipping to documents.</td>
+</tr>
 </tbody>
 </table>
+<div class="mp-page-break"></div>
 <h3>Screenshots</h3>
 <div class="mp-page-screenshot">
-<p><img src="./system/storage/manual/html/images/configure-integration.png" alt="Configure Integreation" title="Configure Integration" /></p>
+<p><img src="./system/storage/manual/html/images/configure-integration.png" alt="Configure Integration" title="Configure Integration" /></p>
 </div>
 <div class="mp-page-break"></div>
 <h2>NextUp ERP OpenCart Workflow Options</h2>
@@ -202,10 +252,181 @@ although this extension does not rely on any 3rd party module.</li>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>VAT applicable on payment</td>
+<td>Yes/No</td>
+<td>Whether or not to send the "is vat applicable on payment" flag to NextUp ERP when issuing a document. If not sent, then NextUp will use its default settings.</td>
+</tr>
+<tr>
+<td>Add shipping to document</td>
+<td>Yes/No</td>
+<td>Whether or not to add shipping cost to the document issued to NextUp ERP.</td>
+</tr>
+<tr>
+<td>Stock status for in-stock products</td>
+<td>Option</td>
+<td>When the stock quantities are updated from NextUp ERP and some products are found to be in-stock, use this status when updating the product stock status.</td>
+</tr>
+<tr>
+<td>Stock status for out-of-stock products</td>
+<td>Option</td>
+<td>When the stock quantities are updated from NextUp ERP and some products are found to be out-of-stock, use this status when updating the product stock status.</td>
+</tr>
+<tr>
+<td>Client group used for individuals</td>
+<td>Option</td>
+<td>OpenCart client group used for customers that are billed as individuals. If there is not per-billing type segregation, then set this to <code>None</code>. You need to creat this customer group yourself.</td>
+</tr>
+<tr>
+<td>Client group used for legal persons</td>
+<td>Option</td>
+<td>OpenCart client group used for customers that are billed as legal persons/companies. If there is not per-billing type segregation, then set this to <code>None</code>. You need to creat this customer group yourself.</td>
+</tr>
+<tr>
+<td>Custom field used for VAT Code entry</td>
+<td>Option</td>
+<td>OpenCart custom field used for VAT code entry. The extension will use this when looking up the customer's VAT code. If you don't have any need for this, then set it to <code>None</code>. If You need to creat this field yourself.</td>
+</tr>
+<tr>
+<td>Custom field used for reg. com. number entry</td>
+<td>Option</td>
+<td>OpenCart custom field used for reg. com. number entry. The extension will use this when looking up the customer's reg. com. number. If you don't have any need for this, then set it to <code>None</code>. If You need to creat this field yourself.</td>
+</tr>
+<tr>
+<td>Custom field used for bank account (IBAN) entry</td>
+<td>Option</td>
+<td>OpenCart custom field used for bank account number entry. The extension will use this when looking up the customer's bank account number. If you don't have any need for this, then set it to <code>None</code>. If You need to creat this field yourself.</td>
+</tr>
+<tr>
+<td>Custom field used for bank name entry</td>
+<td>Option</td>
+<td>OpenCart custom field used for bank name entry. The extension will use this when looking up the customer's bank name. If you don't have any need for this, then set it to <code>None</code>. If You need to creat this field yourself.</td>
+</tr>
+<tr>
+<td>Customer group used for NextUp-imported new tax rates</td>
+<td>Option</td>
+<td>When importing tax rates from NextUp, assign them to this customer group by default. Mandatory.</td>
+</tr>
+<tr>
+<td>Geozone used for NextUp-imported new tax rates</td>
+<td>Option</td>
+<td>When importing tax rates from NextUp, assign them to this geozone by default. Mandatory.</td>
+</tr>
+<tr>
+<td>Weight class used for NextUp-imported new products</td>
+<td>Option</td>
+<td>When importing product from NextUp, assign them to this weight class by default. Mandatory.</td>
+</tr>
+<tr>
+<td>Length class used for NextUp-imported new products</td>
+<td>Option</td>
+<td>When importing product from NextUp, assign them to this length class by default. Mandatory.</td>
+</tr>
 </tbody>
 </table>
 <p>Below is a screenshot represeting the relevant section of the configuration page:</p>
 <div class="mp-page-screenshot">
 <p><img src="./system/storage/manual/html/images/configure-workflow.png" alt="Configure Workflow" title="Configure Workflow" /></p>
 </div>
-<div class="mp-page-break"></div></div></div>
+<div class="mp-page-break"></div></div><div class="mp-page-contents-block mp-page-products">
+	<h1>Product synchronization</h1>
+<p>The products in your OpenCart store and the products in your NextUp ERP instance you currently operate are connected based on the product SKU:<br />
+the SKU code in your store must match the product code in your NextUp ERP instance.</p>
+<h2>Introduction</h2>
+<p>An explicit connection between the products in your store and the products in your NextUp ERP instance must be established before the products can:</p>
+<ul>
+<li>be updated from NextUp ERP;</li>
+<li>be added to documents issued to NextUp ERP from OpenCart orders.</li>
+</ul>
+<p>This explicit connection is required for the following reasons:</p>
+<ul>
+<li>because NextUp does not automatically create products when issuing documents (sale invoice or sale order)<br />
+so this is a way to insure that only OpenCart orders for which a document can actually be issued<br />
+are allowed to be exported to NextUp ERP;</li>
+<li>to allow you to have products in your store that are not present in NextUp ERP, and viceversa;</li>
+<li>as an optimization, because only connected products are synchronized,<br />
+so, if not all your store products are also creaded in NextUp ERP,<br />
+then only the ones that are will be updated.</li>
+</ul>
+<p>Once this connection is established, the following product information will be extracted from NextUp ERP.</p>
+<h3>Stock quantity</h3>
+<p>For storable NextUp ERP products, the stock quantity will be read, for the warehouse you selected in the extension configuration page.<br />
+If the product is out-of-stock, then the out-of-stock status you configured will also be set.<br />
+if the product is in-stock, the in-stock status you configured will also be set.</p>
+<h3>Price</h3>
+<p>The product price will be read from NextUp ERP, for the warehouse you selected in the extension configuration page, according to the following rules:</p>
+<ul>
+<li>the price actually assigned to the store product will not include any tax;</li>
+<li>if the warehouse you selected does have a price for the product, then that price will be extracted;</li>
+<li>otherwise: <ul>
+<li>if you selected an <code>en-gross</code> warehouse, then the generic en-gross price will be extracted;</li>
+<li>if you selected an <code>en-detail</code> warehouse, then the generic en-detail price will be extracted.</li>
+</ul>
+</li>
+<li>if needed, the sale price without VAT will be calculated and will be rounded to 4 digit decimal precision.</li>
+</ul>
+<h3>Tax information</h3>
+<p>The product tax information will be read from Nextup ERP and the following actions will be taken:</p>
+<ul>
+<li>a tax class will be created for the product's VAT quota value,<br />
+if one does not already exist;</li>
+<li>a percentage-type tax rate will be created for the products' VAT quota value,<br />
+if one does not already exist and it will be assigned to the above mentioned tax class, based on the payment address<br />
+and associated with the customer groups and geo zone selected in the extension configuration page;</li>
+<li>the above mentioned tax class will be assigned to the store product.</li>
+</ul>
+<div class="mp-page-break"></div>
+<h2>Connecting products</h2>
+<h3>Individually</h3>
+<p>To connect a single product, navigate to that product's editor page, then to the <code>Nextup ERP Integration</code> tab.<br />
+If the product cannot be connected, a warning message will be displayed:</p>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/product-connect-nosku.png" alt="Product connect when no SKU set" title="Product connect when no SKU set" /></p>
+</div>
+<p>If the product can be connected, then the <code>Connect to NextUp ERP by SKU</code> button will be shown.<br />
+Click it to connect the product. </p>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/connect-product.png" alt="Connect product" title="Connect product" /></p>
+</div>
+<p>If the operation has been successful, then a confirmation message will be displayed<br />
+and the page will automatically reload in 5 seconds.</p>
+<div class="mp-page-break"></div>
+<h3>In bulk</h3>
+<p>To connect products in bulk, navigate to <code>Catalog - Products</code>, check the desired products in the product list<br />
+and then use the right-most button in the header button bar, the on with the plug icon:</p>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/products-bulk-connect.png" alt="Bulk connect button" title="Bulk connect button" /></p>
+</div>
+<p>For each selected product, the operation result will be shown below that product's row.</p>
+<div class="mp-page-break"></div>
+<h2>Consulting product connected status</h2>
+<p>To see which products are connected to NextUp ERP navigate to <code>Catalog - Products</code>, and check the value of the <code>Connected to NextUp ERP</code> column:</p>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/products-connected-status.png" alt="Products connected status" title="Products connected status" /></p>
+</div>
+<div class="mp-page-break"></div>
+<h2>Consulting NextUp ERP-related product information</h2>
+<p>To view NextUP ERP-related product information for a product that has previously been connected to NextUp ERP,<br />
+navigate to that product's editor page, then to the <code>Nextup ERP Integration</code> tab.</p>
+<p>The following information is displayed:</p>
+<ul>
+<li><code>Connected to NextUp ERP</code> - whether or not the product is connected to NextUp ERP;</li>
+<li><code>NextUp ERP article ID</code> - the internal NextUp ERP product ID;</li>
+<li><code>NextUp ERP VAT option name</code> - the VAT option name assigned to the product in NextUp ERP;</li>
+<li><code>NextUp ERP VAT quota value</code> - the VAT quota value  assigned to the product in NextUp ERP;</li>
+<li><code>Batch tracking enabled</code> - whether or not batch tracking is enabled in NextUp ERP for the product.</li>
+</ul>
+<p>The following actions are available for connected products:</p>
+<ul>
+<li><code>Update entire information from NextUp ERP</code> - Updates both stock quantities and prices;</li>
+<li><code>Update stock information from NextUp ERP</code> - Only updates stock quantities.</li>
+</ul>
+<div class="mp-page-screenshot">
+<p><img src="./system/storage/manual/html/images/product-connected-info.png" alt="Product connected info" title="Product connected info" /></p>
+</div></div><div class="mp-page-contents-block mp-page-contact">
+	<h1>Contact</h1>
+<ul>
+<li>e-mail: alexandru.boia@outlook.com</li>
+<li>web: <a href="http://myclar.ro">http://myclar.ro</a></li>
+<li>phone: +40 724 382 661</li>
+</ul></div></div>

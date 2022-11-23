@@ -13,16 +13,25 @@
 			"file": "limitations.md",
 			"title": "Limitations"
 		}, {
+			"file": "sidebar.md",
+			"title": "Sidebar artefacts"
+		}, {
 			"file": "installation.md",
 			"title": "Installation"
 		}, {
 			"file": "configure.md",
 			"title": "Configure Extension"
+		}, {
+			"file": "products.md",
+			"title": "Product synchronization"
+		}, {
+			"file": "contact.md",
+			"title": "Contact"
 		}]
 	},
 	"output": {
 		"pdf": true,
-		"html": true,
+		"html": false,
 		"copy": {
 			"base": "../../upload/system/storage/manual",
 			"html": "html",
