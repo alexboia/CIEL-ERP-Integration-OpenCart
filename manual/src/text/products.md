@@ -91,7 +91,7 @@ To see which products are connected to NextUp ERP navigate to `Catalog - Product
 
 <div class="mp-page-break"></div>
 
-## Consulting NextUp ERP-related product information
+## Consulting NextUp ERP-related product information and actions
 
 To view NextUP ERP-related product information for a product that has previously been connected to NextUp ERP, 
 navigate to that product's editor page, then to the `Nextup ERP Integration` tab.

@@ -28,6 +28,9 @@
 			"file": "customers.md",
 			"title": "Customers"
 		}, {
+			"file": "orders.md",
+			"title": "Orders"
+		}, {
 			"file": "tools/sync-product-information.md",
 			"title": "Sync product information in bulk"
 		}, {
