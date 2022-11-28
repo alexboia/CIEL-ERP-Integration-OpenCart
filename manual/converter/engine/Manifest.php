@@ -92,7 +92,7 @@ namespace MyClar\ManualBuilder {
 		private function _isOutputTypeEnabled(string $outputType): bool {
 			$this->_readIfNeeded();
 			return !empty($this->_contents['output'])
-				&& !empty($this->_contents['output'][$outputType])
+				&& isset($this->_contents['output'][$outputType])
 					? $this->_contents['output'][$outputType] === true
 					: true;
 		}

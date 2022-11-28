@@ -31,6 +31,8 @@ namespace MyClar\ManualBuilder {
 			if ($this->_manifest->shouldOutputType($outputType)) {
 				$contents = $this->_renderOutputType($outputType, $pages);
 				$this->_storeOutput($outputType, $contents);
+			} else {
+				$this->_removeExistingOutput($outputType);
 			}
 		}
 
@@ -64,6 +66,13 @@ namespace MyClar\ManualBuilder {
 		private function _copyOutput(): void {
 			$copier = new OutputCopier($this->_manifest);
 			$copier->copyOutput();
+		}
+
+		private function _removeExistingOutput($outputType) {
+			$outputFilePath = $this->_manifest->determineOutputFilePath($outputType);
+			if (file_exists($outputFilePath)) {
+				@unlink($outputFilePath);
+			}
 		}
 	}
 }
