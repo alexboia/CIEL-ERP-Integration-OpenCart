@@ -25,6 +25,9 @@
 			"file": "products.md",
 			"title": "Product synchronization"
 		}, {
+			"file": "customers.md",
+			"title": "Customers"
+		}, {
 			"file": "tools/sync-product-information.md",
 			"title": "Sync product information in bulk"
 		}, {
