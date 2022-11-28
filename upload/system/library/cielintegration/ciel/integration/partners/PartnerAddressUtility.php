@@ -21,12 +21,60 @@ namespace Ciel\Api\Integration\Partners {
 					? $localCustomerData['address']['address_phone']
 					: '';
 
+				$country = !empty($localCustomerData['address'])
+						&& !empty($localCustomerData['address']['address_country_name'])
+					? $localCustomerData['address']['address_country_name']
+					: '';
+
+				$county = !empty($localCustomerData['address'])
+						&& !empty($localCustomerData['address']['address_county_name'])
+					? $localCustomerData['address']['address_county_name']
+					: '';
+
+				$city = !empty($localCustomerData['address'])
+						&& !empty($localCustomerData['address']['address_city_name'])
+					? $localCustomerData['address']['address_city_name']
+					: '';
+
+				$postalCode = !empty($localCustomerData['address'])
+						&& !empty($localCustomerData['address']['address_postal_code'])
+					? !empty($localCustomerData['address']['address_postal_code'])
+					: '';
+
+				if (!empty($country)) {
+					$parts[] = $country;
+				} else {
+					$parts[] = '[no-country]';
+				}
+
+				if (!empty($county)) {
+					$parts[] = $county;
+				} else {
+					$parts[] = '[no-county]';
+				}
+
+				if (!empty($city)) {
+					$parts[] = $city;
+				} else {
+					$parts[] = '[no-city]';
+				}
+
+				if (!empty($postalCode)) {
+					$parts[] = $postalCode;
+				} else {
+					$parts[] = '[no-postcode]';
+				}
+
 				if (!empty($email)) {
 					$parts[] = $email;
+				} else {
+					$parts[] = '[no-email]';
 				}
 
 				if (!empty($phone)) {
 					$parts[] = $phone;
+				} else {
+					$parts = '[no-phone]';
 				}
 				
 				if (!empty($parts)) {
