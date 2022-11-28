@@ -25,14 +25,17 @@
 			"file": "products.md",
 			"title": "Product synchronization"
 		}, {
+			"file": "tools/sync-product-information.md",
+			"title": "Sync product information in bulk"
+		}, {
 			"file": "customers.md",
 			"title": "Customers"
 		}, {
 			"file": "orders.md",
 			"title": "Orders"
 		}, {
-			"file": "tools/sync-product-information.md",
-			"title": "Sync product information in bulk"
+			"file": "status.md",
+			"title": "Extension status"
 		}, {
 			"file": "contact.md",
 			"title": "Contact"
