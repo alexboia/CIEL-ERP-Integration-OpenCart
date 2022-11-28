@@ -28,6 +28,9 @@
 			"file": "tools/sync-product-information.md",
 			"title": "Sync product information in bulk"
 		}, {
+			"file": "tools/migrate-oc-romania.md",
+			"title": "Migrate from OpenCart Romania connector format"
+		}, {
 			"file": "customers.md",
 			"title": "Customers"
 		}, {
