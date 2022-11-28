@@ -98,6 +98,14 @@ The following actions are available for orders that don't have documents issued 
 ![Order without document]($img_base_url$/order-view-document-not-issued.png "Order without document")
 </div>
 
+If an order has some issues with its products and, as a result, a document cannot be issued, details are displayed:
+
+<div class="mp-page-screenshot" markdown="1">
+![Order without document, with product issues]($img_base_url$/order-with-product-issues.png "Order without document, with product issues")
+</div>
+
+<div class="mp-page-break"></div>
+
 The following actions are available for orders that have documents issued for them:
 - `Remove NextUp ERP document`.
 
