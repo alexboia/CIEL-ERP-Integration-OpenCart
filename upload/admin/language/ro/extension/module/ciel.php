@@ -87,6 +87,7 @@ $_['msg_err_fill_in_valid_in_stock_status_id'] = 'Te rugăm să completezi o val
 $_['msg_err_fill_in_valid_out_of_stock_status_id'] = 'Te rugăm să completezi o valoare validă pentru statusul produselor care nu se află-n stoc.';
 $_['lbl_add_vat_on_payment_to_document_field'] = 'Se aplică TVA la încasare';
 $_['lbl_add_shipping_to_document_field'] = 'Evidențiază transportul pe document';
+$_['lbl_disable_anaf_vat_code_lookup_field'] = 'Nu valida codul fiscal via ANAF';
 $_['lbl_in_stock_status_id_field'] = 'Status stoc pentru produse care se află-n stoc';
 $_['lbl_out_of_stock_status_id_field'] = 'Status stoc pentru produse epuizate din stoc';
 $_['lbl_pf_customer_group_id_field'] = 'Grup de clienți folosit pentru clienți persoane fizice';

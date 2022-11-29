@@ -3,6 +3,7 @@
 use CielIntegration\AnafApiClient;
 use CielIntegration\CielController;
 use CielIntegration\Integration\Admin\Partner\CustomerCustomFieldsMappingProvider;
+use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\WithInputSanitization;
 use CielIntegration\WithLogging;
 
@@ -12,6 +13,7 @@ use CielIntegration\WithLogging;
 class ControllerExtensionCielCatalogAnafData extends CielController {
 	use WithLogging;
 	use WithInputSanitization;
+	use WithCielIntegration;
 
 	public function assets() {
 		$this->_addHeaderScript('extension/ciel_catalog_anaf_data.js', 
@@ -101,6 +103,12 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 			return $response;
 		}
 
+		if (!$this->_shouldPerformAnafVatCodeLookup()) {
+			$this->_logDebug('Vat code lookup disabled by configuration. Will not lookup using ANAF server!');
+			$response->success = true;
+			return $response;
+		}
+
 		try {
 			$anafApiClient = $this->_getAnafApiClient();
 			$vatPayerData = $anafApiClient->getVatInfoByVatCode($vatCode);
@@ -110,6 +118,7 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 				$response->info = $vatPayerData->toArray();
 			}
 
+			$response->performed = true;
 			$response->success = true;
 			$response->message = null;
 		} catch (Exception $exc) {
@@ -121,13 +130,27 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 
 	private function _createEmptyLookupAjaxResponse() {
 		return $this->_createAjaxResponse(array(
+			'performed' => false,
 			'exists' => false,
 			'info' => null
 		));
 	}
 
 	private function _vatCodeSeemsInvalid($vatCode) {
-		return preg_match('/^([A-Z]{2})?([0-9]{1,9})([0-9]{1})$/', $vatCode) !== 1;
+		return !$this->_maybeCompanyVatCode($vatCode) 
+			&& !$this->_maybePersonNumericalCode($vatCode);
+	}
+
+	private function _maybeCompanyVatCode($vatCode) {
+		return preg_match('/^([A-Z]{2})?([0-9]{1,9})([0-9]{1})$/', $vatCode) === 1;
+	}
+
+	private function _maybePersonNumericalCode($vatCode) {
+		return preg_match('/^([0-9]{13})$/', $vatCode) === 1;
+	}
+
+	private function _shouldPerformAnafVatCodeLookup() {
+		return !$this->_getWorkflow()->getDisableAnafVatCodeLookup();
 	}
 
 	private function _getAnafApiClient() {

@@ -42,10 +42,12 @@
 				}).done(function(data, status, xhr) {
 					_enableAddressFormSubmit();
 					if (data && data.success) {
-						if (_isVatCodeValid(data)) {
-							_updateFieldsFromVatCodeLookupData(data);
-						} else {
-							_resetVatCodeField();
+						if (_wasLookupPerformed(data)) {
+							if (_isVatCodeValid(data)) {
+								_updateFieldsFromVatCodeLookupData(data);
+							} else {
+								_resetVatCodeField();
+							}
 						}
 					} else {
 						_resetVatCodeField();
@@ -78,6 +80,10 @@
 			return resultData.exists 
 				&& !!resultData.info 
 				&& !!resultData.info.person_name;
+		}
+
+		function _wasLookupPerformed(resultData) {
+			return !!resultData.performed
 		}
 
 		function _updateFieldsFromVatCodeLookupData(resultData) {

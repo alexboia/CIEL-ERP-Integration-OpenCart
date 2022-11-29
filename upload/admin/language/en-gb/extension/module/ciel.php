@@ -87,6 +87,7 @@ $_['msg_err_fill_in_valid_in_stock_status_id'] = 'Please fill in a valid in-stoc
 $_['msg_err_fill_in_valid_out_of_stock_status_id'] = 'Please fill in a valid out-of-stock status id.';
 $_['lbl_add_vat_on_payment_to_document_field'] = 'VAT applicable on payment';
 $_['lbl_add_shipping_to_document_field'] = 'Add shipping to document';
+$_['lbl_disable_anaf_vat_code_lookup_field'] = 'Disable ANAF VAT code lookup';
 $_['lbl_in_stock_status_id_field'] = 'Stock status for in-stock products';
 $_['lbl_out_of_stock_status_id_field'] = 'Stock status for out-of-stock products';
 $_['lbl_pf_customer_group_id_field'] = 'Client group used for individuals';

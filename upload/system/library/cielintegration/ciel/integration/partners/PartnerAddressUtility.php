@@ -11,15 +11,6 @@ namespace Ciel\Api\Integration\Partners {
 				$externalKey = $localCustomerData['address']['address_external_key'];
 			} else {
 				$parts = array();
-				
-				$email = !empty($localCustomerData['email'])
-					? $localCustomerData['email']
-					: '';
-
-				$phone = !empty($localCustomerData['address'])
-						&& !empty($localCustomerData['address']['address_phone'])
-					? $localCustomerData['address']['address_phone']
-					: '';
 
 				$country = !empty($localCustomerData['address'])
 						&& !empty($localCustomerData['address']['address_country_name'])
@@ -39,6 +30,15 @@ namespace Ciel\Api\Integration\Partners {
 				$postalCode = !empty($localCustomerData['address'])
 						&& !empty($localCustomerData['address']['address_postal_code'])
 					? !empty($localCustomerData['address']['address_postal_code'])
+					: '';
+
+				$email = !empty($localCustomerData['email'])
+					? $localCustomerData['email']
+					: '';
+
+				$phone = !empty($localCustomerData['address'])
+						&& !empty($localCustomerData['address']['address_phone'])
+					? $localCustomerData['address']['address_phone']
 					: '';
 
 				if (!empty($country)) {

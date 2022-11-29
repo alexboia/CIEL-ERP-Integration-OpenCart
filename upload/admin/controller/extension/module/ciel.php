@@ -191,6 +191,9 @@ class ControllerExtensionModuleCiel extends CielController {
 			$wfAddShippingToDocument = isset($this->request->post['myc_wf_add_shipping_to_document'])
 				? $this->request->post['myc_wf_add_shipping_to_document'] === 'yes'
 				: false;
+			$wfDisableAnafVatCodeLookup = isset($this->request->post['myc_wf_disable_anaf_vat_code_lookup'])
+				? $this->request->post['myc_wf_disable_anaf_vat_code_lookup'] === 'yes'
+				: false;
 
 			$wfInStockStatusId = isset($this->request->post['myc_wf_in_stock_status_id'])
 				? intval($this->request->post['myc_wf_in_stock_status_id'])
@@ -367,6 +370,7 @@ class ControllerExtensionModuleCiel extends CielController {
 					//Save workflow
 					$workflow->saveAdditionalDocumentOptions($wfAddVatOnPaymentToDocument);
 					$workflow->saveShippingSettings($wfAddShippingToDocument);
+					$workflow->saveAnafIntegrationOptions($wfDisableAnafVatCodeLookup);
 					$workflow->saveProductStockStatuses($wfInStockStatusId, 
 						$wfOutOfStockStatusId);
 					$workflow->savePersonTypeCustomerGroupMapping($wfPfCustomerGroupId, 

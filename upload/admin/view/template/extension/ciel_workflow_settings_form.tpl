@@ -24,7 +24,7 @@
 					name="myc_wf_add_vat_on_payment_to_document"
 					id="myc_wf_add_vat_on_payment_to_document"
 					value="yes"
-					<?php echo myc_checked_attr($myc_wf_add_vat_on_payment_to_document); ?>
+					<?php echo myc_checked_attr($wf_add_vat_on_payment_to_document); ?>
 				/>
 			</div>
 		</div>
@@ -37,7 +37,20 @@
 					name="myc_wf_add_shipping_to_document"
 					id="myc_wf_add_shipping_to_document"
 					value="yes"
-					<?php echo myc_checked_attr($myc_wf_add_shipping_to_document); ?>
+					<?php echo myc_checked_attr($wf_add_shipping_to_document); ?>
+				/>
+			</div>
+		</div>
+
+		<!-- Anaf integration bindings -->
+		<div class="form-group required">
+			<label class="col-sm-2 control-label" for="myc_wf_disable_anaf_vat_code_lookup"><?php echo $lbl_disable_anaf_vat_code_lookup_field; ?>:</label>
+			<div class="col-sm-10">
+				<input type="checkbox" 
+					name="myc_wf_disable_anaf_vat_code_lookup"
+					id="myc_wf_disable_anaf_vat_code_lookup"
+					value="yes"
+					<?php echo myc_checked_attr($wf_disable_anaf_vat_code_lookup); ?>
 				/>
 			</div>
 		</div>

@@ -13,6 +13,19 @@ namespace CielIntegration\Integration\Admin\Binding {
 			$this->_bindingSettingsModel = new IntegrationSettings($registry);
 		}
 
+		public function getDisableAnafVatCodeLookup() {
+			$wfSettings = $this->_getWorkflowSettings();
+			return isset($wfSettings['disable_anaf_vat_code_lookup'])
+				? $wfSettings['disable_anaf_vat_code_lookup'] == true
+				: false;
+		}
+
+		public function saveAnafIntegrationOptions($disableVatCodeLookup) {
+			$this->_saveWorkflowSettigs(array(
+				'disable_anaf_vat_code_lookup' => $disableVatCodeLookup
+			));
+		}
+
 		public function getAddVatOnPaymentToDocument() {
 			$wfSettings = $this->_getWorkflowSettings();
 			return isset($wfSettings['add_vat_on_payment_to_document'])
