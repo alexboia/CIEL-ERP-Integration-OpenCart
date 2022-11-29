@@ -110,14 +110,19 @@ class ControllerExtensionCielCatalogAnafData extends CielController {
 		}
 
 		try {
-			$anafApiClient = $this->_getAnafApiClient();
-			$vatPayerData = $anafApiClient->getVatInfoByVatCode($vatCode);
-
-			if ($vatPayerData != null) {
+			if (!$this->_maybePersonNumericalCode($vatCode)) {
+				$anafApiClient = $this->_getAnafApiClient();
+				$vatPayerData = $anafApiClient->getVatInfoByVatCode($vatCode);
+	
+				if ($vatPayerData != null) {
+					$response->exists = true;
+					$response->info = $vatPayerData->toArray();
+				}
+			} else {
 				$response->exists = true;
-				$response->info = $vatPayerData->toArray();
+				$response->info = array();
 			}
-
+			
 			$response->performed = true;
 			$response->success = true;
 			$response->message = null;

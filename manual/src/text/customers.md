@@ -42,6 +42,15 @@ It uses the following fields to compute the external address key:
 
 So, if any of these fields change, it will result in a new NextUp ERP customer address for the same customer (that has already been mapped).
 
+## ANAF Vat code lookup
+
+In the front-end customer address form the extension performs VAT code validation, for the custom field configured as VAT code input in the extension's configuration page.
+The validation has two stages:
+
+1. First, it checks whether it has a valid VAT code or Personal Numerical Code format; if not, the validation fails.
+2. If so, then ANAF vat code lookup is peformed, and the company name is also returned, if the lookup yields any result.
+3. The form's corresponding field is then populated, in case of successful validation, with the company name.
+
 ## Managing customer synchronization
 
 There is no direct way to synchronize a store customer to a NextUp ERP customer: the extension does so automatically when a document is issued from the store to NextUp ERP, either as a sale order or a sale invoice.

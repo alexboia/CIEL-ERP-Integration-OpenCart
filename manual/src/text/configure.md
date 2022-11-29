@@ -57,6 +57,7 @@ In this section, you specify additional workflow integration options, mostly Ope
 | --------------- | ------- | ----------- |
 | VAT applicable on payment | Yes/No  | Whether or not to send the "is vat applicable on payment" flag to NextUp ERP when issuing a document. If not sent, then NextUp will use its default settings. |
 | Add shipping to document | Yes/No  | Whether or not to add shipping cost to the document issued to NextUp ERP. |
+| Disable ANAF VAT code lookup | Yes/No | Whether or not to disable ANAF VAT code lookup on front-end customer address form. |
 | Stock status for in-stock products | Option  | When the stock quantities are updated from NextUp ERP and some products are found to be in-stock, use this status when updating the product stock status. |
 | Stock status for out-of-stock products | Option  | When the stock quantities are updated from NextUp ERP and some products are found to be out-of-stock, use this status when updating the product stock status. |
 | Client group used for individuals | Option | OpenCart client group used for customers that are billed as individuals. If there is not per-billing type segregation, then set this to `None`. You need to creat this customer group yourself. |

@@ -78,8 +78,7 @@
 
 		function _isVatCodeValid(resultData) {
 			return resultData.exists 
-				&& !!resultData.info 
-				&& !!resultData.info.person_name;
+				&& !!resultData.info;
 		}
 
 		function _wasLookupPerformed(resultData) {
@@ -87,13 +86,15 @@
 		}
 
 		function _updateFieldsFromVatCodeLookupData(resultData) {
-			$ctlVatCodeField.val(resultData.info.vat_code_full || '');
-			if (!$ctlCompanyNameField.val()) {
-				$ctlCompanyNameField.val(resultData.info.person_name || '');
-			}
-
-			if (!$ctlPostCodeField.val()) {
-				$ctlPostCodeField.val(resultData.info.postal_code);
+			if (!!resultData.info.person_name) {
+				$ctlVatCodeField.val(resultData.info.vat_code_full || '');
+				if (!$ctlCompanyNameField.val()) {
+					$ctlCompanyNameField.val(resultData.info.person_name || '');
+				}
+	
+				if (!$ctlPostCodeField.val()) {
+					$ctlPostCodeField.val(resultData.info.postal_code);
+				}
 			}
 		}
 
