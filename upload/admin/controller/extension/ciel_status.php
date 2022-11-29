@@ -4,8 +4,12 @@ use CielIntegration\ExtensionInfo;
 use CielIntegration\Integration\Admin\WithCielIntegration;
 use CielIntegration\LogFileDownloader;
 use CielIntegration\LogFileManager;
+use CielIntegration\ManualFileDownloader;
+use CielIntegration\ManualManager;
 use CielIntegration\WithAdminLayoutLoader;
 use CielIntegration\WithLogging;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\ref;
 
 class ControllerExtensionCielStatus extends CielController {
 	use WithCielIntegration;
@@ -58,7 +62,8 @@ class ControllerExtensionCielStatus extends CielController {
 			'lbl_module_version',
 			'lbl_module_configured',
 			'lbl_php_version',
-			'lbl_opencart_version'
+			'lbl_opencart_version',
+			'lbl_manual'
 		));
 
 		$data['download_log_btn_text'] = $this->_t('download_log_btn_text');
@@ -75,6 +80,9 @@ class ControllerExtensionCielStatus extends CielController {
 		
 		$data['view_config_link_text'] = $this->_t('view_config_link_text');
 		$data['view_config_link_action'] = $this->_createRouteUrl('extension/module/ciel');
+
+		$data['download_manual_link_text'] = $this->_t('download_manual_link_text');
+		$data['download_manual_link_action'] = $this->_createRouteUrl('extension/ciel_status/downloadManual');
 
 		$data['status'] = $this->_getStatus();
 		$data['debug_log_status'] = $this->_getDebugLogStatus();
@@ -239,5 +247,24 @@ class ControllerExtensionCielStatus extends CielController {
 		if ($logFileManager->exists()) {
 			$logFileManager->clear();
 		}
+	}
+
+	public function downloadManual() {
+		$manualManager = $this->_getManualManager();
+		if ($manualManager->pdfExists()) {
+			$manualDownloader = $this->_getManualDownloader();
+			$manualContents = $manualManager->getContents();
+			$manualDownloader->sendManualFile('manual-oc-nextup-erp.pdf', $manualContents);
+		} else {
+			die;
+		}
+	}
+
+	private function _getManualManager() {
+		return new ManualManager();
+	}
+
+	private function _getManualDownloader() {
+		return new ManualFileDownloader($this->response);
 	}
 }

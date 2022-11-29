@@ -41,6 +41,12 @@
 							<a href="<?php echo $view_config_link_action; ?>" target="_blank" class="myc-status-configure-link"><?php echo $view_config_link_text ?></a>
 						</div>
 					</div>
+					<div class="form-group">
+					<div class="col-sm-2 myc-status-label"><?php echo $lbl_manual; ?>:</div>
+						<div class="col-sm-10">
+							<a href="<?php echo $download_manual_link_action; ?>" target="_blank" class="myc-status-configure-link"><?php echo $download_manual_link_text ?></a>
+						</div>
+					</div>
 				</div>
 			</div>
 

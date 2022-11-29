@@ -7,11 +7,13 @@ $_['ciel_status_box_error_log'] = 'Jurnal erori';
 $_['download_log_btn_text'] = 'Descarcă log';
 $_['clear_log_btn_text'] = 'Șterge log';
 $_['view_config_link_text'] = '(Configurează)';
+$_['download_manual_link_text'] = 'Click aici pentru a-l descărca';
 
 $_['lbl_module_version'] = 'Versiune modul';
 $_['lbl_php_version'] = 'Versiune PHP';
 $_['lbl_opencart_version'] = 'Versiune OpenCart';
 $_['lbl_module_configured'] = 'Modul configurat?';
+$_['lbl_manual'] = 'Manual';
 
 $_['log_file_large_warning'] = 'Atenție: Fișierul jurnal %s are o dimensiune de %s!';
 $_['log_file_missing_info'] = 'Fișierul jurnal %s nu există!';
