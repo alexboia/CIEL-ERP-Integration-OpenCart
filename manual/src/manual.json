@@ -34,6 +34,9 @@
 			"file": "tools/import-new-products.md",
 			"title": "Import new products from NextUp ERP"
 		}, {
+			"file": "tools/export-products-nextup-import.md",
+			"title": "Export store products for NextUp Import"
+		}, {
 			"file": "customers.md",
 			"title": "Customers"
 		}, {
