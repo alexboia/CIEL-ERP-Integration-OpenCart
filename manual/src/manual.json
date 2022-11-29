@@ -16,11 +16,14 @@
 			"file": "limitations.md",
 			"title": "Other limitations"
 		}, {
-			"file": "sidebar.md",
-			"title": "Sidebar artefacts"
+			"file": "prepare.md",
+			"title": "Preparations"
 		}, {
 			"file": "installation.md",
 			"title": "Installation"
+		}, {
+			"file": "sidebar.md",
+			"title": "Sidebar artefacts"
 		}, {
 			"file": "configure.md",
 			"title": "Configure Extension"

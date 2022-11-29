@@ -12,7 +12,7 @@ In this section, you specify the NextUp ERP server address and credentials. The 
 
 | Field           | Type    | Description |
 | --------------- | ------- | --------- |
-| Web service URL | URL     | The URL for which NextUp ERP server is configured to listen |
+| Web service URL | URL     | The URL for which NextUp ERP server is configured to listen (MUST include the `/POST` segment as well) |
 | Username        | String  | The username used for authentication with the NextUp ERP server |
 | Password        | String  | The password used for authentication with the NextUp ERP server |
 | Society code    | String  | The society code to which the store will be bound to operate |
