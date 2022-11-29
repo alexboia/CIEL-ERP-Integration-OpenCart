@@ -1,4 +1,4 @@
-# Limitations
+# Other limitations
 
 1. There is no automatic stock update feature;
 2. Migrating connected products from OpenCart Romania's extension is done on a best-effort basis: if the expected structure differs from the actual one, results may differ;

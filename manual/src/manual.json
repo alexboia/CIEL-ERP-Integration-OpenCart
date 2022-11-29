@@ -9,9 +9,12 @@
 		}, {
 			"file": "requirements.md",
 			"title": "Requirements"
-		},{
+		}, {
+			"file": "what-and-what-not.md",
+			"title": "What this extension does"
+		}, {
 			"file": "limitations.md",
-			"title": "Limitations"
+			"title": "Other limitations"
 		}, {
 			"file": "sidebar.md",
 			"title": "Sidebar artefacts"
