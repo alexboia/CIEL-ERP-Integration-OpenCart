@@ -29,19 +29,37 @@
 		<div class="container-fluid">
 			<?php echo $html_connection_settings_form; ?>		
 		</div>
-		<?php if (!empty($html_runtime_settings_form)): ?>
+		<?php if (!$has_connection_error && !empty($html_runtime_settings_form)): ?>
 			<div class="container-fluid">
 				<?php echo $html_runtime_settings_form; ?>
 			</div>
 		<?php endif; ?>
-		<?php if (!empty($html_workflow_settings_form)): ?>
+		<?php if (!$has_connection_error && !empty($html_workflow_settings_form)): ?>
 			<div class="container-fluid">
 				<?php echo $html_workflow_settings_form; ?>
+			</div>
+		<?php endif; ?>
+		<?php if ($has_connection_error): ?>
+			<div class="container-fluid">
+				<input type="hidden" 
+					id="myc_had_connection_error" 
+					name="had_connection_error" 
+					value="true" 
+				/>
+
+				<div class="alert alert-danger" role="alert">
+					<span><?php echo $ciel_settings_connection_error; ?></span>
+				</div>
 			</div>
 		<?php endif; ?>
 	</form>
 
 	<?php echo $html_loading_indicator; ?>
+
+	<script type="text/javascript">
+		window['myc_msgConfirmWarehouseChange'] = '<?php echo $msg_confirm_warehouse_change; ?>';
+		window['myc_hasConnectionError'] = <?php echo myc_bool2str($has_connection_error); ?>;
+	</script>
 </div>
 
 <?php echo $html_footer; ?>

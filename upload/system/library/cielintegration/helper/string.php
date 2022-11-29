@@ -31,3 +31,7 @@ function myc_extract_vat_code_parts($fullVatCode) {
 
 	return $parts;
 }
+
+function myc_bool2str($bool) {
+	return $bool == true ? 'true' : 'false';
+}

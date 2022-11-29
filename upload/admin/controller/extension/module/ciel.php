@@ -40,15 +40,21 @@ class ControllerExtensionModuleCiel extends CielController {
 	public function index() {
 		//Prepare document assets
 		$this->_setDocumentTitleLangKey('ciel_settings_page_title');
+		$this->_includeCommonScript();
 		$this->_includeLoadingIndicatorScript();
 		$this->_includeOperationStatusScript();
 		$this->_addHeaderScript('extension/module/ciel.js');
+
+		$storeBinding = $this->_getStoreBinding();
+		$hasConnectionInfo = $storeBinding->hasConnectionInfo();
 
 		//Prepare data
 		$data = $this->_loadAdminLayout();
 		$data['token'] = $this->_getCurrentSessionToken();
 
 		$data['ciel_settings_page_title'] = $this->_t('ciel_settings_page_title');
+		$data['ciel_settings_connection_error'] = $this->_t('ciel_settings_connection_error');
+		$data['msg_confirm_warehouse_change'] = $this->_t('msg_confirm_warehouse_change');
 
 		$data['txt_save_action'] = $this->_t('button_save');
 		$data['url_save_action'] = $this->_createRouteUrl('extension/module/ciel/saveSettings');
@@ -60,8 +66,18 @@ class ControllerExtensionModuleCiel extends CielController {
 		$data['html_breadcrumbs'] = $this->_renderBreadcrumbs($this->_getBreadcrumbsData());
 
 		$data['html_connection_settings_form'] = $this->_renderConnectionSettinsForm();
-		$data['html_runtime_settings_form'] = $this->_renderRuntimeSettingsForm();
-		$data['html_workflow_settings_form'] = $this->_renderWorkflowSettingsForm();
+		$data['has_connection_info'] = $hasConnectionInfo;
+		$data['has_connection_error'] = false;
+
+		try {
+			$data['html_runtime_settings_form'] = $this->_renderRuntimeSettingsForm();
+			$data['html_workflow_settings_form'] = $this->_renderWorkflowSettingsForm();
+		} catch (Exception $exc) {
+			$this->_logError($exc, 'Error retrieving settings');
+			$data['html_runtime_settings_form'] = '';
+			$data['html_workflow_settings_form'] = '';
+			$data['has_connection_error'] = true;
+		}
 
 		//Render view
 		$this->_renderViewToResponseOutput('extension/module/ciel', 
@@ -109,6 +125,10 @@ class ControllerExtensionModuleCiel extends CielController {
 			$customersReset = false;
 			$hadConnectionInfo = $storeBinding
 				->hasConnectionInfo();
+
+			$hadConnectionError = isset($this->request->post['had_connection_error'])
+				? $this->request->post['had_connection_error'] === 'true'
+				: false;
 
 			//Connection information
 			$bindingEndpoint = isset($this->request->post['myc_connection_endpoint_url']) 
@@ -263,7 +283,7 @@ class ControllerExtensionModuleCiel extends CielController {
 				$storeBinding
 					->save();
 
-				if ($hadConnectionInfo) {
+				if ($hadConnectionInfo && !$hadConnectionError) {
 					if (empty($bindingWarehouse) 
 						|| empty($bindingWarehouseCode) 
 						|| !WarehouseType::isTypeIdSupported($bindingWarehouseType)) {
@@ -386,14 +406,19 @@ class ControllerExtensionModuleCiel extends CielController {
 
 					$response->articlesReset = $articlesReset;
 					$response->customersReset = $customersReset;
+					$response->message = $this->_t('msg_settings_saved_ok');
 					$response->success = true;
 				} else {
 					$response->warehouses = $this->_getWarehousesForDropdown();
 					$response->vatQuotas = $this->_getVatQuotasForDropdown();
 					$response->articlesReset = false;
+					$response->message = $hadConnectionError 
+						? $this->_t('msg_settings_saved_ok_needs_reload')
+						: $this->_t('msg_settings_saved_ok');
 					$response->success = true;
 				}
 			} catch (Exception $exc) {
+				$response->message = $this->_t('msg_settings_save_failed');
 				$this->_logError($exc);
 			}
 

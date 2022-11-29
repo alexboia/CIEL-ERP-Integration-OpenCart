@@ -45,8 +45,6 @@ $_['lbl_ciel_document_issued_percentage'] = 'Documente emise NextUp';
 $_['ciel_settings_page_title'] = 'Configurare Integrare NextUp ERP';
 
 $_['text_connection_settings_form_heading'] = 'Opțiuni Conexiune NextUp ERP';
-$_['msg_connection_test_ok'] = 'Conexiunea și autentificarea s-au desfășurat cu succes';
-$_['msg_connection_test_failed'] = 'Conexiunea nu a putut fi stabilită sau autentificarea a eșuat';
 $_['msg_err_fill_in_connection_properties'] = 'Te rugăm să completezi proprietățile conexiunii';
 $_['button_test_connection'] = 'Testează conexiune';
 $_['lbl_connection_endpoint_url_field'] = 'URL Webservice';
@@ -100,6 +98,15 @@ $_['lbl_new_tax_rate_customer_group_id_field'] = 'Grupul de clienți folosit pen
 $_['lbl_new_tax_rate_geo_zone_id_field'] = 'Zona geografică folosită pentru produsele importate din NextUp';
 $_['lbl_new_product_weight_class_id_field'] = 'Clasa de greutate folosită pentru produsele importate din NextUp';
 $_['lbl_new_product_length_class_id_field'] = 'Clasa de lungime folosită pentru produsele importate din NextUp';
+
+$_['msg_confirm_warehouse_change'] = 'Te rugăm să confirmi schimbarea depozitului! Odată cu salvarea modificărilor, toate produsele din magazin vor fi deconectate de articolele corespunzătoare din NextUp ERP.';
+
+$_['msg_connection_test_ok'] = 'Conexiunea și autentificarea s-au desfășurat cu succes';
+$_['msg_connection_test_failed'] = 'Conexiunea nu a putut fi stabilită sau autentificarea a eșuat';
+
+$_['msg_settings_saved_ok'] = 'Opțiunile au fost salvate cu succes.';
+$_['msg_settings_saved_ok_needs_reload'] = 'Opțiunile au fost salvate cu succes. Pagina se va reîncărca automat în 5 secunde...';
+$_['msg_settings_save_failed'] = 'Opțiunile nu au putut fi salvate.';
 
 //
 // CIEL product form tab

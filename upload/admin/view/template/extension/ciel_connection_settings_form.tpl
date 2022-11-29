@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	window['myc_hasConnectionInfo'] = <?php echo $has_connection ? 'true' : 'false'; ?>;
+	window['myc_hasConnectionInfo'] = <?php echo myc_bool2str($has_connection); ?>;
 </script>
 <div class="panel panel-default">
 	<div class="panel-heading">

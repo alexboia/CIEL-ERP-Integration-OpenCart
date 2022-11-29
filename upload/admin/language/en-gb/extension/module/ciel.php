@@ -43,10 +43,9 @@ $_['lbl_ciel_document_issued_percentage'] = 'NextUp documents issued';
 //
 
 $_['ciel_settings_page_title'] = 'Configure NextUp ERP Integration';
+$_['ciel_settings_connection_error'] = 'There was an error loading the requried settings options. NextUp server might be down or incorrectly configured. Hit F5 to reload or modify the connection settings.';
 
 $_['text_connection_settings_form_heading'] = 'NextUp ERP Connection Options';
-$_['msg_connection_test_ok'] = 'The connection and authentication have been successfully established';
-$_['msg_connection_test_failed'] = 'The connection could not be established or authentication failed';
 $_['msg_err_fill_in_connection_properties'] = 'Please fill in all the connection properties';
 $_['button_test_connection'] = 'Test connection';
 $_['lbl_connection_endpoint_url_field'] = 'Webservice URL';
@@ -100,6 +99,15 @@ $_['lbl_new_tax_rate_customer_group_id_field'] = 'Customer group used for NextUp
 $_['lbl_new_tax_rate_geo_zone_id_field'] = 'Geozone used for NextUp-imported new tax rates';
 $_['lbl_new_product_weight_class_id_field'] = 'Weight class used for NextUp-imported new products';
 $_['lbl_new_product_length_class_id_field'] = 'Length class used for NextUp-imported new products';
+
+$_['msg_confirm_warehouse_change'] = 'Please confirm warehouse change! When saved, this will disconnect all your products from their corresponding NextUp ERP articles.';
+
+$_['msg_connection_test_ok'] = 'The connection and authentication have been successfully established';
+$_['msg_connection_test_failed'] = 'The connection could not be established or authentication failed';
+
+$_['msg_settings_saved_ok'] = 'The settings have been successfully saved.';
+$_['msg_settings_saved_ok_needs_reload'] = 'The settings have been successfully saved. The page will automatically reload in 5 seconds...';
+$_['msg_settings_save_failed'] = 'The settings could not be saved.';
 
 //
 // CIEL product form tab

@@ -1,8 +1,15 @@
 (function($) {
 	"use strict";
 
+	var DEFAULT_MSG_CONNECTION_TEST_FAILED = 'The connection test failed';
+	var DEFAULT_MSG_SETTINGS_SAVED_OK = 'The settings have been successfully saved.';
+	var DEFAULT_MSG_SETTINGS_SAVED_OK_NEEDS_RELOAD = 'The settings have been successfully saved. The page will automatically reload in 5 seconds...';
+	var DEFAULT_MSG_SETTINGS_SAVE_FAILED = 'The settings could not be saved.';
+	var DEFAULT_MSG_CONFIRM_WAREHOUSE_CHANGE = 'Please confirm warehouse change! When saved, this will disconnect all your products from their corresponding NextUp ERP articles.';
+
 	var _context = {
-		hasConnectionInfo: false
+		hasConnectionInfo: false,
+		hasConnectionError: false
 	};
 
 	var $ctlSettingsForm = null;
@@ -40,6 +47,10 @@
 			.attr('data-test-connection-url');
 	}
 
+	function _delayedReloadPage(timeoutSeconds) {
+		$.delayedReloadCielPage(timeoutSeconds);
+	}
+
 	function _getConnectionTestInputData() {
 		return {
 			myc_connection_endpoint_url: $('#myc_connection_endpoint_url')
@@ -56,7 +67,6 @@
 	}
 
 	function _testConnection(data) {
-		//TODO: check that the values are not empty
 		$.showCielLoading();
 		_clearStatusMessage();
 		$.ajax(_getConnectionTestUrl(), {
@@ -69,13 +79,11 @@
 			if (data && data.success) {
 				_showSuccess(data.message);
 			} else {
-				//TODO: add support for localization
-				_showError(data.message || 'The connection test failed');
+				_showError(data.message || DEFAULT_MSG_CONNECTION_TEST_FAILED);
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			//TODO: add support for localization
-			_showError('The connection test failed');
+			_showError(DEFAULT_MSG_CONNECTION_TEST_FAILED);
 		});
 	}
 
@@ -169,17 +177,19 @@
 					_initialSync();
 				}
 
-				//TODO: add support for localization
-				_showSuccess('The settings have been successfully saved.');
-				_storeInitialControlValues();
+				if (!_context.hasConnectionError) {
+					_showSuccess(data.message || DEFAULT_MSG_SETTINGS_SAVED_OK);
+					_storeInitialControlValues();
+				} else {
+					_showSuccess(data.message || DEFAULT_MSG_SETTINGS_SAVED_OK_NEEDS_RELOAD);
+					_delayedReloadPage(5);
+				}
 			} else {
-				//TODO: add support for localization
-				_showError(data.message || 'The settings could not be saved.');
+				_showError(data.message || DEFAULT_MSG_SETTINGS_SAVE_FAILED);
 			}
 		}).fail(function(xhr, status, error) {
 			$.hideCielLoading();
-			//TODO: add support for localization
-			_showError('The settings could not be saved.');
+			_showError(DEFAULT_MSG_SETTINGS_SAVE_FAILED);
 		});
 	}
 
@@ -193,8 +203,10 @@
 			.find('option:selected');
 
 		if ($option.size()) {
-			$('#myc_runtime_shipping_vat_quota_value').val($option
-					.attr('data-quota-value'));
+			var shippingQuotaValue = $option
+				.attr('data-quota-value');
+			$('#myc_runtime_shipping_vat_quota_value')
+				.val(shippingQuotaValue);
 		}
 	}
 
@@ -253,8 +265,8 @@
 	}
 
 	function _confirmWarehouseChange() {
-		//TODO: add support for localization
-		return confirm('Please confirm warehouse change! When saved, this will disconnect all your products from their corresponding CIEL ERP articles.');
+		return confirm(window['myc_msgConfirmWarehouseChange'] 
+			|| DEFAULT_MSG_CONFIRM_WAREHOUSE_CHANGE);
 	}
 
 	function _initControls() {
@@ -292,7 +304,8 @@
 
 	function _initContext() {
 		_updateContext({
-			hasConnectionInfo: !!window['myc_hasConnectionInfo']
+			hasConnectionInfo: !!window['myc_hasConnectionInfo'],
+			hasConnectionError: !!window['myc_hasConnectionError']
 		});
 	}
 

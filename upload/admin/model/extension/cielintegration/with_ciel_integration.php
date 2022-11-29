@@ -119,20 +119,14 @@ namespace CielIntegration\Integration\Admin {
 		 * @return array|null
 		 */
 		protected function _getWarehousesForDropdown() {
-			$dataSource = null;
+			$dataSource = $this->_getStoreBinding()
+				->getAvailableWarehouses();
 
-			try {
-				$dataSource = $this->_getStoreBinding()
-					->getAvailableWarehouses();
-
-				foreach ($dataSource as $id => $w) {
-					if (!is_object($w['properties'])) {
-						$w['properties'] = (object)$w['properties'];
-						$dataSource[$id] = $w;
-					}
+			foreach ($dataSource as $id => $w) {
+				if (!is_object($w['properties'])) {
+					$w['properties'] = (object)$w['properties'];
+					$dataSource[$id] = $w;
 				}
-			} catch (Exception $exc) {
-				//TODO: log errors
 			}
 
 			return $dataSource;
@@ -142,14 +136,8 @@ namespace CielIntegration\Integration\Admin {
 		 * @return array|null
 		 */
 		protected function _getVatQuotasForDropdown() {
-			$dataSource = null;
-
-			try {
-				$dataSource = $this->_getStoreBinding()
-					->getAvailableVatQuotas();
-			} catch (Exception $exc) {
-				//TODO: log errors
-			}
+			$dataSource = $this->_getStoreBinding()
+				->getAvailableVatQuotas();
 
 			return $dataSource;
 		}

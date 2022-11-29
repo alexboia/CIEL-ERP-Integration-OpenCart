@@ -120,7 +120,8 @@ class ControllerExtensionCielStatus extends CielController {
 			'php_version' => $this->_getPhpVersionString(),
 			'opencart_version' => $this->_getOpenCartVersionString(),
 			'module_version' => $this->_getVersionString(),
-			'module_configured' => $this->_getIsConfiguredDescription()
+			'module_configured' => $this->_getIsConfiguredDescription(),
+			'manual_exists' => $this->_getManualManager()->pdfExists()
 		);
 	}
 
