@@ -31,6 +31,9 @@
 			"file": "tools/migrate-oc-romania.md",
 			"title": "Migrate from OpenCart Romania connector format"
 		}, {
+			"file": "tools/import-new-products.md",
+			"title": "Import new products from NextUp ERP"
+		}, {
 			"file": "customers.md",
 			"title": "Customers"
 		}, {
