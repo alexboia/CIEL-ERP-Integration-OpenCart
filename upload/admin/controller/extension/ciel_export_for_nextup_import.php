@@ -10,7 +10,7 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 	use WithAdminLayoutLoader;
 	use WithCielIntegration;
 
-	const ARTICLES_CSV_BASE_FILE_NAME = 'magento-nextup-articles-export';
+	const ARTICLES_CSV_BASE_FILE_NAME = 'opencart-nextup-articles-export';
 
 	public function __construct(\Registry $registry) {
 		parent::__construct($registry);
@@ -68,6 +68,8 @@ class ControllerExtensionCielExportForNextupImport extends CielController {
 
 	private function _exportArticlesForCielImport() {
 		$params = new CielErpArticleExportParameters();
+		$params->setDecimalPointChar(',');
+		$params->setThousandsSeparatorChar('');
 		return $this->_getArticleIntegration()
 			->exportArticlesForCielImport($params);
 	}

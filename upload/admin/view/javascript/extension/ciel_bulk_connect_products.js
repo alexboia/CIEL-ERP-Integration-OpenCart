@@ -79,7 +79,7 @@
 		var processItem = selection.shift();
 		_processSelectedProduct(processItem, function(success) {
 			if (selection.length > 0) {
-				_processNextSelectedProduct(selection, allFailed || success);
+				_processNextSelectedProduct(selection, allFailed && !success);
 			} else {
 				$.hideCielLoading();
 				if (!allFailed) {

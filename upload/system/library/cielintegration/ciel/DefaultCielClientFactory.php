@@ -20,6 +20,8 @@ namespace Ciel\Api {
 		 */
 		private $_ambientCielClient;
 
+		private $_sessionProviderSetup = false;
+
 		public function __construct(CielClientSessionProvider $sessionProvider, 
 				CielClientAmbientConnectionInfoProvider $ambientConnectionOptionsProvider) {
 			$this->_sessionProvider = $sessionProvider;
@@ -31,19 +33,25 @@ namespace Ciel\Api {
 				throw new InvalidArgumentException('Endpoint may not be empty');
 			}
 
+			$this->_setupSessionProvider();
+
 			$client = new CielClient($endpoint, $options);
 			$client->setSessionProvider($this->_sessionProvider);
+
 			return $client;
 		}
 
-		public function createCielClientForConnectionInfo(CielClientConnectionInfo $info) { 
-			$client = new CielClient($info->getServerUrl(), 
-				array(
-					'timeoutSeconds' => $info->getTimeoutSeconds()
-				)
-			);
+		private function _setupSessionProvider() {
+			if (!$this->_sessionProviderSetup) {
+				$this->_sessionProvider->setup();
+				$this->_sessionProviderSetup = true;
+			}
+		}
 
-			$client->setSessionProvider($this->_sessionProvider);
+		public function createCielClientForConnectionInfo(CielClientConnectionInfo $info) { 
+			$client = $this->createCielClientForEndpointAndOptions($info->getServerUrl(), 
+				$this->_createCielClientOptions($info));
+
 			if ($info->hasUserName() && $info->hasSocietyCode()) {
 				$client->logon($info->getUserName(), 
 					$info->getPassword(), 
@@ -51,6 +59,12 @@ namespace Ciel\Api {
 			}
 
 			return $client;
+		}
+
+		private function _createCielClientOptions(CielClientConnectionInfo $info) {
+			return 	array(
+				'timeoutSeconds' => $info->getTimeoutSeconds()
+			);
 		}
 
 		public function getAmbientCielClient() { 

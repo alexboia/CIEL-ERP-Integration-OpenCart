@@ -88,7 +88,8 @@ namespace Ciel\Api\Integration\Partners {
 		public static function deriveExternalAddressKeyFromParts($parts) {
 			$rawIdentifier = join('-', $parts);
 			$localPartnerIdentifier = self::_prepareAddressKeyIdentifier($rawIdentifier);
-			return self::_deriveExternalAddressKey($localPartnerIdentifier);
+			$externalKey = self::_deriveExternalAddressKey($localPartnerIdentifier);
+			return sha1($externalKey);
 		}
 
 		private static function _prepareAddressKeyIdentifier($rawIdentifier) {
