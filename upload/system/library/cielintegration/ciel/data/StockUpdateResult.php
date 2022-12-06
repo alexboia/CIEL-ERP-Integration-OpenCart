@@ -39,7 +39,7 @@ namespace Ciel\Api\Data {
 				|| $offset === self::KEY_REASON;
 		}
 
-		public function offsetGet($offset) { 
+		public function offsetGet($offset): mixed { 
 			if ($offset === self::KEY_UPDATED){
 				return $this->getUpdated();
 			} else if ($offset === self::KEY_REASON) {

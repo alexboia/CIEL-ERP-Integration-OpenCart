@@ -21,12 +21,12 @@ namespace Ciel\Api\Data {
 			return new self($eligibleCount, $updatedCount);
 		}
 
-		public function offsetExists($offset) { 
+		public function offsetExists($offset): bool { 
 			return $offset === self::KEY_ELIGIBLE_COUNT 
 				|| $offset === self::KEY_UPDATED_COUNT;
 		}
 
-		public function offsetGet($offset) { 
+		public function offsetGet($offset): mixed { 
 			if ($offset === self::KEY_ELIGIBLE_COUNT) {
 				return $this->getEligibleCount();
 			} else if ($offset === self::KEY_UPDATED_COUNT) {
@@ -36,7 +36,7 @@ namespace Ciel\Api\Data {
 			}
 		}
 
-		public function offsetSet($offset, $value) { 
+		public function offsetSet($offset, $value): void { 
 			$this->_throwReadOnly();
 		}
 
