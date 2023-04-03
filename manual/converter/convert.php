@@ -6,3 +6,7 @@ function myc_build_manual(array $args) {
 	$processor = new MyClar\ManualBuilder\ManualProcessor($inputDir, $outputDir);
 	$processor->process();
 }
+
+function myc_init_manual(array $args) {
+	//TODO: init basic manual src structure
+}
