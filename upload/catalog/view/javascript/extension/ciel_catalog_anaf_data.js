@@ -82,7 +82,7 @@
 		}
 
 		function _wasLookupPerformed(resultData) {
-			return !!resultData.performed
+			return !!resultData.performed;
 		}
 
 		function _updateFieldsFromVatCodeLookupData(resultData) {
